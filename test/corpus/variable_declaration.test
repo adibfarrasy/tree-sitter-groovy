@@ -1,0 +1,79 @@
+==========
+identifier type
+==========
+Object result = point.proceed()
+---
+(source_file
+  (variable_declaration
+    (type_identifier)
+    (variable_declarator
+      (identifier)
+      (method_invocation
+        (identifier)
+        (identifier)
+        (argument_list)))))
+
+==========
+primitive type
+==========
+boolean result = point.proceed()
+---
+(source_file
+  (variable_declaration
+    (boolean_type)
+    (variable_declarator
+      (identifier)
+      (method_invocation
+        (identifier)
+        (identifier)
+        (argument_list)))))
+
+==========
+identifier type with dimension
+==========
+Object[] args = point.getArgs()
+---
+(source_file
+  (variable_declaration
+    (type_identifier)
+    (dimensions)
+    (variable_declarator
+      (identifier)
+      (method_invocation
+        (identifier)
+        (identifier)
+        (argument_list)))))
+
+==========
+with `as <class>` cast
+==========
+MethodSignature methodSignature = point.getSignature() as MethodSignature
+---
+(source_file
+  (variable_declaration
+    (type_identifier)
+        (variable_declarator
+          (identifier)
+          (binary_expression
+            (method_invocation
+              (identifier)
+              (identifier)
+              (argument_list))
+            (identifier)))))
+
+==========
+with `(<class>)` cast
+==========
+MethodSignature methodSignature = (MethodSignature) point.getSignature()
+---
+(source_file
+  (variable_declaration
+    (type_identifier)
+    (variable_declarator
+      (identifier)
+        (cast_expression
+          (type_identifier)
+          (method_invocation
+            (identifier)
+            (identifier)
+            (argument_list))))))

@@ -26,11 +26,11 @@ const PREC = {
   PARENS: 16, // (Expression)
   CLASS_LITERAL: 17, // .
   CALL: 18,
+  LAMBDA: 19,
 
   MAP_KEY: 3,
   INFERRED_PARAMS: 3,
   PRIMARY_EXPR: 2,
-  TYPE: 1,
 };
 
 module.exports = grammar({
@@ -60,36 +60,26 @@ module.exports = grammar({
 
   conflicts: ($) => [
     [$.modifiers, $.annotated_type, $.receiver_parameter],
+    [$.expression, $.statement],
+    [$.instanceof_expression],
+    [$._type, $.array_type],
+    [$.annotated_type, $.array_type],
+    [$.array_literal, $.map_literal],
+    [$.expression, $.array_access],
     [
       $.modifiers,
       $.annotated_type,
       $.module_declaration,
       $.package_declaration,
+      $.variable_declaration,
     ],
-    // [$._unannotated_type, $.primary_expression, $.inferred_parameters],
-    // [$._unannotated_type, $.primary_expression],
-    // [$._unannotated_type, $.primary_expression, $.scoped_type_identifier],
-    // [$._unannotated_type, $.scoped_type_identifier],
-    // [$._unannotated_type, $.generic_type],
-    // [$.generic_type, $.primary_expression],
-    [$.expression, $.statement],
-    // [$.lambda_expression, $.primary_expression],
-
-    [$._variable_declarator_id],
-    [$.instanceof_expression],
-    [$._type, $.array_type],
-    [$.annotated_type, $.array_type],
-    // [$.primary_expression, $.method_invocation],
-    // [$.field_access, $.method_invocation],
-    // [$.primary_expression, $.explicit_constructor_invocation],
-    [$.array_literal, $.map_literal],
-    [$.expression, $.array_access],
+    [$.modifiers, $.annotated_type, $.variable_declaration],
   ],
 
   word: ($) => $.identifier,
 
   rules: {
-    program: ($) => repeat($.statement),
+    source_file: ($) => repeat($.statement),
 
     // Literals
 
@@ -240,7 +230,18 @@ module.exports = grammar({
         PREC.CAST,
         seq(
           "(",
-          sep1(field("type", $._type), "&"),
+          choice(
+            // TODO: why must this be taken out of _type to work?
+            alias($.identifier, $.type_identifier),
+            seq(
+              field("element", alias($.identifier, $.type_identifier)),
+              field("dimensions", $.dimensions),
+            ),
+            // end of TODO
+
+            field("type", $._type),
+            seq($._type, $.dimensions),
+          ),
           ")",
           field("value", $.expression),
         ),
@@ -280,6 +281,7 @@ module.exports = grammar({
           [">=", PREC.REL],
           ["<=", PREC.REL],
           ["in", PREC.REL],
+          ["as", PREC.REL],
           ["==", PREC.EQUALITY],
           ["!=", PREC.EQUALITY],
           ["&&", PREC.AND],
@@ -320,13 +322,16 @@ module.exports = grammar({
       ),
 
     lambda_expression: ($) =>
-      seq(
-        field(
-          "parameters",
-          choice($.identifier, $.formal_parameters, $.inferred_parameters),
+      prec.right(
+        PREC.LAMBDA,
+        seq(
+          field(
+            "parameters",
+            choice($.identifier, $.formal_parameters, $.inferred_parameters),
+          ),
+          "->",
+          field("body", choice($.expression, $.block)),
         ),
-        "->",
-        field("body", choice($.expression, $.block)),
       ),
 
     inferred_parameters: ($) =>
@@ -374,7 +379,6 @@ module.exports = grammar({
     primary_expression: ($) =>
       prec.left(
         PREC.PRIMARY_EXPR,
-
         choice(
           $._literal,
           $.array_literal,
@@ -477,7 +481,14 @@ module.exports = grammar({
                 field("name", $.identifier),
               ),
             ),
-            field("arguments", $.argument_list),
+            choice(
+              seq(
+                field("arguments", $.argument_list),
+                field("closure", $.closure),
+              ),
+              field("closure", $.closure),
+              field("arguments", $.argument_list),
+            ),
           ),
         ),
       ),
@@ -549,15 +560,22 @@ module.exports = grammar({
         $.continue_statement,
         $.return_statement,
         $.yield_statement,
-        $.switch_expression, //switch statements and expressions are identical
+        $.switch_expression,
         $.synchronized_statement,
-        $.local_variable_declaration,
         $.throw_statement,
         $.try_statement,
         $.try_with_resources_statement,
       ),
 
     block: ($) => seq("{", repeat($.statement), "}"),
+
+    closure: ($) =>
+      seq(
+        "{",
+        optional(seq(commaSep1($.identifier), "->")),
+        repeat($.statement),
+        "}",
+      ),
 
     expression_statement: ($) => prec.right(seq($.expression, optional(";"))),
 
@@ -663,7 +681,7 @@ module.exports = grammar({
         "for",
         "(",
         choice(
-          field("init", $.local_variable_declaration),
+          field("init", $.variable_declaration),
           seq(commaSep(field("init", $.expression)), ";"),
         ),
         field("condition", optional($.expression)),
@@ -728,6 +746,7 @@ module.exports = grammar({
           $.interface_declaration,
           $.annotation_type_declaration,
           $.enum_declaration,
+          $.variable_declaration,
         ),
       ),
 
@@ -1065,16 +1084,14 @@ module.exports = grammar({
       commaSep1(field("declarator", $.variable_declarator)),
 
     variable_declarator: ($) =>
-      seq(
-        $._variable_declarator_id,
-        optional(seq("=", field("value", $._variable_initializer))),
+      prec.right(
+        seq(
+          $._variable_declarator_id,
+          optional(seq("=", field("value", $._variable_initializer))),
+        ),
       ),
 
-    _variable_declarator_id: ($) =>
-      seq(
-        field("name", $.identifier),
-        field("dimensions", optional($.dimensions)),
-      ),
+    _variable_declarator_id: ($) => seq(field("name", $.identifier)),
 
     _variable_initializer: ($) => choice($.expression, $.array_initializer),
 
@@ -1085,16 +1102,15 @@ module.exports = grammar({
 
     _type: ($) => choice($._unannotated_type, $.annotated_type),
 
-    _unannotated_type: ($) =>
-      prec.left(PREC.TYPE, choice($._simple_type, $.array_type)),
+    _unannotated_type: ($) => prec.left(choice($._simple_type, $.array_type)),
 
     _simple_type: ($) =>
       choice(
+        prec(1, alias($.identifier, $.type_identifier)),
         $.void_type,
         $.integral_type,
         $.floating_point_type,
         $.boolean_type,
-        alias($.identifier, $.type_identifier),
         $.scoped_type_identifier,
         $.generic_type,
       ),
@@ -1131,15 +1147,7 @@ module.exports = grammar({
         field("dimensions", $.dimensions),
       ),
 
-    integral_type: ($) =>
-      choice(
-        "byte",
-        "short",
-        "int",
-        "long",
-        "char",
-        // TODO: java.math.BigInteger where?
-      ),
+    integral_type: ($) => choice("byte", "short", "int", "long", "char"),
 
     floating_point_type: ($) => choice("float", "double"),
 
@@ -1202,12 +1210,29 @@ module.exports = grammar({
 
     throws: ($) => seq("throws", commaSep1($._type)),
 
-    local_variable_declaration: ($) =>
-      seq(
-        optional($.modifiers),
-        field("type", $._unannotated_type),
-        $._variable_declarator_list,
-        ";",
+    variable_declaration: ($) =>
+      prec.right(
+        3,
+        seq(
+          optional("final"),
+          repeat($._annotation),
+          choice(
+            "def",
+            "var",
+
+            // TODO: why must this be taken out of _unannotated_type to work?
+            alias($.identifier, $.type_identifier),
+            seq(
+              field("element", alias($.identifier, $.type_identifier)),
+              field("dimensions", $.dimensions),
+            ),
+            // end of TODO
+
+            field("type", $._unannotated_type),
+          ),
+          $._variable_declarator_list,
+          optional(";"),
+        ),
       ),
 
     method_declaration: ($) =>
@@ -1235,12 +1260,7 @@ module.exports = grammar({
     identifier: ($) => /[\p{L}_$][\p{L}\p{Nd}_$]*/,
 
     // http://stackoverflow.com/questions/13014947/regex-to-match-a-c-style-multiline-comment/36328890#36328890
-    comment: ($) =>
-      choice(
-        $.line_comment,
-        $.block_comment,
-        // TODO: Shebang and Groovydoc comments
-      ),
+    comment: ($) => choice($.line_comment, $.block_comment),
 
     line_comment: ($) => token(prec(PREC.COMMENT, seq("//", /[^\n]*/))),
 
@@ -1260,4 +1280,3 @@ function commaSep1(rule) {
 function commaSep(rule) {
   return optional(commaSep1(rule));
 }
-
