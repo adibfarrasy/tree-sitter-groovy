@@ -19,8 +19,8 @@ const PREC = {
   ADD: 12, // +  -
   MULT: 13, // *  /  %
   CAST: 14, // (Type)
-  OBJ_INST: 14, // new
   UNARY: 15, // ++a  --a  a++  a--  +  -  !  ~
+  OBJ_INST: 16, // new
   ARRAY: 16, // [Index]
   OBJ_ACCESS: 16, // .
   PARENS: 16, // (Expression)
@@ -28,9 +28,8 @@ const PREC = {
   CALL: 18,
   LAMBDA: 19,
 
-  MAP_KEY: 3,
-  INFERRED_PARAMS: 3,
-  PRIMARY_EXPR: 2,
+  TYPE: 2,
+  PRIMARY_EXPR: 1,
 };
 
 module.exports = grammar({
@@ -62,7 +61,6 @@ module.exports = grammar({
     [$.modifiers, $.annotated_type, $.receiver_parameter],
     [$.expression, $.statement],
     [$.instanceof_expression],
-    [$._type, $.array_type],
     [$.annotated_type, $.array_type],
     [$.array_literal, $.map_literal],
     [$.expression, $.array_access],
@@ -74,6 +72,7 @@ module.exports = grammar({
       $.variable_declaration,
     ],
     [$.modifiers, $.annotated_type, $.variable_declaration],
+    [$.primary_expression, $._unannotated_type],
   ],
 
   word: ($) => $.identifier,
@@ -99,8 +98,7 @@ module.exports = grammar({
         $.null_literal,
       ),
 
-    map_key: ($) =>
-      prec.left(PREC.MAP_KEY, choice(seq("(", $.identifier, ")"), $._literal)),
+    map_key: ($) => prec.left(choice(seq("(", $.identifier, ")"), $._literal)),
 
     map_entry: ($) =>
       seq(field("key", $.map_key), ":", field("value", $.expression)),
@@ -187,13 +185,7 @@ module.exports = grammar({
       token(seq("'", repeat1(choice(/[^\\'\n]/, /\\./, /\\\n/)), "'")),
 
     string_literal: ($) =>
-      token(
-        choice(
-          seq('"', repeat(choice(/[^\\"\n]/, /\\(.|\n)/)), '"'),
-          // TODO: support multiline string literals by debugging the following:
-          // seq('"', repeat(choice(/[^\\"\n]/, /\\(.|\n)/)), '"', '+', /\n/, '"', repeat(choice(/[^\\"\n]/, /\\(.|\n)/)))
-        ),
-      ),
+      token(choice(seq('"', repeat(choice(/[^\\"\n]/, /\\(.|\n)/)), '"'))),
 
     text_block: ($) =>
       token(
@@ -230,18 +222,7 @@ module.exports = grammar({
         PREC.CAST,
         seq(
           "(",
-          choice(
-            // TODO: why must this be taken out of _type to work?
-            alias($.identifier, $.type_identifier),
-            seq(
-              field("element", alias($.identifier, $.type_identifier)),
-              field("dimensions", $.dimensions),
-            ),
-            // end of TODO
-
-            field("type", $._type),
-            seq($._type, $.dimensions),
-          ),
+          choice(field("type", $._type), seq($._type, $.dimensions)),
           ")",
           field("value", $.expression),
         ),
@@ -335,7 +316,7 @@ module.exports = grammar({
       ),
 
     inferred_parameters: ($) =>
-      prec.left(PREC.INFERRED_PARAMS, seq("(", commaSep1($.identifier), ")")),
+      prec.left(seq("(", commaSep1($.identifier), ")")),
 
     ternary_expression: ($) =>
       prec.right(
@@ -1100,9 +1081,11 @@ module.exports = grammar({
 
     // Types
 
-    _type: ($) => choice($._unannotated_type, $.annotated_type),
+    _type: ($) =>
+      prec.left(PREC.TYPE, choice($._unannotated_type, $.annotated_type)),
 
-    _unannotated_type: ($) => prec.left(choice($._simple_type, $.array_type)),
+    _unannotated_type: ($) =>
+      prec.left(PREC.TYPE, choice($._simple_type, $.array_type)),
 
     _simple_type: ($) =>
       choice(
@@ -1219,15 +1202,7 @@ module.exports = grammar({
           choice(
             "def",
             "var",
-
-            // TODO: why must this be taken out of _unannotated_type to work?
-            alias($.identifier, $.type_identifier),
-            seq(
-              field("element", alias($.identifier, $.type_identifier)),
-              field("dimensions", $.dimensions),
-            ),
-            // end of TODO
-
+            // field("type", $._restricted_type),
             field("type", $._unannotated_type),
           ),
           $._variable_declarator_list,

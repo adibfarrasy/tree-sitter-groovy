@@ -1009,26 +1009,6 @@
     "type": "cast_expression",
     "named": true,
     "fields": {
-      "dimensions": {
-        "multiple": false,
-        "required": false,
-        "types": [
-          {
-            "type": "dimensions",
-            "named": true
-          }
-        ]
-      },
-      "element": {
-        "multiple": false,
-        "required": false,
-        "types": [
-          {
-            "type": "type_identifier",
-            "named": true
-          }
-        ]
-      },
       "type": {
         "multiple": false,
         "required": false,
@@ -1060,10 +1040,6 @@
         },
         {
           "type": "dimensions",
-          "named": true
-        },
-        {
-          "type": "type_identifier",
           "named": true
         }
       ]
@@ -3782,26 +3758,6 @@
           }
         ]
       },
-      "dimensions": {
-        "multiple": false,
-        "required": false,
-        "types": [
-          {
-            "type": "dimensions",
-            "named": true
-          }
-        ]
-      },
-      "element": {
-        "multiple": false,
-        "required": false,
-        "types": [
-          {
-            "type": "type_identifier",
-            "named": true
-          }
-        ]
-      },
       "type": {
         "multiple": false,
         "required": false,
@@ -3823,10 +3779,6 @@
         },
         {
           "type": "marker_annotation",
-          "named": true
-        },
-        {
-          "type": "type_identifier",
           "named": true
         }
       ]

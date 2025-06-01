@@ -65,7 +65,7 @@
     },
     "map_key": {
       "type": "PREC_LEFT",
-      "value": 3,
+      "value": 0,
       "content": {
         "type": "CHOICE",
         "members": [
@@ -1361,41 +1361,6 @@
             "type": "CHOICE",
             "members": [
               {
-                "type": "ALIAS",
-                "content": {
-                  "type": "SYMBOL",
-                  "name": "identifier"
-                },
-                "named": true,
-                "value": "type_identifier"
-              },
-              {
-                "type": "SEQ",
-                "members": [
-                  {
-                    "type": "FIELD",
-                    "name": "element",
-                    "content": {
-                      "type": "ALIAS",
-                      "content": {
-                        "type": "SYMBOL",
-                        "name": "identifier"
-                      },
-                      "named": true,
-                      "value": "type_identifier"
-                    }
-                  },
-                  {
-                    "type": "FIELD",
-                    "name": "dimensions",
-                    "content": {
-                      "type": "SYMBOL",
-                      "name": "dimensions"
-                    }
-                  }
-                ]
-              },
-              {
                 "type": "FIELD",
                 "name": "type",
                 "content": {
@@ -2336,7 +2301,7 @@
     },
     "inferred_parameters": {
       "type": "PREC_LEFT",
-      "value": 3,
+      "value": 0,
       "content": {
         "type": "SEQ",
         "members": [
@@ -2585,7 +2550,7 @@
     },
     "primary_expression": {
       "type": "PREC_LEFT",
-      "value": 2,
+      "value": 1,
       "content": {
         "type": "CHOICE",
         "members": [
@@ -6795,21 +6760,25 @@
       ]
     },
     "_type": {
-      "type": "CHOICE",
-      "members": [
-        {
-          "type": "SYMBOL",
-          "name": "_unannotated_type"
-        },
-        {
-          "type": "SYMBOL",
-          "name": "annotated_type"
-        }
-      ]
+      "type": "PREC_LEFT",
+      "value": 2,
+      "content": {
+        "type": "CHOICE",
+        "members": [
+          {
+            "type": "SYMBOL",
+            "name": "_unannotated_type"
+          },
+          {
+            "type": "SYMBOL",
+            "name": "annotated_type"
+          }
+        ]
+      }
     },
     "_unannotated_type": {
       "type": "PREC_LEFT",
-      "value": 0,
+      "value": 2,
       "content": {
         "type": "CHOICE",
         "members": [
@@ -7371,41 +7340,6 @@
                 "value": "var"
               },
               {
-                "type": "ALIAS",
-                "content": {
-                  "type": "SYMBOL",
-                  "name": "identifier"
-                },
-                "named": true,
-                "value": "type_identifier"
-              },
-              {
-                "type": "SEQ",
-                "members": [
-                  {
-                    "type": "FIELD",
-                    "name": "element",
-                    "content": {
-                      "type": "ALIAS",
-                      "content": {
-                        "type": "SYMBOL",
-                        "name": "identifier"
-                      },
-                      "named": true,
-                      "value": "type_identifier"
-                    }
-                  },
-                  {
-                    "type": "FIELD",
-                    "name": "dimensions",
-                    "content": {
-                      "type": "SYMBOL",
-                      "name": "dimensions"
-                    }
-                  }
-                ]
-              },
-              {
                 "type": "FIELD",
                 "name": "type",
                 "content": {
@@ -7618,10 +7552,6 @@
       "instanceof_expression"
     ],
     [
-      "_type",
-      "array_type"
-    ],
-    [
       "annotated_type",
       "array_type"
     ],
@@ -7644,6 +7574,10 @@
       "modifiers",
       "annotated_type",
       "variable_declaration"
+    ],
+    [
+      "primary_expression",
+      "_unannotated_type"
     ]
   ],
   "precedences": [],
