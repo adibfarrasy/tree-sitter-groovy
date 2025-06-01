@@ -1,0 +1,39 @@
+{
+  "$schema": "https://tree-sitter.github.io/tree-sitter/assets/schemas/config.schema.json",
+  "grammars": [
+    {
+      "name": "tree_sitter_groovy",
+      "camelcase": "TreeSitterGroovy",
+      "title": "tree-sitter groovy",
+      "scope": "source.tree_sitter_groovy",
+      "file-types": [
+        "tree_sitter_groovy"
+      ],
+      "injection-regex": "^tree_sitter_groovy$",
+      "class-name": "TreeSitterTreeSitterGroovy"
+    }
+  ],
+  "metadata": {
+    "version": "0.1.0",
+    "license": "MIT",
+    "description": "TreeSitterGroovy grammar for tree-sitter",
+    "authors": [
+      {
+        "name": "Adib Farrasy",
+        "email": "adibfarrasy@gmail.com"
+      }
+    ],
+    "links": {
+      "repository": "https://github.com/tree-sitter/tree-sitter-tree_sitter_groovy"
+    }
+  },
+  "bindings": {
+    "c": true,
+    "go": true,
+    "node": true,
+    "python": true,
+    "rust": true,
+    "swift": true,
+    "zig": false
+  }
+}
