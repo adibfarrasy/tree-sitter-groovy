@@ -55,12 +55,12 @@ MethodSignature methodSignature = point.getSignature() as MethodSignature
     (type_identifier)
         (variable_declarator
           (identifier)
-          (binary_expression
+          (cast_expression
             (method_invocation
               (identifier)
               (identifier)
               (argument_list))
-            (identifier)))))
+            (type_identifier)))))
 
 ==========
 with `(<class>)` cast
@@ -78,3 +78,47 @@ MethodSignature methodSignature = (MethodSignature) point.getSignature()
             (identifier)
             (identifier)
             (argument_list))))))
+
+==========
+positional argument object creation
+==========
+MyClass myInstance = new MyClass(a,b,c)
+---
+(source_file
+  (variable_declaration
+    (type_identifier)
+    (variable_declarator
+      (identifier)
+      (object_creation_expression
+        (type_identifier)
+        (object_creation_argument_list
+          (argument
+            (identifier))
+          (argument
+            (identifier))
+          (argument
+            (identifier)))))))
+
+
+==========
+named argument object creation
+==========
+MyClass myInstance = new MyClass(a: 1, b: 2, c: 3)
+---
+(source_file
+  (variable_declaration
+    (type_identifier)
+    (variable_declarator
+      (identifier)
+      (object_creation_expression
+        (type_identifier)
+        (object_creation_argument_list
+          (argument
+            (identifier)
+            (decimal_integer_literal))
+          (argument
+            (identifier)
+            (decimal_integer_literal))
+          (argument
+            (identifier)
+            (decimal_integer_literal)))))))

@@ -218,13 +218,20 @@ module.exports = grammar({
       ),
 
     cast_expression: ($) =>
-      prec(
+      prec.right(
         PREC.CAST,
-        seq(
-          "(",
-          choice(field("type", $._type), seq($._type, $.dimensions)),
-          ")",
-          field("value", $.expression),
+        choice(
+          seq(
+            "(",
+            choice(field("type", $._type), seq($._type, $.dimensions)),
+            ")",
+            field("value", $.expression),
+          ),
+          seq(
+            field("value", $.expression),
+            "as",
+            choice(field("type", $._type), seq($._type, $.dimensions)),
+          ),
         ),
       ),
 
@@ -262,7 +269,6 @@ module.exports = grammar({
           [">=", PREC.REL],
           ["<=", PREC.REL],
           ["in", PREC.REL],
-          ["as", PREC.REL],
           ["==", PREC.EQUALITY],
           ["!=", PREC.EQUALITY],
           ["&&", PREC.AND],
@@ -419,9 +425,17 @@ module.exports = grammar({
           "new",
           field("type_arguments", optional($.type_arguments)),
           field("type", $._simple_type),
-          field("arguments", $.argument_list),
+          $.object_creation_argument_list,
           optional($.class_body),
         ),
+      ),
+
+    object_creation_argument_list: ($) => seq("(", commaSep($.argument), ")"),
+
+    argument: ($) =>
+      choice(
+        seq(field("name", $.identifier), ":", field("value", $.expression)),
+        $.expression,
       ),
 
     field_access: ($) =>
