@@ -1,5 +1,4 @@
 {
-  "$schema": "https://tree-sitter.github.io/tree-sitter/assets/schemas/grammar.schema.json",
   "name": "groovy",
   "word": "identifier",
   "rules": {
@@ -7599,6 +7598,6 @@
     "_unannotated_type",
     "comment",
     "module_directive"
-  ],
-  "reserved": {}
+  ]
 }
+
