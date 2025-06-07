@@ -1,0 +1,54 @@
+==========
+chaining
+==========
+obj.method1().method2().method3()
+---
+(source_file
+  (expression_statement
+    (method_invocation
+      (method_invocation
+        (method_invocation
+          (identifier)
+          (identifier)
+          (argument_list))
+        (identifier)
+        (argument_list))
+      (identifier)
+      (argument_list))))
+
+==========
+optional chaining
+==========
+obj?.method1()?.method2()?.method3()
+---
+(source_file
+  (expression_statement
+    (method_invocation
+      (method_invocation
+        (method_invocation
+          (identifier)
+          (identifier)
+          (argument_list))
+        (identifier)
+        (argument_list))
+      (identifier)
+      (argument_list))))
+
+==========
+invalid optional chaining
+==========
+obj?.method1()?.method2()?.method3()?
+---
+(source_file
+  (expression_statement
+    (method_invocation
+      (method_invocation
+        (method_invocation
+          (identifier)
+          (identifier)
+          (argument_list))
+        (identifier)
+        (argument_list))
+      (identifier)
+      (argument_list)))
+  (ERROR))

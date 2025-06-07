@@ -470,7 +470,7 @@ module.exports = grammar({
               field("name", $.identifier),
               seq(
                 field("object", choice($.primary_expression, $.super)),
-                ".",
+                choice(".", "?."),
                 optional(seq($.super, ".")),
                 field("type_arguments", optional($.type_arguments)),
                 field("name", $.identifier),
