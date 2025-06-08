@@ -1200,7 +1200,7 @@ module.exports = grammar({
     spread_parameter: ($) =>
       seq(
         optional($.modifiers),
-        $._unannotated_type,
+        field("type", $._unannotated_type),
         "...",
         $.variable_declarator,
       ),
