@@ -1,0 +1,39 @@
+==========================================
+single line, single quoted
+==========================================
+'test'
+---
+(source_file
+  (expression_statement
+    (string_literal)))
+
+==========================================
+single line, double quoted
+==========================================
+"test"
+---
+(source_file
+  (expression_statement
+    (string_literal)))
+
+==========================================
+multiple lines, triple single quoted
+==========================================
+'''
+test
+'''
+---
+(source_file
+  (expression_statement
+    (string_literal)))
+
+==========================================
+multiple lines, triple double quoted
+==========================================
+"""
+test
+"""
+---
+(source_file
+  (expression_statement
+    (string_literal)))

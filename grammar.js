@@ -35,7 +35,7 @@ const PREC = {
 module.exports = grammar({
   name: "groovy",
 
-  extras: ($) => [$.line_comment, $.block_comment, /\s/],
+  extras: ($) => [$.line_comment, $.block_comment, /\s/, /\n/],
 
   supertypes: ($) => [
     $.expression,
@@ -73,6 +73,7 @@ module.exports = grammar({
     ],
     [$.modifiers, $.annotated_type, $.variable_declaration],
     [$.primary_expression, $._unannotated_type],
+    [$._method_declarator, $._variable_declarator_id],
   ],
 
   word: ($) => $.identifier,
@@ -92,7 +93,6 @@ module.exports = grammar({
         $.hex_floating_point_literal,
         $.true,
         $.false,
-        $.character_literal,
         $.string_literal,
         $.text_block,
         $.null_literal,
@@ -181,11 +181,25 @@ module.exports = grammar({
 
     false: ($) => "false",
 
-    character_literal: ($) =>
+    string_literal: ($) =>
+      choice(
+        $._sq_string_literal,
+        $._dq_string_literal,
+        $._triple_sq_string_literal,
+        $._triple_dq_string_literal,
+      ),
+
+    _sq_string_literal: () =>
       token(seq("'", repeat1(choice(/[^\\'\n]/, /\\./, /\\\n/)), "'")),
 
-    string_literal: ($) =>
-      token(choice(seq('"', repeat(choice(/[^\\"\n]/, /\\(.|\n)/)), '"'))),
+    _dq_string_literal: () =>
+      token(seq('"', repeat(choice(/[^\\"\n]/, /\\(.|\n)/)), '"')),
+
+    _triple_sq_string_literal: () =>
+      token(seq("'''", /([^'\\]|\\.|'[^']|''[^'])*/, "'''")),
+
+    _triple_dq_string_literal: () =>
+      token(seq('"""', /([^"\\$]|\\.|"[^"]|""[^"])*/, '"""')),
 
     text_block: ($) =>
       token(
@@ -742,6 +756,7 @@ module.exports = grammar({
           $.annotation_type_declaration,
           $.enum_declaration,
           $.variable_declaration,
+          $.method_declaration,
         ),
       ),
 
@@ -1053,15 +1068,19 @@ module.exports = grammar({
       seq(
         "{",
         repeat(
-          choice(
-            $.constant_declaration,
-            $.enum_declaration,
-            $.method_declaration,
-            $.class_declaration,
-            $.interface_declaration,
-            $.record_declaration,
-            $.annotation_type_declaration,
-            ";",
+          seq(
+            optional(/\n+/),
+            choice(
+              $.constant_declaration,
+              $.enum_declaration,
+              $.method_declaration,
+              $.class_declaration,
+              $.interface_declaration,
+              $.record_declaration,
+              $.annotation_type_declaration,
+              ";",
+            ),
+            optional(/\n+/),
           ),
         ),
         "}",
@@ -1127,7 +1146,7 @@ module.exports = grammar({
       ),
 
     generic_type: ($) =>
-      prec.dynamic(
+      prec.right(
         PREC.GENERIC,
         seq(
           choice(
@@ -1144,13 +1163,13 @@ module.exports = grammar({
         field("dimensions", $.dimensions),
       ),
 
-    integral_type: ($) => choice("byte", "short", "int", "long", "char"),
+    integral_type: () => choice("byte", "short", "int", "long", "char"),
 
-    floating_point_type: ($) => choice("float", "double"),
+    floating_point_type: () => choice("float", "double"),
 
-    boolean_type: ($) => "boolean",
+    boolean_type: () => "boolean",
 
-    void_type: ($) => "void",
+    void_type: () => "void",
 
     _method_header: ($) =>
       seq(

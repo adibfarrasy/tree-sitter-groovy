@@ -8,10 +8,6 @@
         "named": true
       },
       {
-        "type": "character_literal",
-        "named": true
-      },
-      {
         "type": "decimal_floating_point_literal",
         "named": true
       },
@@ -137,6 +133,10 @@
       },
       {
         "type": "interface_declaration",
+        "named": true
+      },
+      {
+        "type": "method_declaration",
         "named": true
       },
       {
@@ -3288,15 +3288,22 @@
   {
     "type": "spread_parameter",
     "named": true,
-    "fields": {},
+    "fields": {
+      "type": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "_unannotated_type",
+            "named": true
+          }
+        ]
+      }
+    },
     "children": {
       "multiple": true,
       "required": true,
       "types": [
-        {
-          "type": "_unannotated_type",
-          "named": true
-        },
         {
           "type": "modifiers",
           "named": true
@@ -3322,6 +3329,11 @@
         }
       ]
     }
+  },
+  {
+    "type": "string_literal",
+    "named": true,
+    "fields": {}
   },
   {
     "type": "super_interfaces",
@@ -4153,10 +4165,6 @@
     "named": false
   },
   {
-    "type": "character_literal",
-    "named": true
-  },
-  {
     "type": "class",
     "named": false
   },
@@ -4356,10 +4364,6 @@
   {
     "type": "strictfp",
     "named": false
-  },
-  {
-    "type": "string_literal",
-    "named": true
   },
   {
     "type": "super",
