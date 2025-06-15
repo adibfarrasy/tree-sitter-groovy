@@ -9,14 +9,26 @@ gen-test:
     tree-sitter test
 
 parse-examples:
-    @echo "Generating test files for manual inspection..."
-    #!/usr/bin/env bash
-    for f in examples/*; do tree-sitter parse "$f" > "$(basename "$f" | sed 's/\([a-z0-9]\)\([A-Z]\)/\1_\2/g' | tr '[:upper:]' '[:lower:]')"; done
+    #!/bin/bash
+    echo "Generating test files for manual inspection..."
+    echo "Working directory: $(pwd)"
+    for f in examples/*; do
+        echo "Parsing $f"
+        tree-sitter parse "$f" > "test_$(basename "$f")"
+    done
+    echo "Files created:"
+    ls -la *.parsed 2>/dev/null || echo "No .parsed files found"
+    echo "Compiling errors..."
+    if grep -C 3 -H -n ERROR test_* > error.log 2>/dev/null; then
+        echo "Errors found in error.log"
+    else
+        echo "No errors found, creating empty error.log"
+        echo "No errors found." > error.log
+    fi
+    echo "Final error.log:"
+    ls -la error.log 2>/dev/null || echo "error.log not created"
 
-    @echo "Compiling errors..."
-    grep -C 3 -H -n ERROR test_* > error.log || echo "No errors found."
-
-full:
+try:
     just gen-test
     just parse-examples
 

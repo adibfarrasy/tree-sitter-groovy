@@ -1,8 +1,8 @@
-==========
+================================================================================
 identifier type
-==========
+================================================================================
 Object result = point.proceed()
----
+--------------------------------------------------------------------------------
 (source_file
   (variable_declaration
     (type_identifier)
@@ -13,11 +13,11 @@ Object result = point.proceed()
         (identifier)
         (argument_list)))))
 
-==========
+================================================================================
 primitive type
-==========
+================================================================================
 boolean result = point.proceed()
----
+--------------------------------------------------------------------------------
 (source_file
   (variable_declaration
     (boolean_type)
@@ -28,14 +28,14 @@ boolean result = point.proceed()
         (identifier)
         (argument_list)))))
 
-==========
+================================================================================
 identifier type with dimension
-==========
+================================================================================
 Object[] args = point.getArgs()
----
+--------------------------------------------------------------------------------
 (source_file
   (variable_declaration
-    (array_type
+    (declaration_array_type
       (type_identifier)
       (dimensions))
     (variable_declarator
@@ -45,11 +45,11 @@ Object[] args = point.getArgs()
         (identifier)
         (argument_list)))))
 
-==========
+================================================================================
 with `as <class>` cast
-==========
+================================================================================
 MethodSignature methodSignature = point.getSignature() as MethodSignature
----
+--------------------------------------------------------------------------------
 (source_file
   (variable_declaration
     (type_identifier)
@@ -62,11 +62,11 @@ MethodSignature methodSignature = point.getSignature() as MethodSignature
               (argument_list))
             (type_identifier)))))
 
-==========
+================================================================================
 with `(<class>)` cast
-==========
+================================================================================
 MethodSignature methodSignature = (MethodSignature) point.getSignature()
----
+--------------------------------------------------------------------------------
 (source_file
   (variable_declaration
     (type_identifier)
@@ -79,11 +79,11 @@ MethodSignature methodSignature = (MethodSignature) point.getSignature()
             (identifier)
             (argument_list))))))
 
-==========
+================================================================================
 positional argument object creation
-==========
+================================================================================
 MyClass myInstance = new MyClass(a,b,c)
----
+--------------------------------------------------------------------------------
 (source_file
   (variable_declaration
     (type_identifier)
@@ -100,11 +100,11 @@ MyClass myInstance = new MyClass(a,b,c)
             (identifier)))))))
 
 
-==========
+================================================================================
 named argument object creation
-==========
+================================================================================
 MyClass myInstance = new MyClass(a: 1, b: 2, c: 3)
----
+--------------------------------------------------------------------------------
 (source_file
   (variable_declaration
     (type_identifier)

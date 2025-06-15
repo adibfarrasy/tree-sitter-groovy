@@ -29,6 +29,7 @@ const PREC = {
   LAMBDA: 19,
 
   TYPE: 2,
+  SCOPED_TYPE: 1,
   PRIMARY_EXPR: 1,
 };
 
@@ -43,37 +44,54 @@ module.exports = grammar({
     $.statement,
     $.primary_expression,
     $._literal,
-    $._type,
-    $._simple_type,
-    $._unannotated_type,
+    $._declaration_type,
+    $._declaration_simple_type,
+    $._declaration_unannotated_type,
+    $._expression_type,
+    $._expression_simple_type,
+    $._expression_unannotated_type,
     $.comment,
     $.module_directive,
   ],
 
   inline: ($) => [
     $._name,
-    $._simple_type,
+    $._declaration_simple_type,
+    $._expression_simple_type,
     $._class_body_declaration,
     $._variable_initializer,
   ],
 
   conflicts: ($) => [
-    [$.modifiers, $.annotated_type, $.receiver_parameter],
     [$.expression, $.statement],
     [$.instanceof_expression],
-    [$.annotated_type, $.array_type],
+    [$.declaration_annotated_type, $.declaration_array_type],
+    [$.expression_annotated_type, $.expression_array_type],
     [$.array_literal, $.map_literal],
     [$.expression, $.array_access],
+    [$._method_declarator, $._variable_declarator_id],
+    [$._declaration_unannotated_type, $._expression_unannotated_type],
     [
-      $.modifiers,
-      $.annotated_type,
+      $.primary_expression,
+      $._declaration_unannotated_type,
+      $._expression_unannotated_type,
+    ],
+    [
+      $.primary_expression,
+      $._expression_unannotated_type,
+      $.scoped_type_identifier,
+    ],
+    [$.primary_expression, $._expression_unannotated_type],
+    [$.primary_expression, $._declaration_unannotated_type],
+    [
       $.module_declaration,
       $.package_declaration,
+      $.modifiers,
+      $.expression_annotated_type,
       $.variable_declaration,
     ],
-    [$.modifiers, $.annotated_type, $.variable_declaration],
-    [$.primary_expression, $._unannotated_type],
-    [$._method_declarator, $._variable_declarator_id],
+    [$.modifiers, $.expression_annotated_type, $.receiver_parameter],
+    [$.modifiers, $.expression_annotated_type, $.variable_declaration],
   ],
 
   word: ($) => $.identifier,
@@ -103,7 +121,7 @@ module.exports = grammar({
     map_entry: ($) =>
       seq(field("key", $.map_key), ":", field("value", $.expression)),
 
-    map_literal: ($) => seq("[", commaSep($.map_entry), "]"),
+    map_literal: ($) => seq("[", choice(commaSep($.map_entry), ":"), "]"),
 
     array_literal: ($) => seq("[", commaSep($.expression), "]"),
 
@@ -237,14 +255,20 @@ module.exports = grammar({
         choice(
           seq(
             "(",
-            choice(field("type", $._type), seq($._type, $.dimensions)),
+            choice(
+              field("type", $._expression_type),
+              seq($._expression_type, $.dimensions),
+            ),
             ")",
             field("value", $.expression),
           ),
           seq(
             field("value", $.expression),
             "as",
-            choice(field("type", $._type), seq($._type, $.dimensions)),
+            choice(
+              field("type", $._expression_type),
+              seq($._expression_type, $.dimensions),
+            ),
           ),
         ),
       ),
@@ -278,8 +302,8 @@ module.exports = grammar({
     binary_expression: ($) =>
       choice(
         ...[
+          ["<", PREC.GENERIC + 1],
           [">", PREC.REL],
-          ["<", PREC.REL],
           [">=", PREC.REL],
           ["<=", PREC.REL],
           ["in", PREC.REL],
@@ -317,7 +341,7 @@ module.exports = grammar({
           field("left", $.expression),
           "instanceof",
           optional("final"),
-          field("right", $._type),
+          field("right", $._expression_type),
           field("name", optional($.identifier)),
         ),
       ),
@@ -394,6 +418,7 @@ module.exports = grammar({
           $.method_invocation,
           $.method_reference,
           $.array_creation_expression,
+          $.expression_array_type,
         ),
       ),
 
@@ -402,7 +427,7 @@ module.exports = grammar({
         seq(
           "new",
           repeat($._annotation),
-          field("type", $._simple_type),
+          field("type", $._expression_simple_type),
           choice(
             seq(
               field("dimensions", repeat1($.dimensions_expr)),
@@ -421,7 +446,10 @@ module.exports = grammar({
     parenthesized_expression: ($) => seq("(", $.expression, ")"),
 
     class_literal: ($) =>
-      prec.dynamic(PREC.CLASS_LITERAL, seq($._unannotated_type, ".", "class")),
+      prec.dynamic(
+        PREC.CLASS_LITERAL,
+        seq($._expression_unannotated_type, ".", "class"),
+      ),
 
     object_creation_expression: ($) =>
       choice(
@@ -438,7 +466,7 @@ module.exports = grammar({
         seq(
           "new",
           field("type_arguments", optional($.type_arguments)),
-          field("type", $._simple_type),
+          field("type", $._expression_simple_type),
           $.object_creation_argument_list,
           optional($.class_body),
         ),
@@ -484,7 +512,7 @@ module.exports = grammar({
               field("name", $.identifier),
               seq(
                 field("object", choice($.primary_expression, $.super)),
-                choice(".", "?."),
+                choice(".", "?.", "*."),
                 optional(seq($.super, ".")),
                 field("type_arguments", optional($.type_arguments)),
                 field("name", $.identifier),
@@ -506,19 +534,26 @@ module.exports = grammar({
 
     method_reference: ($) =>
       seq(
-        choice($._type, $.primary_expression, $.super),
+        choice($._expression_type, $.primary_expression, $.super),
         "::",
         optional($.type_arguments),
         choice("new", $.identifier),
       ),
 
-    type_arguments: ($) => seq("<", commaSep(choice($._type, $.wildcard)), ">"),
+    type_arguments: ($) =>
+      prec(
+        -10,
+        seq("<", commaSep(choice($._declaration_type, $.wildcard)), ">"),
+      ),
 
     wildcard: ($) =>
       seq(repeat($._annotation), "?", optional($._wildcard_bounds)),
 
     _wildcard_bounds: ($) =>
-      choice(seq("extends", $._type), seq($.super, $._type)),
+      choice(
+        seq("extends", $._declaration_type),
+        seq($.super, $._declaration_type),
+      ),
 
     dimensions: ($) =>
       prec.right(repeat1(seq(repeat($._annotation), "[", "]"))),
@@ -559,8 +594,8 @@ module.exports = grammar({
         $.labeled_statement,
         $.if_statement,
         $.while_statement,
-        $.for_statement,
         $.enhanced_for_statement,
+        $.for_statement,
         $.block,
         ";",
         $.assert_statement,
@@ -639,7 +674,7 @@ module.exports = grammar({
     catch_formal_parameter: ($) =>
       seq(optional($.modifiers), $.catch_type, $._variable_declarator_id),
 
-    catch_type: ($) => sep1($._unannotated_type, "|"),
+    catch_type: ($) => sep1($._declaration_unannotated_type, "|"),
 
     finally_clause: ($) => seq("finally", $.block),
 
@@ -659,7 +694,7 @@ module.exports = grammar({
       choice(
         seq(
           optional($.modifiers),
-          field("type", $._unannotated_type),
+          field("type", $._declaration_unannotated_type),
           $._variable_declarator_id,
           "=",
           field("value", $.expression),
@@ -704,11 +739,13 @@ module.exports = grammar({
       seq(
         "for",
         "(",
-        optional($.modifiers),
-        field("type", $._unannotated_type),
-        $._variable_declarator_id,
-        ":",
-        field("value", $.expression),
+        seq(
+          optional($.modifiers),
+          field("type", $._declaration_unannotated_type),
+          $._variable_declarator_id,
+          choice(":", "in"),
+          field("value", $.expression),
+        ),
         ")",
         field("body", $.statement),
       ),
@@ -916,13 +953,19 @@ module.exports = grammar({
         optional($.type_bound),
       ),
 
-    type_bound: ($) => seq("extends", $._type, repeat(seq("&", $._type))),
+    type_bound: ($) =>
+      seq(
+        "extends",
+        $._declaration_type,
+        repeat(seq("&", $._declaration_type)),
+      ),
 
-    superclass: ($) => seq("extends", $._type),
+    superclass: ($) => seq("extends", $._declaration_type),
 
     super_interfaces: ($) => seq("implements", $.type_list),
 
-    type_list: ($) => seq($._type, repeat(seq(",", $._type))),
+    type_list: ($) =>
+      seq($._declaration_type, repeat(seq(",", $._declaration_type))),
 
     permits: ($) => seq("permits", $.type_list),
 
@@ -996,7 +1039,7 @@ module.exports = grammar({
       prec.right(
         seq(
           optional($.modifiers),
-          field("type", $._unannotated_type),
+          field("type", $._declaration_unannotated_type),
           $._variable_declarator_list,
           optional(";"),
         ),
@@ -1040,7 +1083,7 @@ module.exports = grammar({
     annotation_type_element_declaration: ($) =>
       seq(
         optional($.modifiers),
-        field("type", $._unannotated_type),
+        field("type", $._declaration_unannotated_type),
         field("name", $.identifier),
         "(",
         ")",
@@ -1089,7 +1132,7 @@ module.exports = grammar({
     constant_declaration: ($) =>
       seq(
         optional($.modifiers),
-        field("type", $._unannotated_type),
+        field("type", $._declaration_unannotated_type),
         $._variable_declarator_list,
         ";",
       ),
@@ -1114,35 +1157,69 @@ module.exports = grammar({
 
     // Types
 
-    _type: ($) =>
-      prec.left(PREC.TYPE, choice($._unannotated_type, $.annotated_type)),
+    _declaration_type: ($) =>
+      prec.left(
+        PREC.TYPE,
+        choice($._declaration_unannotated_type, $.declaration_annotated_type),
+      ),
 
-    _unannotated_type: ($) =>
-      prec.left(PREC.TYPE, choice($._simple_type, $.array_type)),
+    _declaration_unannotated_type: ($) =>
+      prec.right(
+        PREC.TYPE,
+        choice($._declaration_simple_type, $.declaration_array_type),
+      ),
 
-    _simple_type: ($) =>
+    _declaration_simple_type: ($) =>
       choice(
+        prec(2, $.scoped_type_identifier),
         prec(1, alias($.identifier, $.type_identifier)),
         $.void_type,
         $.integral_type,
         $.floating_point_type,
         $.boolean_type,
-        $.scoped_type_identifier,
         $.generic_type,
       ),
 
-    annotated_type: ($) => seq(repeat1($._annotation), $._unannotated_type),
+    declaration_annotated_type: ($) =>
+      seq(repeat1($._annotation), $._declaration_unannotated_type),
+
+    _expression_type: ($) =>
+      prec.left(
+        PREC.TYPE,
+        choice($._expression_unannotated_type, $.expression_annotated_type),
+      ),
+
+    _expression_unannotated_type: ($) =>
+      prec.right(
+        PREC.TYPE,
+        choice($._expression_simple_type, $.expression_array_type),
+      ),
+
+    _expression_simple_type: ($) =>
+      choice(
+        prec(2, $.scoped_type_identifier),
+        prec(1, alias($.identifier, $.type_identifier)),
+        $.void_type,
+        $.integral_type,
+        $.floating_point_type,
+        $.boolean_type,
+      ),
+
+    expression_annotated_type: ($) =>
+      seq(repeat1($._annotation), $._expression_unannotated_type),
 
     scoped_type_identifier: ($) =>
-      seq(
-        choice(
+      prec.left(
+        PREC.SCOPED_TYPE,
+        seq(
+          choice(
+            alias($.identifier, $.type_identifier),
+            $.scoped_type_identifier,
+          ),
+          ".",
+          repeat($._annotation),
           alias($.identifier, $.type_identifier),
-          $.scoped_type_identifier,
-          $.generic_type,
         ),
-        ".",
-        repeat($._annotation),
-        alias($.identifier, $.type_identifier),
       ),
 
     generic_type: ($) =>
@@ -1157,9 +1234,15 @@ module.exports = grammar({
         ),
       ),
 
-    array_type: ($) =>
+    declaration_array_type: ($) =>
       seq(
-        field("element", $._unannotated_type),
+        field("element", $._declaration_unannotated_type),
+        field("dimensions", $.dimensions),
+      ),
+
+    expression_array_type: ($) =>
+      seq(
+        field("element", $._expression_unannotated_type),
         field("dimensions", $.dimensions),
       ),
 
@@ -1179,7 +1262,7 @@ module.exports = grammar({
             repeat($._annotation),
           ),
         ),
-        field("type", $._unannotated_type),
+        field("type", $._declaration_unannotated_type),
         $._method_declarator,
         optional($.throws),
       ),
@@ -1204,14 +1287,14 @@ module.exports = grammar({
     formal_parameter: ($) =>
       seq(
         optional($.modifiers),
-        field("type", $._unannotated_type),
+        field("type", $._declaration_unannotated_type),
         $._variable_declarator_id,
       ),
 
     receiver_parameter: ($) =>
       seq(
         repeat($._annotation),
-        $._unannotated_type,
+        $._declaration_unannotated_type,
         optional(seq($.identifier, ".")),
         $.this,
       ),
@@ -1219,12 +1302,12 @@ module.exports = grammar({
     spread_parameter: ($) =>
       seq(
         optional($.modifiers),
-        field("type", $._unannotated_type),
+        field("type", $._declaration_unannotated_type),
         "...",
         $.variable_declarator,
       ),
 
-    throws: ($) => seq("throws", commaSep1($._type)),
+    throws: ($) => seq("throws", commaSep1($._declaration_type)),
 
     variable_declaration: ($) =>
       prec.right(
@@ -1232,12 +1315,7 @@ module.exports = grammar({
         seq(
           optional("final"),
           repeat($._annotation),
-          choice(
-            "def",
-            "var",
-            // field("type", $._restricted_type),
-            field("type", $._unannotated_type),
-          ),
+          choice("def", "var", field("type", $._declaration_unannotated_type)),
           $._variable_declarator_list,
           optional(";"),
         ),

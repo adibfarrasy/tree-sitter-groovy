@@ -1,8 +1,8 @@
-==========
+================================================================================
 chaining
-==========
+================================================================================
 obj.method1().method2().method3()
----
+--------------------------------------------------------------------------------
 (source_file
   (expression_statement
     (method_invocation
@@ -16,11 +16,11 @@ obj.method1().method2().method3()
       (identifier)
       (argument_list))))
 
-==========
+================================================================================
 optional chaining
-==========
+================================================================================
 obj?.method1()?.method2()?.method3()
----
+--------------------------------------------------------------------------------
 (source_file
   (expression_statement
     (method_invocation
@@ -34,11 +34,11 @@ obj?.method1()?.method2()?.method3()
       (identifier)
       (argument_list))))
 
-==========
+================================================================================
 invalid optional chaining
-==========
+================================================================================
 obj?.method1()?.method2()?.method3()?
----
+--------------------------------------------------------------------------------
 (source_file
   (expression_statement
     (method_invocation
@@ -52,3 +52,25 @@ obj?.method1()?.method2()?.method3()?
       (identifier)
       (argument_list)))
   (ERROR))
+
+================================================================================
+invocation with type
+================================================================================
+def tags = JsonUtil.parse(myVar, CreditTag[]).toList()
+--------------------------------------------------------------------------------
+(source_file
+  (variable_declaration
+    (variable_declarator
+      (identifier)
+      (method_invocation
+        (method_invocation
+          (identifier)
+          (identifier)
+          (argument_list
+            (identifier)
+              (expression_array_type
+                (type_identifier)
+                (dimensions))))
+        (identifier)
+        (argument_list)))))
+

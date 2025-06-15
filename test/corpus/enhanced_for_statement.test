@@ -1,0 +1,62 @@
+================================================================================
+simple enhanced for statements
+================================================================================
+for (String s : list) {}
+--------------------------------------------------------------------------------
+(source_file
+  (enhanced_for_statement
+    (type_identifier)
+    (identifier)
+    (identifier)
+    (block)))
+
+================================================================================
+simple enhanced for..in statements
+================================================================================
+for (String s in list) {}
+--------------------------------------------------------------------------------
+(source_file
+  (enhanced_for_statement
+    (type_identifier)
+    (identifier)
+    (identifier)
+    (block)))
+
+================================================================================
+generic type in enhanced for statements
+================================================================================
+for (List<String> list : lists) {}
+--------------------------------------------------------------------------------
+(source_file
+  (enhanced_for_statement
+    (generic_type
+      (type_identifier)
+      (type_arguments
+        (type_identifier)))
+    (identifier)
+    (identifier)
+    (block)))
+
+================================================================================
+more complex type in enhanced for statements
+================================================================================
+for (Map.Entry<String, List<String>> entry : map.entrySet()) {}
+--------------------------------------------------------------------------------
+(source_file
+  (enhanced_for_statement
+    (generic_type
+      (scoped_type_identifier
+        (type_identifier)
+        (type_identifier))
+      (type_arguments
+        (type_identifier)
+        (generic_type
+          (type_identifier)
+          (type_arguments
+            (type_identifier)))))
+    (identifier)
+    (method_invocation
+      (identifier)
+      (identifier)
+      (argument_list))
+    (block)))
