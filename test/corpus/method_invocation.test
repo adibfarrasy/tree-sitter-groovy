@@ -68,7 +68,7 @@ def tags = JsonUtil.parse(myVar, CreditTag[]).toList()
           (identifier)
           (argument_list
             (identifier)
-              (expression_array_type
+              (array_type
                 (type_identifier)
                 (dimensions))))
         (identifier)

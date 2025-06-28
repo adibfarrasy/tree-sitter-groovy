@@ -35,7 +35,7 @@ Object[] args = point.getArgs()
 --------------------------------------------------------------------------------
 (source_file
   (variable_declaration
-    (declaration_array_type
+    (array_type
       (type_identifier)
       (dimensions))
     (variable_declarator
