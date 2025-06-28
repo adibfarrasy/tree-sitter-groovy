@@ -80,7 +80,7 @@ module.exports = grammar({
   word: ($) => $.identifier,
 
   rules: {
-    source_file: ($) => repeat($.statement),
+    source_file: ($) => repeat(choice($.statement, $.comment)),
 
     // Literals
 
@@ -883,15 +883,18 @@ module.exports = grammar({
       ),
 
     class_declaration: ($) =>
-      seq(
-        optional($.modifiers),
-        "class",
-        field("name", $.identifier),
-        optional(field("type_parameters", $.type_parameters)),
-        optional(field("superclass", $.superclass)),
-        optional(field("interfaces", $.super_interfaces)),
-        optional(field("permits", $.permits)),
-        field("body", $.class_body),
+      prec.right(
+        5,
+        seq(
+          optional($.modifiers),
+          "class",
+          field("name", $.identifier),
+          optional(field("type_parameters", $.type_parameters)),
+          optional(field("superclass", $.superclass)),
+          optional(field("interfaces", $.super_interfaces)),
+          optional(field("permits", $.permits)),
+          field("body", $.class_body),
+        ),
       ),
 
     modifiers: ($) =>
@@ -1238,7 +1241,7 @@ module.exports = grammar({
 
     variable_declaration: ($) =>
       prec.right(
-        3,
+        PREC.DECL,
         seq(
           optional("final"),
           repeat($._annotation),
@@ -1265,20 +1268,24 @@ module.exports = grammar({
         field("body", $.block),
       ),
 
-    this: ($) => "this",
+    this: () => "this",
 
-    super: ($) => "super",
+    super: () => "super",
 
     // https://docs.oracle.com/javase/specs/jls/se8/html/jls-3.html#jls-IdentifierChars
-    identifier: ($) => /[\p{L}_$][\p{L}\p{Nd}_$]*/,
+    identifier: () => /[\p{L}_$][\p{L}\p{Nd}_$]*/,
 
     // http://stackoverflow.com/questions/13014947/regex-to-match-a-c-style-multiline-comment/36328890#36328890
-    comment: ($) => choice($.line_comment, $.block_comment),
+    comment: ($) =>
+      choice($.line_comment, $.block_comment, $.groovydoc_comment),
 
-    line_comment: ($) => token(prec(PREC.COMMENT, seq("//", /[^\n]*/))),
+    line_comment: () => token(prec(PREC.COMMENT, seq("//", /[^\n]*/))),
 
-    block_comment: ($) =>
+    block_comment: () =>
       token(prec(PREC.COMMENT, seq("/*", /[^*]*\*+([^/*][^*]*\*+)*/, "/"))),
+
+    groovydoc_comment: () =>
+      token(prec(PREC.COMMENT + 1, seq("/**", /([^*]|\*[^/])*/, "*/"))),
   },
 });
 
