@@ -66,15 +66,13 @@ module.exports = grammar({
     [$.primary_expression, $._unannotated_type],
     [$.primary_expression, $._unannotated_type, $.scoped_type_identifier],
     [$.primary_expression, $._unannotated_type],
+    [$.modifiers, $.annotated_type, $.receiver_parameter],
     [
       $.module_declaration,
       $.package_declaration,
       $.modifiers,
       $.annotated_type,
-      $.variable_declaration,
     ],
-    [$.modifiers, $.annotated_type, $.receiver_parameter],
-    [$.modifiers, $.annotated_type, $.variable_declaration],
   ],
 
   word: ($) => $.identifier,
@@ -898,23 +896,26 @@ module.exports = grammar({
       ),
 
     modifiers: ($) =>
-      repeat1(
-        choice(
-          $._annotation,
-          "public",
-          "protected",
-          "private",
-          "abstract",
-          "static",
-          "final",
-          "strictfp",
-          "default",
-          "synchronized",
-          "native",
-          "transient",
-          "volatile",
-          "sealed",
-          "non-sealed",
+      prec(
+        5,
+        repeat1(
+          choice(
+            $._annotation,
+            "public",
+            "protected",
+            "private",
+            "abstract",
+            "static",
+            "final",
+            "strictfp",
+            "default",
+            "synchronized",
+            "native",
+            "transient",
+            "volatile",
+            "sealed",
+            "non-sealed",
+          ),
         ),
       ),
 
@@ -1244,7 +1245,7 @@ module.exports = grammar({
         PREC.DECL,
         seq(
           optional("final"),
-          repeat($._annotation),
+          // repeat($._annotation),
           choice("def", "var", field("type", $._unannotated_type)),
           $._variable_declarator_list,
           optional(";"),

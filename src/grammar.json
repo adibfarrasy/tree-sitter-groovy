@@ -5766,71 +5766,75 @@
       }
     },
     "modifiers": {
-      "type": "REPEAT1",
+      "type": "PREC",
+      "value": 5,
       "content": {
-        "type": "CHOICE",
-        "members": [
-          {
-            "type": "SYMBOL",
-            "name": "_annotation"
-          },
-          {
-            "type": "STRING",
-            "value": "public"
-          },
-          {
-            "type": "STRING",
-            "value": "protected"
-          },
-          {
-            "type": "STRING",
-            "value": "private"
-          },
-          {
-            "type": "STRING",
-            "value": "abstract"
-          },
-          {
-            "type": "STRING",
-            "value": "static"
-          },
-          {
-            "type": "STRING",
-            "value": "final"
-          },
-          {
-            "type": "STRING",
-            "value": "strictfp"
-          },
-          {
-            "type": "STRING",
-            "value": "default"
-          },
-          {
-            "type": "STRING",
-            "value": "synchronized"
-          },
-          {
-            "type": "STRING",
-            "value": "native"
-          },
-          {
-            "type": "STRING",
-            "value": "transient"
-          },
-          {
-            "type": "STRING",
-            "value": "volatile"
-          },
-          {
-            "type": "STRING",
-            "value": "sealed"
-          },
-          {
-            "type": "STRING",
-            "value": "non-sealed"
-          }
-        ]
+        "type": "REPEAT1",
+        "content": {
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "SYMBOL",
+              "name": "_annotation"
+            },
+            {
+              "type": "STRING",
+              "value": "public"
+            },
+            {
+              "type": "STRING",
+              "value": "protected"
+            },
+            {
+              "type": "STRING",
+              "value": "private"
+            },
+            {
+              "type": "STRING",
+              "value": "abstract"
+            },
+            {
+              "type": "STRING",
+              "value": "static"
+            },
+            {
+              "type": "STRING",
+              "value": "final"
+            },
+            {
+              "type": "STRING",
+              "value": "strictfp"
+            },
+            {
+              "type": "STRING",
+              "value": "default"
+            },
+            {
+              "type": "STRING",
+              "value": "synchronized"
+            },
+            {
+              "type": "STRING",
+              "value": "native"
+            },
+            {
+              "type": "STRING",
+              "value": "transient"
+            },
+            {
+              "type": "STRING",
+              "value": "volatile"
+            },
+            {
+              "type": "STRING",
+              "value": "sealed"
+            },
+            {
+              "type": "STRING",
+              "value": "non-sealed"
+            }
+          ]
+        }
       }
     },
     "type_parameters": {
@@ -7566,13 +7570,6 @@
             ]
           },
           {
-            "type": "REPEAT",
-            "content": {
-              "type": "SYMBOL",
-              "name": "_annotation"
-            }
-          },
-          {
             "type": "CHOICE",
             "members": [
               {
@@ -7852,21 +7849,15 @@
       "_unannotated_type"
     ],
     [
-      "module_declaration",
-      "package_declaration",
-      "modifiers",
-      "annotated_type",
-      "variable_declaration"
-    ],
-    [
       "modifiers",
       "annotated_type",
       "receiver_parameter"
     ],
     [
+      "module_declaration",
+      "package_declaration",
       "modifiers",
-      "annotated_type",
-      "variable_declaration"
+      "annotated_type"
     ]
   ],
   "precedences": [],
