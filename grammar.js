@@ -297,6 +297,8 @@ module.exports = grammar({
           ["<<", PREC.SHIFT],
           [">>", PREC.SHIFT],
           [">>>", PREC.SHIFT],
+          ["<=>", PREC.REL],
+          ["?:", PREC.TERNARY],
         ].map(([operator, precedence]) =>
           prec.left(
             precedence,
@@ -418,7 +420,8 @@ module.exports = grammar({
 
     dimensions_expr: ($) => seq(repeat($._annotation), "[", $.expression, "]"),
 
-    parenthesized_expression: ($) => seq("(", $.expression, ")"),
+    parenthesized_expression: ($) =>
+      prec(PREC.PARENS, seq("(", $.expression, ")")),
 
     class_literal: ($) =>
       prec.dynamic(PREC.CLASS_LITERAL, seq($._unannotated_type, ".", "class")),
@@ -490,13 +493,17 @@ module.exports = grammar({
                 field("name", $.identifier),
               ),
             ),
-            choice(
-              seq(
-                field("arguments", $.argument_list),
+            seq(
+              optional("("),
+              choice(
+                seq(
+                  field("arguments", $.argument_list),
+                  field("closure", $.closure),
+                ),
                 field("closure", $.closure),
+                field("arguments", $.argument_list),
               ),
-              field("closure", $.closure),
-              field("arguments", $.argument_list),
+              optional(")"),
             ),
           ),
         ),
@@ -1208,11 +1215,14 @@ module.exports = grammar({
       ),
 
     formal_parameters: ($) =>
-      seq(
-        "(",
-        optional($.receiver_parameter),
-        commaSep(choice($.formal_parameter, $.spread_parameter)),
-        ")",
+      prec(
+        PREC.LAMBDA,
+        seq(
+          "(",
+          optional($.receiver_parameter),
+          commaSep(choice($.formal_parameter, $.spread_parameter)),
+          ")",
+        ),
       ),
 
     formal_parameter: ($) =>
@@ -1220,6 +1230,7 @@ module.exports = grammar({
         optional($.modifiers),
         field("type", $._unannotated_type),
         $._variable_declarator_id,
+        optional(seq("=", field("default_value", $.expression))),
       ),
 
     receiver_parameter: ($) =>
