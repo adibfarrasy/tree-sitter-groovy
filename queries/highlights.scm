@@ -66,6 +66,7 @@
   name: (identifier) @variable)
 
 (field_access
+  object: (identifier) @variable
   field: (identifier) @property)
 
 (assignment_expression
