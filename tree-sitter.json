@@ -10,7 +10,8 @@
         "groovy", "gvy", "gy", "gsh"
       ],
       "injection-regex": "^groovy$",
-      "class-name": "groovy"
+      "class-name": "groovy",
+      "highlights": "queries/highlights.scm"
     }
   ],
   "metadata": {
