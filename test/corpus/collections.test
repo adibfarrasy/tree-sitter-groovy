@@ -1,41 +1,36 @@
 ================================================================================
-binary comparison only
-:skip
+array literal with elements
 ================================================================================
-a < b
+[1, 2, 3]
 --------------------------------------------------------------------------------
 (source_file
   (expression_statement
-    (binary_expression
-      (identifier)
-      (identifier))))
+    (array_literal
+      (decimal_integer_literal)
+      (decimal_integer_literal)
+      (decimal_integer_literal))))
 
 ================================================================================
-simple comparison
+nested array literal
 ================================================================================
-if (a < b) {}
+[[1, 2], [3, 4]]
 --------------------------------------------------------------------------------
 (source_file
-  (if_statement
-    (parenthesized_expression
-      (binary_expression
-        (identifier)
-        (identifier)))
-    (block)))
+  (expression_statement
+    (array_literal
+      (array_literal
+        (decimal_integer_literal)
+        (decimal_integer_literal))
+      (array_literal
+        (decimal_integer_literal)
+        (decimal_integer_literal)))))
 
 ================================================================================
-multiple comparisons
+empty map literal
 ================================================================================
-if (a < b || c == d) {}
+[:]
 --------------------------------------------------------------------------------
 (source_file
-  (if_statement
-    (parenthesized_expression
-      (binary_expression
-        (binary_expression
-          (identifier)
-          (identifier))
-        (binary_expression
-          (identifier)
-          (identifier))))
-    (block)))
+  (expression_statement
+    (map_literal)))
+

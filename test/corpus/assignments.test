@@ -1,0 +1,97 @@
+================================================================================
+simple assignment
+================================================================================
+x = 5
+--------------------------------------------------------------------------------
+(source_file
+  (expression_statement
+    (assignment_expression
+      (identifier)
+      (decimal_integer_literal))))
+
+================================================================================
+compound assignments
+================================================================================
+x += 5
+y -= 3
+z *= 2
+a /= 4
+b %= 3
+c &= 7
+d |= 8
+e ^= 9
+f <<= 2
+g >>= 1
+h >>>= 3
+--------------------------------------------------------------------------------
+(source_file
+  (expression_statement
+    (assignment_expression
+      (identifier)
+      (decimal_integer_literal)))
+  (expression_statement
+    (assignment_expression
+      (identifier)
+      (decimal_integer_literal)))
+  (expression_statement
+    (assignment_expression
+      (identifier)
+      (decimal_integer_literal)))
+  (expression_statement
+    (assignment_expression
+      (identifier)
+      (decimal_integer_literal)))
+  (expression_statement
+    (assignment_expression
+      (identifier)
+      (decimal_integer_literal)))
+  (expression_statement
+    (assignment_expression
+      (identifier)
+      (decimal_integer_literal)))
+  (expression_statement
+    (assignment_expression
+      (identifier)
+      (decimal_integer_literal)))
+  (expression_statement
+    (assignment_expression
+      (identifier)
+      (decimal_integer_literal)))
+  (expression_statement
+    (assignment_expression
+      (identifier)
+      (decimal_integer_literal)))
+  (expression_statement
+    (assignment_expression
+      (identifier)
+      (decimal_integer_literal)))
+  (expression_statement
+    (assignment_expression
+      (identifier)
+      (decimal_integer_literal))))
+
+================================================================================
+field assignment
+================================================================================
+obj.field = value
+--------------------------------------------------------------------------------
+(source_file
+  (expression_statement
+    (assignment_expression
+      (field_access
+        (identifier)
+        (identifier))
+      (identifier))))
+
+================================================================================
+array element assignment
+================================================================================
+arr[0] = value
+--------------------------------------------------------------------------------
+(source_file
+  (expression_statement
+    (assignment_expression
+      (array_access
+        (identifier)
+        (decimal_integer_literal))
+      (identifier))))

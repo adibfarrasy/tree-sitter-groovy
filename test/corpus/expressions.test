@@ -1,0 +1,241 @@
+================================================================================
+binary arithmetic expressions
+================================================================================
+a + b
+x - y
+p * q
+m / n
+a % b
+--------------------------------------------------------------------------------
+(source_file
+  (expression_statement
+    (binary_expression
+      (identifier)
+      (identifier)))
+  (expression_statement
+    (binary_expression
+      (identifier)
+      (identifier)))
+  (expression_statement
+    (binary_expression
+      (identifier)
+      (identifier)))
+  (expression_statement
+    (binary_expression
+      (identifier)
+      (identifier)))
+  (expression_statement
+    (binary_expression
+      (identifier)
+      (identifier))))
+
+================================================================================
+binary comparison expressions
+================================================================================
+a < b
+x <= y
+p > q
+m >= n
+a == b
+x != y
+--------------------------------------------------------------------------------
+(source_file
+  (expression_statement
+    (binary_expression
+      (identifier)
+      (identifier)))
+  (expression_statement
+    (binary_expression
+      (identifier)
+      (identifier)))
+  (expression_statement
+    (binary_expression
+      (identifier)
+      (identifier)))
+  (expression_statement
+    (binary_expression
+      (identifier)
+      (identifier)))
+  (expression_statement
+    (binary_expression
+      (identifier)
+      (identifier)))
+  (expression_statement
+    (binary_expression
+      (identifier)
+      (identifier))))
+
+================================================================================
+binary logical expressions
+================================================================================
+a && b
+x || y
+--------------------------------------------------------------------------------
+(source_file
+  (expression_statement
+    (binary_expression
+      (identifier)
+      (identifier)))
+  (expression_statement
+    (binary_expression
+      (identifier)
+      (identifier))))
+
+================================================================================
+binary bitwise expressions
+================================================================================
+a & b
+x | y
+p ^ q
+a << b
+x >> y
+m >>> n
+--------------------------------------------------------------------------------
+(source_file
+  (expression_statement
+    (binary_expression
+      (identifier)
+      (identifier)))
+  (expression_statement
+    (binary_expression
+      (identifier)
+      (identifier)))
+  (expression_statement
+    (binary_expression
+      (identifier)
+      (identifier)))
+  (expression_statement
+    (binary_expression
+      (identifier)
+      (identifier)))
+  (expression_statement
+    (binary_expression
+      (identifier)
+      (identifier)))
+  (expression_statement
+    (binary_expression
+      (identifier)
+      (identifier))))
+
+================================================================================
+groovy specific operators
+================================================================================
+a <=> b
+x in list
+value ?: defaultValue
+--------------------------------------------------------------------------------
+(source_file
+  (expression_statement
+    (binary_expression
+      (identifier)
+      (identifier)))
+  (expression_statement
+    (binary_expression
+      (identifier)
+      (identifier)))
+  (expression_statement
+    (binary_expression
+      (identifier)
+      (identifier))))
+
+================================================================================
+unary minus
+================================================================================
+-b
+--------------------------------------------------------------------------------
+(source_file
+  (expression_statement
+    (unary_expression
+      (identifier))))
+
+================================================================================
+logical not and bitwise not
+================================================================================
+!c
+~d
+--------------------------------------------------------------------------------
+(source_file
+  (expression_statement
+    (unary_expression
+      (identifier)))
+  (expression_statement
+    (unary_expression
+      (identifier))))
+
+================================================================================
+pre and post increment
+================================================================================
+++e
+f++
+--------------------------------------------------------------------------------
+(source_file
+  (expression_statement
+    (update_expression
+      (identifier)))
+  (expression_statement
+    (update_expression
+      (identifier))))
+
+================================================================================
+pre and post decrement
+================================================================================
+--g
+h--
+--------------------------------------------------------------------------------
+(source_file
+  (expression_statement
+    (update_expression
+      (identifier)))
+  (expression_statement
+    (update_expression
+      (identifier))))
+
+================================================================================
+ternary expression
+================================================================================
+condition ? trueValue : falseValue
+--------------------------------------------------------------------------------
+(source_file
+  (expression_statement
+    (ternary_expression
+      (identifier)
+      (identifier)
+      (identifier))))
+
+================================================================================
+parenthesized expression
+================================================================================
+(a + b) * c
+--------------------------------------------------------------------------------
+(source_file
+  (expression_statement
+    (binary_expression
+      (parenthesized_expression
+        (binary_expression
+          (identifier)
+          (identifier)))
+      (identifier))))
+
+================================================================================
+complex nested expression
+================================================================================
+(a + b) * c > d && e <= f || g != h
+--------------------------------------------------------------------------------
+(source_file
+  (expression_statement
+    (binary_expression
+      (binary_expression
+        (binary_expression
+          (binary_expression
+            (parenthesized_expression
+              (binary_expression
+                (identifier)
+                (identifier)))
+            (identifier))
+          (identifier))
+        (binary_expression
+          (identifier)
+          (identifier)))
+      (binary_expression
+        (identifier)
+        (identifier)))))

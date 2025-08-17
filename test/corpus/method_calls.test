@@ -1,0 +1,109 @@
+================================================================================
+simple method call
+================================================================================
+println("hello")
+--------------------------------------------------------------------------------
+(source_file
+  (expression_statement
+    (method_invocation
+      (identifier)
+      (argument_list
+        (string_literal)))))
+
+================================================================================
+method call without arguments
+================================================================================
+doSomething()
+--------------------------------------------------------------------------------
+(source_file
+  (expression_statement
+    (method_invocation
+      (identifier)
+      (argument_list))))
+
+================================================================================
+method call on object
+================================================================================
+obj.method()
+--------------------------------------------------------------------------------
+(source_file
+  (expression_statement
+    (method_invocation
+      (identifier)
+      (identifier)
+      (argument_list))))
+
+================================================================================
+chained method calls
+================================================================================
+obj.method1().method2().method3()
+--------------------------------------------------------------------------------
+(source_file
+  (expression_statement
+    (method_invocation
+      (method_invocation
+        (method_invocation
+          (identifier)
+          (identifier)
+          (argument_list))
+        (identifier)
+        (argument_list))
+      (identifier)
+      (argument_list))))
+
+================================================================================
+method call with multiple arguments
+================================================================================
+calculate(a, b, c)
+--------------------------------------------------------------------------------
+(source_file
+  (expression_statement
+    (method_invocation
+      (identifier)
+      (argument_list
+        (identifier)
+        (identifier)
+        (identifier)))))
+
+================================================================================
+method call with mixed argument types
+================================================================================
+process("text", 42, true, null)
+--------------------------------------------------------------------------------
+(source_file
+  (expression_statement
+    (method_invocation
+      (identifier)
+      (argument_list
+        (string_literal)
+        (decimal_integer_literal)
+        (true)
+        (null_literal)))))
+
+================================================================================
+static method call
+================================================================================
+Math.max(a, b)
+--------------------------------------------------------------------------------
+(source_file
+  (expression_statement
+    (method_invocation
+      (identifier)
+      (identifier)
+      (argument_list
+        (identifier)
+        (identifier)))))
+
+================================================================================
+method call with field access
+================================================================================
+obj.field.method()
+--------------------------------------------------------------------------------
+(source_file
+  (expression_statement
+    (method_invocation
+      (field_access
+        (identifier)
+        (identifier))
+      (identifier)
+      (argument_list))))

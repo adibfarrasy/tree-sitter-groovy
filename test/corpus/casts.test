@@ -1,0 +1,67 @@
+================================================================================
+java style cast
+================================================================================
+(String) value
+--------------------------------------------------------------------------------
+(source_file
+  (expression_statement
+    (cast_expression
+      (type_identifier)
+      (identifier))))
+
+================================================================================
+groovy as cast
+================================================================================
+value as String
+--------------------------------------------------------------------------------
+(source_file
+  (expression_statement
+    (cast_expression
+      (identifier)
+      (type_identifier))))
+
+================================================================================
+cast with generic type
+================================================================================
+value as List<String>
+--------------------------------------------------------------------------------
+(source_file
+  (expression_statement
+    (cast_expression
+      (identifier)
+      (generic_type
+        (type_identifier)
+        (type_arguments
+          (type_identifier))))))
+
+================================================================================
+cast with array type
+================================================================================
+(String[]) value
+--------------------------------------------------------------------------------
+(source_file
+  (expression_statement
+    (cast_expression
+      (type_identifier)
+      (dimensions)
+      (identifier))))
+
+================================================================================
+complex cast expression
+================================================================================
+((Map<String, Integer>) data).get("key")
+--------------------------------------------------------------------------------
+(source_file
+  (expression_statement
+    (method_invocation
+      (parenthesized_expression
+        (cast_expression
+          (generic_type
+            (type_identifier)
+            (type_arguments
+              (type_identifier)
+              (type_identifier)))
+          (identifier)))
+      (identifier)
+      (argument_list
+        (string_literal)))))

@@ -1,0 +1,128 @@
+================================================================================
+decimal integer literals
+================================================================================
+42
+1000
+123L
+456l
+--------------------------------------------------------------------------------
+(source_file
+  (expression_statement
+    (decimal_integer_literal))
+  (expression_statement
+    (decimal_integer_literal))
+  (expression_statement
+    (decimal_integer_literal))
+  (expression_statement
+    (decimal_integer_literal)))
+
+================================================================================
+hex integer literals
+================================================================================
+0x42
+0X1A2B
+0xdeadbeefL
+0XCAFE
+--------------------------------------------------------------------------------
+(source_file
+  (expression_statement
+    (hex_integer_literal))
+  (expression_statement
+    (hex_integer_literal))
+  (expression_statement
+    (hex_integer_literal))
+  (expression_statement
+    (hex_integer_literal)))
+
+================================================================================
+octal integer literals
+================================================================================
+0o777
+0O123
+0o456L
+--------------------------------------------------------------------------------
+(source_file
+  (expression_statement
+    (octal_integer_literal))
+  (expression_statement
+    (octal_integer_literal))
+  (expression_statement
+    (octal_integer_literal)))
+
+================================================================================
+binary integer literals
+================================================================================
+0b1010
+0B11110000
+0b101010L
+--------------------------------------------------------------------------------
+(source_file
+  (expression_statement
+    (binary_integer_literal))
+  (expression_statement
+    (binary_integer_literal))
+  (expression_statement
+    (binary_integer_literal)))
+
+================================================================================
+decimal floating point literals
+================================================================================
+3.14
+.5
+2.5f
+1.23d
+2e10
+3.14e-2
+5E+3
+--------------------------------------------------------------------------------
+(source_file
+  (expression_statement
+    (decimal_floating_point_literal))
+  (expression_statement
+    (decimal_floating_point_literal))
+  (expression_statement
+    (decimal_floating_point_literal))
+  (expression_statement
+    (decimal_floating_point_literal))
+  (expression_statement
+    (decimal_floating_point_literal))
+  (expression_statement
+    (decimal_floating_point_literal))
+  (expression_statement
+    (decimal_floating_point_literal)))
+
+================================================================================
+hex floating point literals
+================================================================================
+0x1.0p0
+0X1.5p+3
+0x2.Ap-2
+--------------------------------------------------------------------------------
+(source_file
+  (expression_statement
+    (hex_floating_point_literal))
+  (expression_statement
+    (hex_floating_point_literal))
+  (expression_statement
+    (hex_floating_point_literal)))
+
+================================================================================
+boolean literals
+================================================================================
+true
+false
+--------------------------------------------------------------------------------
+(source_file
+  (expression_statement
+    (true))
+  (expression_statement
+    (false)))
+
+================================================================================
+null literal
+================================================================================
+null
+--------------------------------------------------------------------------------
+(source_file
+  (expression_statement
+    (null_literal)))
