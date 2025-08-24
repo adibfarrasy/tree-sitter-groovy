@@ -557,7 +557,9 @@ module.exports = grammar({
           field("object", choice($.primary_expression, $.super)),
           field("operator", choice(".", "?.", "*.")),
           field("name", $.identifier),
+          optional("("),
           field("closure", $.closure),
+          optional(")"),
         ),
       ),
 

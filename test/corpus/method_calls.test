@@ -143,3 +143,19 @@ obj.method { }
       (identifier)
       (identifier)
       (closure))))
+
+================================================================================
+method call with parens and closure
+================================================================================
+list.find({i -> i})
+--------------------------------------------------------------------------------
+(source_file
+  (expression_statement
+    (method_invocation
+      (identifier)
+      (identifier)
+      (closure
+        (expression_statement
+          (lambda_expression
+            (identifier)
+            (identifier)))))))
