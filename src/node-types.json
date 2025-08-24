@@ -3155,6 +3155,11 @@
     }
   },
   {
+    "type": "multiline_string_fragment",
+    "named": true,
+    "fields": {}
+  },
+  {
     "type": "object_creation_argument_list",
     "named": true,
     "fields": {},
@@ -3799,9 +3804,42 @@
     }
   },
   {
+    "type": "string_interpolation",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "expression",
+          "named": true
+        },
+        {
+          "type": "identifier",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
     "type": "string_literal",
     "named": true,
-    "fields": {}
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": false,
+      "types": [
+        {
+          "type": "multiline_string_fragment",
+          "named": true
+        },
+        {
+          "type": "string_interpolation",
+          "named": true
+        }
+      ]
+    }
   },
   {
     "type": "super_interfaces",
@@ -4423,6 +4461,22 @@
   },
   {
     "type": "!=",
+    "named": false
+  },
+  {
+    "type": "\"",
+    "named": false
+  },
+  {
+    "type": "\"\"\"",
+    "named": false
+  },
+  {
+    "type": "$",
+    "named": false
+  },
+  {
+    "type": "${",
     "named": false
   },
   {

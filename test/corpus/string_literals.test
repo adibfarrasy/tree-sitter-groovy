@@ -38,7 +38,7 @@ multiline string
 --------------------------------------------------------------------------------
 (source_file
   (expression_statement
-    (string_literal)))
+    (text_block)))
 
 ================================================================================
 string with escape sequences

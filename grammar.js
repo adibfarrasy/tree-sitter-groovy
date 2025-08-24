@@ -107,13 +107,13 @@ module.exports = grammar({
 
     array_literal: ($) => seq("[", commaSep($.expression), "]"),
 
-    decimal_integer_literal: ($) =>
+    decimal_integer_literal: () =>
       token(seq(DIGITS, optional(choice("l", "L")))),
 
-    hex_integer_literal: ($) =>
+    hex_integer_literal: () =>
       token(seq(choice("0x", "0X"), HEX_DIGITS, optional(choice("l", "L")))),
 
-    octal_integer_literal: ($) =>
+    octal_integer_literal: () =>
       token(
         seq(
           choice("0o", "0O"),
@@ -122,12 +122,12 @@ module.exports = grammar({
         ),
       ),
 
-    binary_integer_literal: ($) =>
+    binary_integer_literal: () =>
       token(
         seq(choice("0b", "0B"), sep1(/[01]+/, "_"), optional(choice("l", "L"))),
       ),
 
-    decimal_floating_point_literal: ($) =>
+    decimal_floating_point_literal: () =>
       token(
         choice(
           seq(
@@ -158,7 +158,7 @@ module.exports = grammar({
         ),
       ),
 
-    hex_floating_point_literal: ($) =>
+    hex_floating_point_literal: () =>
       token(
         seq(
           choice("0x", "0X"),
@@ -177,9 +177,9 @@ module.exports = grammar({
         ),
       ),
 
-    true: ($) => "true",
+    true: () => "true",
 
-    false: ($) => "false",
+    false: () => "false",
 
     string_literal: ($) =>
       choice(
@@ -190,18 +190,60 @@ module.exports = grammar({
       ),
 
     _sq_string_literal: () =>
-      token(seq("'", repeat1(choice(/[^\\'\n]/, /\\./, /\\\n/)), "'")),
+      token(seq("'", repeat(choice(/[^\\'\n]/, /\\./, /\\\n/)), "'")),
 
-    _dq_string_literal: () =>
-      token(seq('"', repeat(choice(/[^\\"\n]/, /\\(.|\n)/)), '"')),
+    _dq_string_literal: ($) =>
+      seq(
+        '"',
+        repeat(
+          choice(
+            $._string_fragment,
+            $._escape_sequence,
+            $.string_interpolation,
+          ),
+        ),
+        '"',
+      ),
 
     _triple_sq_string_literal: () =>
       token(seq("'''", /([^'\\]|\\.|'[^']|''[^'])*/, "'''")),
 
-    _triple_dq_string_literal: () =>
-      token(seq('"""', /([^"\\$]|\\.|"[^"]|""[^"])*/, '"""')),
+    _triple_dq_string_literal: ($) =>
+      seq(
+        '"""',
+        repeat(
+          choice(
+            alias($._multiline_string_fragment, $.multiline_string_fragment),
+            $._escape_sequence,
+            $.string_interpolation,
+          ),
+        ),
+        '"""',
+      ),
 
-    text_block: ($) =>
+    _string_fragment: () => token.immediate(prec(1, /[^"\\$]+/)),
+    _multiline_string_fragment: () => choice(/[^"\\$]+/, /"([^"\\$]|\\")*/),
+
+    string_interpolation: ($) =>
+      choice(seq("${", $.expression, "}"), seq("$", $.identifier)),
+
+    _escape_sequence: ($) =>
+      choice(
+        $._basic_escape_sequence,
+        $._octal_escape_sequence,
+        $._hex_escape_sequence,
+        $._unicode_escape_sequence,
+      ),
+
+    _basic_escape_sequence: () => token(seq("\\", /[bfnrt'"\\]/)),
+    _octal_escape_sequence: () => token(seq("\\", /[0-7]{1,3}/)),
+    _hex_escape_sequence: () => token(seq("\\", /x[0-9a-fA-F]{2}/)),
+    _unicode_escape_sequence: () =>
+      token(
+        choice(seq("\\", /u[0-9a-fA-F]{4}/), seq("\\", /u\{[0-9a-fA-F]+\}/)),
+      ),
+
+    text_block: () =>
       token(
         choice(
           seq(
@@ -483,7 +525,10 @@ module.exports = grammar({
       ),
 
     _simple_method_invocation: ($) =>
-      prec(PREC.CALL, seq(field("name", $.identifier), field("arguments", $.argument_list))),
+      prec(
+        PREC.CALL,
+        seq(field("name", $.identifier), field("arguments", $.argument_list)),
+      ),
 
     _object_method_invocation: ($) =>
       prec.left(
