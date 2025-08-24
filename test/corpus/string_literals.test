@@ -76,3 +76,27 @@ empty double quoted string
   (expression_statement
     (string_literal)))
 
+================================================================================
+string interpolation for identifier
+================================================================================
+"$id"
+--------------------------------------------------------------------------------
+(source_file
+  (expression_statement
+    (string_literal
+      (string_interpolation
+        (identifier)))))
+
+================================================================================
+string interpolation for expression
+================================================================================
+"${obj.call()}"
+--------------------------------------------------------------------------------
+(source_file
+  (expression_statement
+    (string_literal
+      (string_interpolation
+        (method_invocation
+          (identifier)
+          (identifier)
+          (argument_list))))))

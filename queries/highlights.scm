@@ -116,6 +116,16 @@
 (string_literal) @string
 (text_block) @string
 
+(string_literal
+  (string_interpolation) @embedded)
+
+(string_interpolation
+  (identifier) @variable)
+
+"$" @punctuation.special
+"${" @punctuation.special
+"}" @punctuation.special
+
 ; Comments
 (line_comment) @comment
 (block_comment) @comment
