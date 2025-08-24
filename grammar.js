@@ -804,7 +804,10 @@ module.exports = grammar({
       ),
 
     element_value_array_initializer: ($) =>
-      seq("{", commaSep($._element_value), optional(","), "}"),
+      prec.left(
+        PREC.ARRAY,
+        seq("[", commaSep($._element_value), optional(","), "]"),
+      ),
 
     // Declarations
 
