@@ -462,7 +462,7 @@ module.exports = grammar({
         seq(
           field("object", choice($.primary_expression, $.super)),
           optional(seq(".", $.super)),
-          ".",
+          field("operator", choice(".", "?.", "*.")),
           field("field", choice($.identifier, $.this)),
         ),
       ),
