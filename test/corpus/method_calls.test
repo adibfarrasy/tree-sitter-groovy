@@ -107,3 +107,39 @@ obj.field.method()
         (identifier))
       (identifier)
       (argument_list))))
+
+================================================================================
+method call with safe navigation
+================================================================================
+obj?.method()
+--------------------------------------------------------------------------------
+(source_file
+  (expression_statement
+    (method_invocation
+      (identifier)
+      (identifier)
+      (argument_list))))
+
+================================================================================
+method call with spread operator
+================================================================================
+obj*.method()
+--------------------------------------------------------------------------------
+(source_file
+  (expression_statement
+    (method_invocation
+      (identifier)
+      (identifier)
+      (argument_list))))
+
+================================================================================
+method call with closure
+================================================================================
+obj.method { }
+--------------------------------------------------------------------------------
+(source_file
+  (expression_statement
+    (method_invocation
+      (identifier)
+      (identifier)
+      (closure))))

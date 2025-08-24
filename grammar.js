@@ -73,6 +73,7 @@ module.exports = grammar({
       $.modifiers,
       $.annotated_type,
     ],
+    [$._object_method_invocation, $._closure_method_invocation],
   ],
 
   word: ($) => $.identifier,
@@ -476,36 +477,42 @@ module.exports = grammar({
 
     method_invocation: ($) =>
       choice(
-        prec.left(
-          PREC.CALL,
-          seq(field("name", $.identifier), field("arguments", $.argument_list)),
-        ),
-        prec.left(
-          PREC.CALL,
-          seq(
-            choice(
-              field("name", $.identifier),
-              seq(
-                field("object", choice($.primary_expression, $.super)),
-                choice(".", "?.", "*."),
-                optional(seq($.super, ".")),
-                field("type_arguments", optional($.type_arguments)),
-                field("name", $.identifier),
-              ),
-            ),
+        $._simple_method_invocation,
+        $._object_method_invocation,
+        $._closure_method_invocation,
+      ),
+
+    _simple_method_invocation: ($) =>
+      prec(PREC.CALL, seq(field("name", $.identifier), field("arguments", $.argument_list))),
+
+    _object_method_invocation: ($) =>
+      prec.left(
+        PREC.CALL,
+        seq(
+          field("object", choice($.primary_expression, $.super)),
+          field("operator", choice(".", "?.", "*.")),
+          optional(seq($.super, ".")),
+          field("type_arguments", optional($.type_arguments)),
+          field("name", $.identifier),
+          choice(
             seq(
-              optional("("),
-              choice(
-                seq(
-                  field("arguments", $.argument_list),
-                  field("closure", $.closure),
-                ),
-                field("closure", $.closure),
-                field("arguments", $.argument_list),
-              ),
-              optional(")"),
+              field("arguments", $.argument_list),
+              field("closure", optional($.closure)),
             ),
+            field("arguments", $.argument_list),
+            field("closure", $.closure),
           ),
+        ),
+      ),
+
+    _closure_method_invocation: ($) =>
+      prec.left(
+        PREC.CALL,
+        seq(
+          field("object", choice($.primary_expression, $.super)),
+          field("operator", choice(".", "?.", "*.")),
+          field("name", $.identifier),
+          field("closure", $.closure),
         ),
       ),
 
