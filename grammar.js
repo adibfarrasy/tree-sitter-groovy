@@ -656,9 +656,11 @@ module.exports = grammar({
     labeled_statement: ($) => seq($.identifier, ":", $.statement),
 
     assert_statement: ($) =>
-      choice(
-        seq("assert", $.expression, ";"),
-        seq("assert", $.expression, ":", $.expression, ";"),
+      prec.right(
+        choice(
+          seq("assert", $.expression, optional(";")),
+          seq("assert", $.expression, ":", $.expression, optional(";")),
+        ),
       ),
 
     do_statement: ($) =>
