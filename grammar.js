@@ -494,7 +494,7 @@ module.exports = grammar({
 
     argument: ($) =>
       choice(
-        seq(field("name", $.identifier), ":", field("value", $.expression)),
+        seq(field("name", choice($.identifier, $.string_literal)), ":", field("value", $.expression)),
         $.expression,
       ),
 

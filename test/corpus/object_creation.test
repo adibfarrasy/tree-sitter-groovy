@@ -71,3 +71,31 @@ new Container(new Item("value"))
             (object_creation_argument_list
               (argument
                 (string_literal)))))))))
+
+================================================================================
+object creation with string literal named parameters
+================================================================================
+new SomeClass("key1": obj.field1,
+                "key2": obj.field2,
+                "key3": obj.field3)
+--------------------------------------------------------------------------------
+(source_file
+  (expression_statement
+    (object_creation_expression
+      (type_identifier)
+      (object_creation_argument_list
+        (argument
+          (string_literal)
+          (field_access
+            (identifier)
+            (identifier)))
+        (argument
+          (string_literal)
+          (field_access
+            (identifier)
+            (identifier)))
+        (argument
+          (string_literal)
+          (field_access
+            (identifier)
+            (identifier)))))))
