@@ -1144,19 +1144,15 @@ module.exports = grammar({
       seq(
         "{",
         repeat(
-          seq(
-            optional(/\n+/),
-            choice(
-              $.constant_declaration,
-              $.enum_declaration,
-              $.method_declaration,
-              $.class_declaration,
-              $.interface_declaration,
-              $.record_declaration,
-              $.annotation_type_declaration,
-              ";",
-            ),
-            optional(/\n+/),
+          choice(
+            $.constant_declaration,
+            $.enum_declaration,
+            $.method_declaration,
+            $.class_declaration,
+            $.interface_declaration,
+            $.record_declaration,
+            $.annotation_type_declaration,
+            ";",
           ),
         ),
         "}",
@@ -1265,7 +1261,7 @@ module.exports = grammar({
     _method_declarator: ($) =>
       prec.right(
         seq(
-          field("name", $.identifier),
+          field("name", choice($.identifier, $.string_literal)),
           field("parameters", $.formal_parameters),
           field("dimensions", optional($.dimensions)),
         ),

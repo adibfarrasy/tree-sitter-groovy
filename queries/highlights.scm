@@ -19,6 +19,7 @@
   "implements"
   "import"
   "interface"
+  "@interface"
   "native"
   "new"
   "package"
@@ -213,6 +214,9 @@
   name: (identifier) @type.definition)
 
 (enum_declaration
+  name: (identifier) @type.definition)
+
+(annotation_type_declaration
   name: (identifier) @type.definition)
 
 ; Import statements

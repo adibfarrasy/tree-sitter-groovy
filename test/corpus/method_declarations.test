@@ -1,0 +1,56 @@
+================================================================================
+simple method declaration
+================================================================================
+void doSomething() {
+    println("hello")
+}
+--------------------------------------------------------------------------------
+(source_file
+  (method_declaration
+    type: (void_type)
+    name: (identifier)
+    parameters: (formal_parameters)
+    body: (block
+      (expression_statement
+        (method_invocation
+          name: (identifier)
+          arguments: (argument_list
+            (string_literal)))))))
+
+================================================================================
+quoted method name
+================================================================================
+void "services should not inject with @Lazy"() {
+    // test implementation
+}
+--------------------------------------------------------------------------------
+(source_file
+  (method_declaration
+    type: (void_type)
+    name: (string_literal)
+    parameters: (formal_parameters)
+    body: (block
+      (line_comment))))
+
+================================================================================
+method with return type and parameters
+================================================================================
+String "get user by id"(Long id) {
+    return userService.findById(id)
+}
+--------------------------------------------------------------------------------
+(source_file
+  (method_declaration
+    type: (type_identifier)
+    name: (string_literal)
+    parameters: (formal_parameters
+      (formal_parameter
+        type: (type_identifier)
+        name: (identifier)))
+    body: (block
+      (return_statement
+        (method_invocation
+          object: (identifier)
+          name: (identifier)
+          arguments: (argument_list
+            (identifier)))))))
