@@ -4464,10 +4464,6 @@
     }
   },
   {
-    "type": "\n",
-    "named": false
-  },
-  {
     "type": "!",
     "named": false
   },
@@ -4834,10 +4830,6 @@
     "named": false
   },
   {
-    "type": "interface",
-    "named": false
-  },
-  {
     "type": "line_comment",
     "named": true,
     "extra": true
@@ -4900,10 +4892,6 @@
   },
   {
     "type": "public",
-    "named": false
-  },
-  {
-    "type": "record",
     "named": false
   },
   {

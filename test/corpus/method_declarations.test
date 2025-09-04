@@ -92,6 +92,38 @@ interface TestMapper {
             name: (identifier)))))))
 
 ================================================================================
+constructor with super call without semicolon
+================================================================================
+class TestClass {
+    TestClass(String param) {
+        super(param)
+        this.field = "value"
+    }
+}
+--------------------------------------------------------------------------------
+(source_file
+  (class_declaration
+    name: (identifier)
+    body: (class_body
+      (constructor_declaration
+        name: (identifier)
+        parameters: (formal_parameters
+          (formal_parameter
+            type: (type_identifier)
+            name: (identifier)))
+        body: (constructor_body
+          (explicit_constructor_invocation
+            constructor: (super)
+            arguments: (argument_list
+              (identifier)))
+          (expression_statement
+            (assignment_expression
+              left: (field_access
+                object: (this)
+                field: (identifier))
+              right: (string_literal))))))))
+
+================================================================================
 interface methods with multiline parameters
 ================================================================================
 interface MultiParamMapper {

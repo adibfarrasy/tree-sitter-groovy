@@ -36,7 +36,13 @@ const PREC = {
 module.exports = grammar({
   name: "groovy",
 
-  extras: ($) => [$.line_comment, $.block_comment, $.groovydoc_comment, /\s/, /\n/],
+  extras: ($) => [
+    $.line_comment,
+    $.block_comment,
+    $.groovydoc_comment,
+    /\s/,
+    /\n/,
+  ],
 
   supertypes: ($) => [
     $.expression,
@@ -56,6 +62,8 @@ module.exports = grammar({
     $._variable_initializer,
   ],
 
+
+
   conflicts: ($) => [
     [$.expression, $.statement],
     [$.instanceof_expression],
@@ -63,9 +71,6 @@ module.exports = grammar({
     [$.array_literal, $.map_literal],
     [$.expression, $.array_access],
     [$._method_declarator, $._variable_declarator_id],
-    [$.primary_expression, $._unannotated_type],
-    [$.primary_expression, $._unannotated_type, $.scoped_type_identifier],
-    [$.primary_expression, $._unannotated_type],
     [$.modifiers, $.annotated_type, $.receiver_parameter],
     [
       $.module_declaration,
@@ -74,11 +79,15 @@ module.exports = grammar({
       $.annotated_type,
     ],
     [$._object_method_invocation, $._closure_method_invocation],
+    [$.primary_expression, $._unannotated_type],
+    [$.primary_expression, $._unannotated_type, $.scoped_type_identifier],
+    [$.method_declaration],
   ],
 
   word: ($) => $.identifier,
 
   rules: {
+
     source_file: ($) => repeat(choice($.statement, $.comment)),
 
     // Literals
@@ -490,11 +499,16 @@ module.exports = grammar({
         ),
       ),
 
-    object_creation_argument_list: ($) => seq("(", commaSep($.argument), optional(","), ")"),
+    object_creation_argument_list: ($) =>
+      seq("(", commaSep($.argument), optional(","), ")"),
 
     argument: ($) =>
       choice(
-        seq(field("name", choice($.identifier, $.string_literal)), ":", field("value", $.expression)),
+        seq(
+          field("name", choice($.identifier, $.string_literal)),
+          ":",
+          field("value", $.expression),
+        ),
         $.expression,
       ),
 
@@ -949,7 +963,7 @@ module.exports = grammar({
         5,
         seq(
           optional($.modifiers),
-          "class",
+          token(seq("class", /\s+/)),
           field("name", $.identifier),
           optional(field("type_parameters", $.type_parameters)),
           optional(field("superclass", $.superclass)),
@@ -960,26 +974,23 @@ module.exports = grammar({
       ),
 
     modifiers: ($) =>
-      prec(
-        5,
-        repeat1(
-          choice(
-            $._annotation,
-            "public",
-            "protected",
-            "private",
-            "abstract",
-            "static",
-            "final",
-            "strictfp",
-            "default",
-            "synchronized",
-            "native",
-            "transient",
-            "volatile",
-            "sealed",
-            "non-sealed",
-          ),
+      repeat1(
+        choice(
+          $._annotation,
+          "public",
+          "protected",
+          "private",
+          "abstract",
+          "static",
+          "final",
+          "strictfp",
+          "default",
+          "synchronized",
+          "native",
+          "transient",
+          "volatile",
+          "sealed",
+          "non-sealed",
         ),
       ),
 
@@ -1046,21 +1057,23 @@ module.exports = grammar({
       ),
 
     explicit_constructor_invocation: ($) =>
-      seq(
-        choice(
-          seq(
-            field("type_arguments", optional($.type_arguments)),
-            field("constructor", choice($.this, $.super)),
+      prec.right(
+        seq(
+          choice(
+            seq(
+              field("type_arguments", optional($.type_arguments)),
+              field("constructor", choice($.this, $.super)),
+            ),
+            seq(
+              field("object", choice($.primary_expression)),
+              ".",
+              field("type_arguments", optional($.type_arguments)),
+              field("constructor", $.super),
+            ),
           ),
-          seq(
-            field("object", choice($.primary_expression)),
-            ".",
-            field("type_arguments", optional($.type_arguments)),
-            field("constructor", $.super),
-          ),
+          field("arguments", $.argument_list),
+          optional(";"),
         ),
-        field("arguments", $.argument_list),
-        ";",
       ),
 
     _name: ($) => choice($.identifier, $.scoped_identifier),
@@ -1081,7 +1094,7 @@ module.exports = grammar({
     record_declaration: ($) =>
       seq(
         optional($.modifiers),
-        "record",
+        token(seq("record", /\s+/)),
         field("name", $.identifier),
         optional(field("type_parameters", $.type_parameters)),
         field("parameters", $.formal_parameters),
@@ -1130,7 +1143,7 @@ module.exports = grammar({
     interface_declaration: ($) =>
       seq(
         optional($.modifiers),
-        "interface",
+        token(seq("interface", /\s+/)),
         field("name", $.identifier),
         field("type_parameters", optional($.type_parameters)),
         optional($.extends_interfaces),
@@ -1153,7 +1166,6 @@ module.exports = grammar({
             $.record_declaration,
             $.annotation_type_declaration,
             ";",
-            "\n",
           ),
         ),
         "}",
@@ -1247,16 +1259,18 @@ module.exports = grammar({
     void_type: () => "void",
 
     _method_header: ($) =>
-      seq(
-        optional(
-          seq(
-            field("type_parameters", $.type_parameters),
-            repeat($._annotation),
+      prec.right(
+        seq(
+          optional(
+            seq(
+              field("type_parameters", $.type_parameters),
+              repeat($._annotation),
+            ),
           ),
+          field("type", $._unannotated_type),
+          $._method_declarator,
+          optional(prec.right($.throws)),
         ),
-        field("type", $._unannotated_type),
-        $._method_declarator,
-        optional($.throws),
       ),
 
     _method_declarator: ($) =>
@@ -1303,7 +1317,11 @@ module.exports = grammar({
         $.variable_declarator,
       ),
 
-    throws: ($) => seq("throws", commaSep1($._type)),
+    throws: ($) =>
+      seq(
+        choice("throws", token(prec(1, seq(/\n\s*/, "throws")))),
+        commaSep1($._type),
+      ),
 
     variable_declaration: ($) =>
       prec.right(
@@ -1318,14 +1336,12 @@ module.exports = grammar({
       ),
 
     method_declaration: ($) =>
-      prec.right(
-        seq(
-          optional($.modifiers),
-          $._method_header,
-          optional(field("body", $.block)),
-          optional(";"),
-        ),
+      seq(
+        optional($.modifiers),
+        $._method_header,
+        optional(choice(field("body", $.block), ";")),
       ),
+
 
     compact_constructor_declaration: ($) =>
       seq(
