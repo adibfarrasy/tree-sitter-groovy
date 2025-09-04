@@ -34,3 +34,16 @@ empty map literal
   (expression_statement
     (map_literal)))
 
+================================================================================
+map literal with string key
+================================================================================
+[key: "value"]
+--------------------------------------------------------------------------------
+(source_file
+  (expression_statement
+    (map_literal
+      (map_entry
+        (map_key
+          (identifier))
+        (string_literal)))))
+

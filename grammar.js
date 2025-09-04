@@ -68,7 +68,6 @@ module.exports = grammar({
     [$.expression, $.statement],
     [$.instanceof_expression],
     [$.annotated_type, $.array_type],
-    [$.array_literal, $.map_literal],
     [$.expression, $.array_access],
     [$._method_declarator, $._variable_declarator_id],
     [$.modifiers, $.annotated_type, $.receiver_parameter],
@@ -107,12 +106,15 @@ module.exports = grammar({
         $.null_literal,
       ),
 
-    map_key: ($) => prec.left(choice(seq("(", $.identifier, ")"), $._literal)),
+    map_key: ($) => prec.left(choice(seq("(", $.identifier, ")"), $._literal, $.identifier)),
 
     map_entry: ($) =>
       seq(field("key", $.map_key), ":", field("value", $.expression)),
 
-    map_literal: ($) => seq("[", choice(commaSep($.map_entry), ":"), "]"),
+    map_literal: ($) => seq("[", choice(
+      seq(commaSep1($.map_entry), optional(",")),
+      ":"
+    ), "]"),
 
     array_literal: ($) => seq("[", commaSep($.expression), "]"),
 
@@ -671,8 +673,8 @@ module.exports = grammar({
 
     assert_statement: ($) =>
       choice(
-        seq("assert", $.expression, ";"),
-        seq("assert", $.expression, ":", $.expression, ";"),
+        prec.right(seq("assert", $.expression, optional(";"))),
+        prec.right(seq("assert", $.expression, ":", $.expression, optional(";"))),
       ),
 
     do_statement: ($) =>

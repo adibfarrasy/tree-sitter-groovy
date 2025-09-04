@@ -239,3 +239,11 @@ complex nested expression
       (binary_expression
         (identifier)
         (identifier)))))
+================================================================================
+assert statement without semicolon
+================================================================================
+assert result
+--------------------------------------------------------------------------------
+(source_file
+  (assert_statement
+    (identifier)))
