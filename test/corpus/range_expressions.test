@@ -1,0 +1,193 @@
+================================================================================
+range with variables
+================================================================================
+a..b
+--------------------------------------------------------------------------------
+
+(source_file
+  (expression_statement
+    (range_expression
+      left: (identifier)
+      right: (identifier))))
+
+================================================================================
+range without spaces
+================================================================================
+0..10
+--------------------------------------------------------------------------------
+
+(source_file
+  (expression_statement
+    (range_expression
+      left: (decimal_integer_literal)
+      right: (decimal_integer_literal))))
+
+================================================================================
+range with spaces between numbers
+================================================================================
+1 .. 10
+--------------------------------------------------------------------------------
+
+(source_file
+  (expression_statement
+    (range_expression
+      left: (decimal_integer_literal)
+      right: (decimal_integer_literal))))
+
+================================================================================
+range with parentheses around numbers
+================================================================================
+(1)..(10)
+--------------------------------------------------------------------------------
+
+(source_file
+  (expression_statement
+    (range_expression
+      left: (parenthesized_expression
+        (decimal_integer_literal))
+      right: (parenthesized_expression
+        (decimal_integer_literal)))))
+
+================================================================================
+array range access without spaces  
+================================================================================
+myArray[0..10]
+--------------------------------------------------------------------------------
+
+(source_file
+  (expression_statement
+    (array_access
+      array: (identifier)
+      index: (range_expression
+        left: (decimal_integer_literal)
+        right: (decimal_integer_literal)))))
+
+================================================================================
+range in array access with spaces
+================================================================================
+myArray[1 .. 10]
+--------------------------------------------------------------------------------
+
+(source_file
+  (expression_statement
+    (array_access
+      array: (identifier)
+      index: (range_expression
+        left: (decimal_integer_literal)
+        right: (decimal_integer_literal)))))
+
+================================================================================
+range in array access with parentheses
+================================================================================
+myArray[(1)..(10)]
+--------------------------------------------------------------------------------
+
+(source_file
+  (expression_statement
+    (array_access
+      array: (identifier)
+      index: (range_expression
+        left: (parenthesized_expression
+          (decimal_integer_literal))
+        right: (parenthesized_expression
+          (decimal_integer_literal))))))
+
+================================================================================
+enhanced for loop with range no spaces
+================================================================================
+for (i : 0..10) {
+    println(i)
+}
+--------------------------------------------------------------------------------
+
+(source_file
+  (enhanced_for_statement
+    name: (identifier)
+    value: (range_expression
+      left: (decimal_integer_literal)
+      right: (decimal_integer_literal))
+    body: (expression_statement
+      (closure
+        (expression_statement
+          (method_invocation
+            name: (identifier)
+            arguments: (argument_list
+              (identifier))))))))
+
+================================================================================
+range in enhanced for loop
+================================================================================
+for (i : (1 .. 10)) {
+    println(i)
+}
+--------------------------------------------------------------------------------
+
+(source_file
+  (enhanced_for_statement
+    name: (identifier)
+    value: (parenthesized_expression
+      (range_expression
+        left: (decimal_integer_literal)
+        right: (decimal_integer_literal)))
+    body: (expression_statement
+      (closure
+        (expression_statement
+          (method_invocation
+            name: (identifier)
+            arguments: (argument_list
+              (identifier))))))))
+
+================================================================================
+range with negative numbers
+================================================================================
+-5 .. 5
+--------------------------------------------------------------------------------
+
+(source_file
+  (expression_statement
+    (range_expression
+      left: (unary_expression
+        operand: (decimal_integer_literal))
+      right: (decimal_integer_literal))))
+
+================================================================================
+range with floating point numbers
+================================================================================
+1.5 .. 10.5
+--------------------------------------------------------------------------------
+
+(source_file
+  (expression_statement
+    (range_expression
+      left: (decimal_floating_point_literal)
+      right: (decimal_floating_point_literal))))
+
+================================================================================
+range with mixed types
+================================================================================
+start .. end
+--------------------------------------------------------------------------------
+
+(source_file
+  (expression_statement
+    (range_expression
+      left: (identifier)
+      right: (identifier))))
+
+================================================================================
+nested ranges in expression
+================================================================================
+(0 .. 5) + (10 .. 15)
+--------------------------------------------------------------------------------
+
+(source_file
+  (expression_statement
+    (binary_expression
+      left: (parenthesized_expression
+        (range_expression
+          left: (decimal_integer_literal)
+          right: (decimal_integer_literal)))
+      right: (parenthesized_expression
+        (range_expression
+          left: (decimal_integer_literal)
+          right: (decimal_integer_literal))))))

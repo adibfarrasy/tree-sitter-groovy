@@ -1,0 +1,50 @@
+================================================================================
+enhanced for loop with final modifier
+================================================================================
+for (final Annotation annotation : annotations) {
+    // process annotation
+}
+--------------------------------------------------------------------------------
+
+(source_file
+  (enhanced_for_statement
+    (modifiers)
+    type: (type_identifier)
+    name: (identifier)
+    value: (identifier)
+    body: (expression_statement
+      (closure
+        (line_comment)))))
+
+================================================================================
+enhanced for loop without modifiers
+================================================================================
+for (annotation : annotations) {
+    // process annotation  
+}
+--------------------------------------------------------------------------------
+
+(source_file
+  (enhanced_for_statement
+    name: (identifier)
+    value: (identifier)
+    body: (expression_statement
+      (closure
+        (line_comment)))))
+
+================================================================================
+enhanced for loop with type but no modifiers
+================================================================================
+for (Annotation annotation : annotations) {
+    // process annotation
+}
+--------------------------------------------------------------------------------
+
+(source_file
+  (enhanced_for_statement
+    type: (type_identifier)
+    name: (identifier)
+    value: (identifier)
+    body: (expression_statement
+      (closure
+        (line_comment)))))

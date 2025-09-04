@@ -5,6 +5,7 @@
 
 enum TokenType {
   AUTOMATIC_SEMICOLON,
+  RANGE_OPERATOR,
 };
 
 static void advance(TSLexer *lexer) {
@@ -50,6 +51,30 @@ static bool scan_whitespace_and_comments(TSLexer *lexer) {
     }
   }
 }
+
+static bool scan_range_operator(TSLexer *lexer) {
+  lexer->result_symbol = RANGE_OPERATOR;
+  
+  // This scanner is called to resolve tokenization conflicts with floating point literals
+  // We need to recognize '..' patterns that would otherwise be tokenized as separate literals
+  if (lexer->lookahead == '.') {
+    advance(lexer);
+    
+    // Skip whitespace between dots
+    while (iswspace(lexer->lookahead)) {
+      skip(lexer);
+    }
+    
+    if (lexer->lookahead == '.') {
+      advance(lexer);
+      lexer->mark_end(lexer);
+      return true;
+    }
+  }
+  
+  return false;
+}
+
 
 static bool scan_automatic_semicolon(TSLexer *lexer) {
   lexer->result_symbol = AUTOMATIC_SEMICOLON;
@@ -128,6 +153,11 @@ bool tree_sitter_groovy_external_scanner_scan(
   TSLexer *lexer,
   const bool *valid_symbols
 ) {
+  // Try range operator first - it has higher priority to resolve tokenization conflicts
+  if (valid_symbols[RANGE_OPERATOR]) {
+    return scan_range_operator(lexer);
+  }
+  
   // Only try to insert automatic semicolon if it's a valid symbol in this context
   if (valid_symbols[AUTOMATIC_SEMICOLON]) {
     return scan_automatic_semicolon(lexer);

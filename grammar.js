@@ -15,17 +15,18 @@ const PREC = {
   EQUALITY: 9, // ==  !=
   GENERIC: 10,
   REL: 10, // <  <=  >  >=  instanceof
-  SHIFT: 11, // <<  >>  >>>
-  ADD: 12, // +  -
-  MULT: 13, // *  /  %
-  CAST: 14, // (Type)
-  UNARY: 15, // ++a  --a  a++  a--  +  -  !  ~
-  OBJ_INST: 16, // new
-  ARRAY: 16, // [Index]
-  OBJ_ACCESS: 16, // .
-  PARENS: 16, // (Expression)
-  CLASS_LITERAL: 17, // .
-  CALL: 18,
+  RANGE: 11, // ..
+  SHIFT: 12, // <<  >>  >>>
+  ADD: 13, // +  -
+  MULT: 14, // *  /  %
+  CAST: 15, // (Type)
+  UNARY: 16, // ++a  --a  a++  a--  +  -  !  ~
+  OBJ_INST: 17, // new
+  ARRAY: 17, // [Index]
+  OBJ_ACCESS: 17, // .
+  PARENS: 17, // (Expression)
+  CLASS_LITERAL: 18, // .
+  CALL: 19,
   LAMBDA: 19,
 
   TYPE: 2,
@@ -38,6 +39,7 @@ module.exports = grammar({
 
   externals: $ => [
     $._automatic_semicolon,
+    $._range_operator,
   ],
 
   extras: ($) => [
@@ -87,6 +89,7 @@ module.exports = grammar({
     [$.statement, $.constructor_body],
     [$.primary_expression, $._simple_method_invocation, $.explicit_constructor_invocation],
     [$.closure, $._variable_declarator_id],
+    [$.for_loop_variable_declaration, $.modifiers],
   ],
 
   word: ($) => $.identifier,
@@ -147,11 +150,27 @@ module.exports = grammar({
     decimal_floating_point_literal: () =>
       token(
         choice(
+          // Floating point with digits after decimal: 1.23, 1.0
           seq(
             DIGITS,
             ".",
-            optional(DIGITS),
+            DIGITS,
             optional(seq(/[eE]/, optional(choice("-", "+")), DIGITS)),
+            optional(/[fFdD]/),
+          ),
+          // Floating point with explicit type suffix: 1.f, 1.d  
+          seq(
+            DIGITS,
+            ".",
+            /[fFdD]/,
+          ),
+          // Scientific notation without fractional part: 1.e5, 1.E-5
+          seq(
+            DIGITS,
+            ".",
+            /[eE]/,
+            optional(choice("-", "+")),
+            DIGITS,
             optional(/[fFdD]/),
           ),
           seq(
@@ -280,6 +299,7 @@ module.exports = grammar({
       choice(
         $.assignment_expression,
         $.binary_expression,
+        $.range_expression,
         $.instanceof_expression,
         $.ternary_expression,
         $.update_expression,
@@ -341,6 +361,7 @@ module.exports = grammar({
           [">=", PREC.REL],
           ["<=", PREC.REL],
           ["in", PREC.REL],
+          ["!in", PREC.REL],
           ["==", PREC.EQUALITY],
           ["!=", PREC.EQUALITY],
           ["&&", PREC.AND],
@@ -367,6 +388,18 @@ module.exports = grammar({
               field("right", $.expression),
             ),
           ),
+        ),
+      ),
+
+    range_expression: ($) =>
+      prec.left(
+        PREC.RANGE,
+        seq(
+          field("left", $.expression),
+          // Use external scanner for cases without spaces (resolves floating point conflicts)
+          // and regular token for cases with spaces
+          choice($._range_operator, ".."),
+          field("right", $.expression),
         ),
       ),
 
@@ -626,12 +659,12 @@ module.exports = grammar({
     statement: ($) =>
       choice(
         $.declaration,
+        $.enhanced_for_statement,
+        $.for_statement,
         $.expression_statement,
         $.labeled_statement,
         $.if_statement,
         $.while_statement,
-        $.enhanced_for_statement,
-        $.for_statement,
         $.block,
         ";",
         $.assert_statement,
@@ -768,7 +801,7 @@ module.exports = grammar({
         "for",
         "(",
         choice(
-          field("init", $.variable_declaration),
+          field("init", $.for_loop_variable_declaration),
           seq(commaSep(field("init", $.expression)), ";"),
         ),
         field("condition", optional($.expression)),
@@ -778,20 +811,26 @@ module.exports = grammar({
         field("body", $.statement),
       ),
 
-    enhanced_for_statement: ($) =>
+    for_loop_variable_declaration: ($) =>
       seq(
+        optional("final"),
+        choice("def", "var", field("type", $._unannotated_type)),
+        $._variable_declarator_list,
+        ";",
+      ),
+
+    enhanced_for_statement: ($) =>
+      prec.right(PREC.REL + 1, seq(
         "for",
         "(",
-        seq(
-          optional($.modifiers),
-          field("type", $._unannotated_type),
-          $._variable_declarator_id,
-          choice(":", "in"),
-          field("value", $.expression),
-        ),
+        optional($.modifiers),
+        optional(field("type", $._unannotated_type)),
+        field("name", $.identifier),
+        choice(":", "in"),
+        field("value", $.expression),
         ")",
         field("body", $.statement),
-      ),
+      )),
 
     // Annotations
 
@@ -1171,7 +1210,7 @@ module.exports = grammar({
       ),
 
     constant_declaration: ($) =>
-      prec.right(seq(
+      prec.right(5, seq(
         optional($.modifiers),
         field("type", $._unannotated_type),
         $._variable_declarator_list,
@@ -1333,7 +1372,7 @@ module.exports = grammar({
       ),
 
     method_declaration: ($) =>
-      prec.right(seq(
+      prec.right(10, seq(
         optional($.modifiers),
         $._method_header,
         optional(choice(
