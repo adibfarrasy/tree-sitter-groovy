@@ -4790,7 +4790,8 @@
   },
   {
     "type": "groovydoc_comment",
-    "named": true
+    "named": true,
+    "extra": true
   },
   {
     "type": "hex_floating_point_literal",

@@ -36,7 +36,7 @@ const PREC = {
 module.exports = grammar({
   name: "groovy",
 
-  extras: ($) => [$.line_comment, $.block_comment, /\s/, /\n/],
+  extras: ($) => [$.line_comment, $.block_comment, $.groovydoc_comment, /\s/, /\n/],
 
   supertypes: ($) => [
     $.expression,
@@ -656,11 +656,9 @@ module.exports = grammar({
     labeled_statement: ($) => seq($.identifier, ":", $.statement),
 
     assert_statement: ($) =>
-      prec.right(
-        choice(
-          seq("assert", $.expression, optional(";")),
-          seq("assert", $.expression, ":", $.expression, optional(";")),
-        ),
+      choice(
+        seq("assert", $.expression, ";"),
+        seq("assert", $.expression, ":", $.expression, ";"),
       ),
 
     do_statement: ($) =>
