@@ -7837,12 +7837,20 @@
           ]
         },
         {
-          "type": "FIELD",
-          "name": "type",
-          "content": {
-            "type": "SYMBOL",
-            "name": "_unannotated_type"
-          }
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "FIELD",
+              "name": "type",
+              "content": {
+                "type": "SYMBOL",
+                "name": "_unannotated_type"
+              }
+            },
+            {
+              "type": "BLANK"
+            }
+          ]
         },
         {
           "type": "SYMBOL",
@@ -8324,6 +8332,10 @@
       "primary_expression",
       "_simple_method_invocation",
       "explicit_constructor_invocation"
+    ],
+    [
+      "closure",
+      "_variable_declarator_id"
     ]
   ],
   "precedences": [],

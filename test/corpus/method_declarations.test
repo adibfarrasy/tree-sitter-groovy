@@ -161,6 +161,33 @@ interface MultiParamMapper {
             name: (identifier)))))))
 
 ================================================================================
+method with untyped parameter
+================================================================================
+ReturnType methodName(@Annotation('param1') Type param1, @Annotation('param2') param2)
+--------------------------------------------------------------------------------
+
+(source_file
+  (method_declaration
+    type: (type_identifier)
+    name: (identifier)
+    parameters: (formal_parameters
+      (formal_parameter
+        (modifiers
+          (annotation
+            name: (identifier)
+            arguments: (annotation_argument_list
+              (string_literal))))
+        type: (type_identifier)
+        name: (identifier))
+      (formal_parameter
+        (modifiers
+          (annotation
+            name: (identifier)
+            arguments: (annotation_argument_list
+              (string_literal))))
+        name: (identifier)))))
+
+================================================================================
 annotation interface with optional semicolons
 ================================================================================
 @interface TestAnnotation {

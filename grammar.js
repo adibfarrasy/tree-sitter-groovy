@@ -86,6 +86,7 @@ module.exports = grammar({
     [$.modifiers, $.annotated_type],
     [$.statement, $.constructor_body],
     [$.primary_expression, $._simple_method_invocation, $.explicit_constructor_invocation],
+    [$.closure, $._variable_declarator_id],
   ],
 
   word: ($) => $.identifier,
@@ -1292,7 +1293,7 @@ module.exports = grammar({
     formal_parameter: ($) =>
       seq(
         optional($.modifiers),
-        field("type", $._unannotated_type),
+        optional(field("type", $._unannotated_type)),
         $._variable_declarator_id,
         optional(seq("=", field("default_value", $.expression))),
       ),
