@@ -152,4 +152,31 @@ interface MultiParamMapper {
             name: (identifier))
           (formal_parameter
             type: (type_identifier)
-            name: (identifier)))))))
+            name: (identifier))))))
+
+================================================================================
+annotation interface with optional semicolons
+================================================================================
+@interface TestAnnotation {
+    String[] value() default []
+    String name() default "test"
+    int count()
+}
+--------------------------------------------------------------------------------
+(source_file
+  (annotation_type_declaration
+    name: (identifier)
+    body: (annotation_type_body
+      (annotation_type_element_declaration
+        type: (array_type
+          element: (type_identifier)
+          dimensions: (dimensions))
+        name: (identifier)
+        value: (element_value_array_initializer))
+      (annotation_type_element_declaration
+        type: (type_identifier)
+        name: (identifier)
+        value: (string_literal))
+      (annotation_type_element_declaration
+        type: (integral_type)
+        name: (identifier)))))

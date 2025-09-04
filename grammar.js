@@ -1123,7 +1123,7 @@ module.exports = grammar({
       ),
 
     annotation_type_element_declaration: ($) =>
-      seq(
+      prec.right(seq(
         optional($.modifiers),
         field("type", $._unannotated_type),
         field("name", $.identifier),
@@ -1131,8 +1131,8 @@ module.exports = grammar({
         ")",
         field("dimensions", optional($.dimensions)),
         optional($._default_value),
-        ";",
-      ),
+        optional(";"),
+      )),
 
     _default_value: ($) => seq("default", field("value", $._element_value)),
 
@@ -1168,12 +1168,12 @@ module.exports = grammar({
       ),
 
     constant_declaration: ($) =>
-      seq(
+      prec.right(seq(
         optional($.modifiers),
         field("type", $._unannotated_type),
         $._variable_declarator_list,
-        ";",
-      ),
+        optional(";"),
+      )),
 
     _variable_declarator_list: ($) =>
       commaSep1(field("declarator", $.variable_declarator)),
