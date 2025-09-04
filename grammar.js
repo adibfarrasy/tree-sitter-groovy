@@ -115,7 +115,7 @@ module.exports = grammar({
         $.null_literal,
       ),
 
-    map_key: ($) => prec.left(choice(seq("(", $.identifier, ")"), $._literal, $.identifier)),
+    map_key: ($) => prec.left(choice(seq("(", $.expression, ")"), $._literal, $.identifier)),
 
     map_entry: ($) =>
       seq(field("key", $.map_key), ":", field("value", $.expression)),

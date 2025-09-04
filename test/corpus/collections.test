@@ -59,3 +59,40 @@ array literal with trailing comma
       (decimal_integer_literal)
       (decimal_integer_literal))))
 
+================================================================================
+map literal with parenthesized expression keys
+================================================================================
+Map<MyEnum.Type, String> map = [
+    (MyEnum.Type.VALUE_ONE): "first",
+    (MyEnum.Type.VALUE_TWO): "second"
+]
+--------------------------------------------------------------------------------
+(source_file
+  (variable_declaration
+    type: (generic_type
+      (type_identifier)
+      (type_arguments
+        (scoped_type_identifier
+          (type_identifier)
+          (type_identifier))
+        (type_identifier)))
+    declarator: (variable_declarator
+      name: (identifier)
+      value: (map_literal
+        (map_entry
+          key: (map_key
+            (field_access
+              object: (field_access
+                object: (identifier)
+                field: (identifier))
+              field: (identifier)))
+          value: (string_literal))
+        (map_entry
+          key: (map_key
+            (field_access
+              object: (field_access
+                object: (identifier)
+                field: (identifier))
+              field: (identifier)))
+          value: (string_literal))))))
+

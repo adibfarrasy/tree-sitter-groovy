@@ -23,6 +23,20 @@ range without spaces
       right: (decimal_integer_literal))))
 
 ================================================================================
+negative range without spaces
+================================================================================
+-10..-1
+--------------------------------------------------------------------------------
+
+(source_file
+  (expression_statement
+    (range_expression
+      left: (unary_expression
+        operand: (decimal_integer_literal))
+      right: (unary_expression
+        operand: (decimal_integer_literal)))))
+
+================================================================================
 range with spaces between numbers
 ================================================================================
 1 .. 10
