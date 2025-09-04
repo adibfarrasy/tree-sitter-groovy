@@ -1904,25 +1904,6 @@
       "required": false,
       "types": [
         {
-          "type": "enum_body_declarations",
-          "named": true
-        },
-        {
-          "type": "enum_constant",
-          "named": true
-        }
-      ]
-    }
-  },
-  {
-    "type": "enum_body_declarations",
-    "named": true,
-    "fields": {},
-    "children": {
-      "multiple": true,
-      "required": false,
-      "types": [
-        {
           "type": "annotation_type_declaration",
           "named": true
         },
@@ -1940,6 +1921,10 @@
         },
         {
           "type": "constructor_declaration",
+          "named": true
+        },
+        {
+          "type": "enum_constant",
           "named": true
         },
         {

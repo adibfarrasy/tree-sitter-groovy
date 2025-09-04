@@ -37,18 +37,13 @@ const PREC = {
 module.exports = grammar({
   name: "groovy",
 
-  externals: $ => [
+  externals: ($) => [
     $._automatic_semicolon,
     $._range_operator,
     $._record_keyword,
   ],
 
-  extras: ($) => [
-    $.line_comment,
-    $.block_comment,
-    $.groovydoc_comment,
-    /\s/,
-  ],
+  extras: ($) => [$.line_comment, $.block_comment, $.groovydoc_comment, /\s/],
 
   supertypes: ($) => [
     $.expression,
@@ -68,8 +63,6 @@ module.exports = grammar({
     $._variable_initializer,
   ],
 
-
-
   conflicts: ($) => [
     [$.expression, $.statement],
     [$.instanceof_expression],
@@ -88,7 +81,11 @@ module.exports = grammar({
     [$.variable_declarator, $.formal_parameter],
     [$.modifiers, $.annotated_type],
     [$.statement, $.constructor_body],
-    [$.primary_expression, $._simple_method_invocation, $.explicit_constructor_invocation],
+    [
+      $.primary_expression,
+      $._simple_method_invocation,
+      $.explicit_constructor_invocation,
+    ],
     [$.closure, $._variable_declarator_id],
     [$.for_loop_variable_declaration, $.modifiers],
   ],
@@ -96,7 +93,6 @@ module.exports = grammar({
   word: ($) => $.identifier,
 
   rules: {
-
     source_file: ($) => repeat(choice($.statement, $.comment)),
 
     // Literals
@@ -116,17 +112,17 @@ module.exports = grammar({
         $.null_literal,
       ),
 
-    map_key: ($) => prec.left(choice(seq("(", $.expression, ")"), $._literal, $.identifier)),
+    map_key: ($) =>
+      prec.left(choice(seq("(", $.expression, ")"), $._literal, $.identifier)),
 
     map_entry: ($) =>
       seq(field("key", $.map_key), ":", field("value", $.expression)),
 
-    map_literal: ($) => seq("[", choice(
-      seq(commaSep1($.map_entry), optional(",")),
-      ":"
-    ), "]"),
+    map_literal: ($) =>
+      seq("[", choice(seq(commaSep1($.map_entry), optional(",")), ":"), "]"),
 
-    array_literal: ($) => seq("[", seq(optional(seq(commaSep1($.expression), optional(",")))), "]"),
+    array_literal: ($) =>
+      seq("[", seq(optional(seq(commaSep1($.expression), optional(",")))), "]"),
 
     decimal_integer_literal: () =>
       token(seq(DIGITS, optional(choice("l", "L")))),
@@ -159,12 +155,8 @@ module.exports = grammar({
             optional(seq(/[eE]/, optional(choice("-", "+")), DIGITS)),
             optional(/[fFdD]/),
           ),
-          // Floating point with explicit type suffix: 1.f, 1.d  
-          seq(
-            DIGITS,
-            ".",
-            /[fFdD]/,
-          ),
+          // Floating point with explicit type suffix: 1.f, 1.d
+          seq(DIGITS, ".", /[fFdD]/),
           // Scientific notation without fractional part: 1.e5, 1.E-5
           seq(
             DIGITS,
@@ -567,7 +559,10 @@ module.exports = grammar({
     _simple_method_invocation: ($) =>
       prec(
         PREC.CALL,
-        seq(field("name", choice($.identifier, $.this)), field("arguments", $.argument_list)),
+        seq(
+          field("name", choice($.identifier, $.this)),
+          field("arguments", $.argument_list),
+        ),
       ),
 
     _object_method_invocation: ($) =>
@@ -683,18 +678,23 @@ module.exports = grammar({
     block: ($) => seq("{", repeat($.statement), "}"),
 
     closure: ($) =>
-      prec(1, seq(
-        "{",
-        optional(seq(
-          choice(
-            seq("(", ")"),
-            commaSep1(choice($.identifier, $.formal_parameter))
+      prec(
+        1,
+        seq(
+          "{",
+          optional(
+            seq(
+              choice(
+                seq("(", ")"),
+                commaSep1(choice($.identifier, $.formal_parameter)),
+              ),
+              "->",
+            ),
           ),
-          "->"
-        )),
-        repeat($.statement),
-        "}",
-      )),
+          repeat($.statement),
+          "}",
+        ),
+      ),
 
     expression_statement: ($) => prec.right(seq($.expression, optional(";"))),
 
@@ -703,7 +703,9 @@ module.exports = grammar({
     assert_statement: ($) =>
       choice(
         prec.right(seq("assert", $.expression, optional(";"))),
-        prec.right(seq("assert", $.expression, ":", $.expression, optional(";"))),
+        prec.right(
+          seq("assert", $.expression, ":", $.expression, optional(";")),
+        ),
       ),
 
     do_statement: ($) =>
@@ -819,17 +821,20 @@ module.exports = grammar({
       ),
 
     enhanced_for_statement: ($) =>
-      prec.right(PREC.REL + 1, seq(
-        "for",
-        "(",
-        optional($.modifiers),
-        optional(field("type", $._unannotated_type)),
-        field("name", $.identifier),
-        choice(":", "in"),
-        field("value", $.expression),
-        ")",
-        field("body", $.statement),
-      )),
+      prec.right(
+        PREC.REL + 1,
+        seq(
+          "for",
+          "(",
+          optional($.modifiers),
+          optional(field("type", $._unannotated_type)),
+          field("name", $.identifier),
+          choice(":", "in"),
+          field("value", $.expression),
+          ")",
+          field("body", $.statement),
+        ),
+      ),
 
     // Annotations
 
@@ -977,22 +982,57 @@ module.exports = grammar({
       ),
 
     enum_body: ($) =>
-      seq(
-        "{",
-        commaSep($.enum_constant),
-        optional(","),
-        optional($.enum_body_declarations),
-        "}",
+      choice(
+        // Empty enum body
+        seq("{", "}"),
+        // Enum constants only
+        seq(
+          "{",
+          sep1($.enum_constant, ","),
+          optional(","),
+          "}",
+        ),
+        // Enum constants followed by semicolon and body declarations
+        seq(
+          "{",
+          sep1($.enum_constant, ","),
+          optional(","),
+          ";",
+          repeat($._enum_body_declaration),
+          "}",
+        ),
+        // Enum constants followed by body declarations (implicit separator)
+        seq(
+          "{",
+          sep1($.enum_constant, ","),
+          repeat1($._enum_body_declaration),
+          "}",
+        ),
       ),
 
-    enum_body_declarations: ($) => seq(";", repeat($._class_body_declaration)),
+    _enum_body_declaration: ($) =>
+      choice(
+        $.field_declaration,
+        $.record_declaration,
+        $.method_declaration,
+        $.compact_constructor_declaration, // For records.
+        $.class_declaration,
+        $.interface_declaration,
+        $.annotation_type_declaration,
+        $.enum_declaration,
+        $.block,
+        $.static_initializer,
+        $.constructor_declaration,
+      ),
 
     enum_constant: ($) =>
-      seq(
-        optional($.modifiers),
-        field("name", $.identifier),
-        field("arguments", optional($.argument_list)),
-        field("body", optional($.class_body)),
+      prec.left(
+        seq(
+          optional($.modifiers),
+          field("name", $.identifier),
+          field("arguments", optional($.argument_list)),
+          field("body", optional($.class_body)),
+        ),
       ),
 
     class_declaration: ($) =>
@@ -1164,16 +1204,18 @@ module.exports = grammar({
       ),
 
     annotation_type_element_declaration: ($) =>
-      prec.right(seq(
-        optional($.modifiers),
-        field("type", $._unannotated_type),
-        field("name", $.identifier),
-        "(",
-        ")",
-        field("dimensions", optional($.dimensions)),
-        optional($._default_value),
-        optional(";"),
-      )),
+      prec.right(
+        seq(
+          optional($.modifiers),
+          field("type", $._unannotated_type),
+          field("name", $.identifier),
+          "(",
+          ")",
+          field("dimensions", optional($.dimensions)),
+          optional($._default_value),
+          optional(";"),
+        ),
+      ),
 
     _default_value: ($) => seq("default", field("value", $._element_value)),
 
@@ -1209,12 +1251,15 @@ module.exports = grammar({
       ),
 
     constant_declaration: ($) =>
-      prec.right(5, seq(
-        optional($.modifiers),
-        field("type", $._unannotated_type),
-        $._variable_declarator_list,
-        optional(";"),
-      )),
+      prec.right(
+        5,
+        seq(
+          optional($.modifiers),
+          field("type", $._unannotated_type),
+          $._variable_declarator_list,
+          optional(";"),
+        ),
+      ),
 
     _variable_declarator_list: ($) =>
       commaSep1(field("declarator", $.variable_declarator)),
@@ -1230,7 +1275,6 @@ module.exports = grammar({
     _variable_declarator_id: ($) => seq(field("name", $.identifier)),
 
     _variable_initializer: ($) => choice($.expression, $.array_literal),
-
 
     // Types
 
@@ -1371,16 +1415,14 @@ module.exports = grammar({
       ),
 
     method_declaration: ($) =>
-      prec.right(10, seq(
-        optional($.modifiers),
-        $._method_header,
-        optional(choice(
-          field("body", $.block),
-          ";",
-          $._automatic_semicolon
-        ))
-      )),
-
+      prec.right(
+        10,
+        seq(
+          optional($.modifiers),
+          $._method_header,
+          optional(choice(field("body", $.block), ";", $._automatic_semicolon)),
+        ),
+      ),
 
     compact_constructor_declaration: ($) =>
       seq(

@@ -1,0 +1,89 @@
+================================================================================
+enum with constructor after constants without semicolon
+================================================================================
+enum Season {
+    SPRING,
+    SUMMER
+
+    Season() {
+        
+    }
+}
+--------------------------------------------------------------------------------
+
+(source_file
+  (enum_declaration
+    name: (identifier)
+    body: (enum_body
+      (enum_constant
+        name: (identifier))
+      (enum_constant
+        name: (identifier))
+      (constructor_declaration
+        name: (identifier)
+        parameters: (formal_parameters)
+        body: (constructor_body)))))
+
+================================================================================
+enum with field and method after constants
+================================================================================
+enum Status {
+    ACTIVE,
+    INACTIVE
+
+    private String label
+    
+    String getLabel() {
+        return label
+    }
+}
+--------------------------------------------------------------------------------
+
+(source_file
+  (enum_declaration
+    name: (identifier)
+    body: (enum_body
+      (enum_constant
+        name: (identifier))
+      (enum_constant
+        name: (identifier))
+      (field_declaration
+        (modifiers)
+        type: (type_identifier)
+        declarator: (variable_declarator
+          name: (identifier)))
+      (method_declaration
+        type: (type_identifier)
+        name: (identifier)
+        parameters: (formal_parameters)
+        body: (block
+          (return_statement
+            (identifier)))))))
+
+================================================================================
+enum with explicit semicolon
+================================================================================
+enum Color {
+    RED,
+    GREEN,
+    BLUE;
+    
+    private int code
+}
+--------------------------------------------------------------------------------
+
+(source_file
+  (enum_declaration
+    name: (identifier)
+    body: (enum_body
+      (enum_constant
+        name: (identifier))
+      (enum_constant
+        name: (identifier))
+      (enum_constant
+        name: (identifier))
+      (field_declaration
+        (modifiers)
+        type: (integral_type)
+        declarator: (variable_declarator
+          name: (identifier))))))
