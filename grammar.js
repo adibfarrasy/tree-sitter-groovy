@@ -70,7 +70,6 @@ module.exports = grammar({
     [$.annotated_type, $.array_type],
     [$.expression, $.array_access],
     [$._method_declarator, $._variable_declarator_id],
-    [$.modifiers, $.annotated_type, $.receiver_parameter],
     [
       $.module_declaration,
       $.package_declaration,
@@ -118,7 +117,7 @@ module.exports = grammar({
       ":"
     ), "]"),
 
-    array_literal: ($) => seq("[", commaSep($.expression), "]"),
+    array_literal: ($) => seq("[", seq(optional(seq(commaSep1($.expression), optional(",")))), "]"),
 
     decimal_integer_literal: () =>
       token(seq(DIGITS, optional(choice("l", "L")))),

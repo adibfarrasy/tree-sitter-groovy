@@ -1,0 +1,10 @@
+prefix=/usr/local
+libdir=${prefix}/lib
+includedir=${prefix}/include
+
+Name: tree-sitter-tree_sitter_groovy
+Description: 
+URL: https://github.com/tree-sitter/tree-sitter-tree_sitter_groovy
+Version: 0.1.0
+Libs: -L${libdir} -ltree-sitter-tree_sitter_groovy
+Cflags: -I${includedir}

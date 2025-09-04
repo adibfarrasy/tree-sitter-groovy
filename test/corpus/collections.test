@@ -47,3 +47,15 @@ map literal with string key
           (identifier))
         (string_literal)))))
 
+================================================================================
+array literal with trailing comma
+================================================================================
+[1, 2, 3,]
+--------------------------------------------------------------------------------
+(source_file
+  (expression_statement
+    (array_literal
+      (decimal_integer_literal)
+      (decimal_integer_literal)
+      (decimal_integer_literal))))
+
