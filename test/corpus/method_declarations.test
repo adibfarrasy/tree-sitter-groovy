@@ -54,3 +54,70 @@ String "get user by id"(Long id) {
           name: (identifier)
           arguments: (argument_list
             (identifier)))))))
+
+================================================================================
+consecutive interface methods with annotations
+================================================================================
+interface TestMapper {
+    @Annotation
+    Long save(TestObject obj)
+
+    @Annotation  
+    int update(TestObject obj)
+}
+--------------------------------------------------------------------------------
+(source_file
+  (interface_declaration
+    name: (identifier)
+    body: (interface_body
+      (method_declaration
+        (modifiers
+          (marker_annotation
+            name: (identifier)))
+        type: (type_identifier)
+        name: (identifier)
+        parameters: (formal_parameters
+          (formal_parameter
+            type: (type_identifier)
+            name: (identifier))))
+      (method_declaration
+        (modifiers
+          (marker_annotation
+            name: (identifier)))
+        type: (integral_type)
+        name: (identifier)
+        parameters: (formal_parameters
+          (formal_parameter
+            type: (type_identifier)
+            name: (identifier)))))))
+
+================================================================================
+interface methods with multiline parameters
+================================================================================
+interface MultiParamMapper {
+    @Annotation
+    TestObject queryByMultipleParams(String paramA,
+                                   Integer paramB,
+                                   Long paramC)
+}
+--------------------------------------------------------------------------------
+(source_file
+  (interface_declaration
+    name: (identifier)
+    body: (interface_body
+      (method_declaration
+        (modifiers
+          (marker_annotation
+            name: (identifier)))
+        type: (type_identifier)
+        name: (identifier)
+        parameters: (formal_parameters
+          (formal_parameter
+            type: (type_identifier)
+            name: (identifier))
+          (formal_parameter
+            type: (type_identifier)
+            name: (identifier))
+          (formal_parameter
+            type: (type_identifier)
+            name: (identifier)))))))

@@ -490,7 +490,7 @@ module.exports = grammar({
         ),
       ),
 
-    object_creation_argument_list: ($) => seq("(", commaSep($.argument), ")"),
+    object_creation_argument_list: ($) => seq("(", commaSep($.argument), optional(","), ")"),
 
     argument: ($) =>
       choice(
@@ -1153,6 +1153,7 @@ module.exports = grammar({
             $.record_declaration,
             $.annotation_type_declaration,
             ";",
+            "\n",
           ),
         ),
         "}",
