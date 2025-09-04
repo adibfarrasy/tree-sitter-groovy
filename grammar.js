@@ -82,6 +82,8 @@ module.exports = grammar({
     [$.variable_declarator, $.formal_parameter],
     [$.method_declaration],
     [$.modifiers, $.annotated_type],
+    [$.statement, $.constructor_body],
+    [$.primary_expression, $._simple_method_invocation, $.explicit_constructor_invocation],
   ],
 
   word: ($) => $.identifier,
@@ -528,7 +530,7 @@ module.exports = grammar({
     _simple_method_invocation: ($) =>
       prec(
         PREC.CALL,
-        seq(field("name", $.identifier), field("arguments", $.argument_list)),
+        seq(field("name", choice($.identifier, $.this)), field("arguments", $.argument_list)),
       ),
 
     _object_method_invocation: ($) =>
@@ -640,6 +642,7 @@ module.exports = grammar({
         $.throw_statement,
         $.try_statement,
         $.try_with_resources_statement,
+        $.explicit_constructor_invocation,
       ),
 
     block: ($) => seq("{", repeat($.statement), "}"),

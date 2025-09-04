@@ -326,6 +326,10 @@
         "named": true
       },
       {
+        "type": "explicit_constructor_invocation",
+        "named": true
+      },
+      {
         "type": "expression_statement",
         "named": true
       },
@@ -1584,10 +1588,6 @@
       "multiple": true,
       "required": false,
       "types": [
-        {
-          "type": "explicit_constructor_invocation",
-          "named": true
-        },
         {
           "type": "statement",
           "named": true
@@ -2931,6 +2931,10 @@
         "types": [
           {
             "type": "identifier",
+            "named": true
+          },
+          {
+            "type": "this",
             "named": true
           }
         ]
