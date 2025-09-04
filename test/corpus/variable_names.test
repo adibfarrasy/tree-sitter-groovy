@@ -1,0 +1,31 @@
+================================================================================
+variable with contextual keyword 'record'
+================================================================================
+String record = "test"
+--------------------------------------------------------------------------------
+
+(source_file
+  (variable_declaration
+    type: (type_identifier)
+    declarator: (variable_declarator
+      name: (identifier)
+      value: (string_literal))))
+
+================================================================================
+variable declaration with complex type and 'record' name
+================================================================================
+ContractESignatureRecord record = eSignatureMapper.getDisbursementRecordByOrderId(order.id)
+--------------------------------------------------------------------------------
+
+(source_file
+  (variable_declaration
+    type: (type_identifier)
+    declarator: (variable_declarator
+      name: (identifier)
+      value: (method_invocation
+        object: (identifier)
+        name: (identifier)
+        arguments: (argument_list
+          (field_access
+            object: (identifier)
+            field: (identifier)))))))

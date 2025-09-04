@@ -6,6 +6,7 @@
 enum TokenType {
   AUTOMATIC_SEMICOLON,
   RANGE_OPERATOR,
+  RECORD_KEYWORD,
 };
 
 static void advance(TSLexer *lexer) {
@@ -50,6 +51,47 @@ static bool scan_whitespace_and_comments(TSLexer *lexer) {
       return found_newline;
     }
   }
+}
+
+static bool scan_record_keyword(TSLexer *lexer) {
+  // Quick check to avoid unnecessary work
+  if (lexer->lookahead != 'r') {
+    return false;
+  }
+  
+  // Check if we're looking at "record" without consuming
+  // We need to be in a context where "record" is expected as a keyword
+  // This is only valid when preceded by modifiers or at the start
+  
+  lexer->result_symbol = RECORD_KEYWORD;
+  
+  // Check if we're looking at "record"
+  const char *word = "record";
+  for (int i = 0; i < 6; i++) {
+    if (lexer->lookahead != word[i]) {
+      return false;
+    }
+    advance(lexer);
+  }
+  
+  // Must be followed by whitespace
+  if (!iswspace(lexer->lookahead)) {
+    return false;
+  }
+  
+  lexer->mark_end(lexer);
+  
+  // Skip whitespace to check what follows
+  while (iswspace(lexer->lookahead)) {
+    skip(lexer);
+  }
+  
+  // Check if followed by identifier (likely record name)
+  if (iswalpha(lexer->lookahead) || lexer->lookahead == '_' || lexer->lookahead == '$') {
+    return true;
+  }
+  
+  return false;
 }
 
 static bool scan_range_operator(TSLexer *lexer) {
@@ -158,9 +200,15 @@ bool tree_sitter_groovy_external_scanner_scan(
     return scan_range_operator(lexer);
   }
   
-  // Only try to insert automatic semicolon if it's a valid symbol in this context
+  // Try automatic semicolon before record keyword
+  // This is important for interface methods with annotations
   if (valid_symbols[AUTOMATIC_SEMICOLON]) {
     return scan_automatic_semicolon(lexer);
+  }
+  
+  // Try record keyword last - only after checking for semicolons
+  if (valid_symbols[RECORD_KEYWORD]) {
+    return scan_record_keyword(lexer);
   }
   
   return false;

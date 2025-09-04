@@ -6327,20 +6327,8 @@
             ]
           },
           {
-            "type": "TOKEN",
-            "content": {
-              "type": "SEQ",
-              "members": [
-                {
-                  "type": "STRING",
-                  "value": "class"
-                },
-                {
-                  "type": "PATTERN",
-                  "value": "\\s+"
-                }
-              ]
-            }
+            "type": "STRING",
+            "value": "class"
           },
           {
             "type": "FIELD",
@@ -7070,20 +7058,8 @@
           ]
         },
         {
-          "type": "TOKEN",
-          "content": {
-            "type": "SEQ",
-            "members": [
-              {
-                "type": "STRING",
-                "value": "record"
-              },
-              {
-                "type": "PATTERN",
-                "value": "\\s+"
-              }
-            ]
-          }
+          "type": "SYMBOL",
+          "name": "_record_keyword"
         },
         {
           "type": "FIELD",
@@ -7343,20 +7319,8 @@
           ]
         },
         {
-          "type": "TOKEN",
-          "content": {
-            "type": "SEQ",
-            "members": [
-              {
-                "type": "STRING",
-                "value": "interface"
-              },
-              {
-                "type": "PATTERN",
-                "value": "\\s+"
-              }
-            ]
-          }
+          "type": "STRING",
+          "value": "interface"
         },
         {
           "type": "FIELD",
@@ -8594,6 +8558,10 @@
     {
       "type": "SYMBOL",
       "name": "_range_operator"
+    },
+    {
+      "type": "SYMBOL",
+      "name": "_record_keyword"
     }
   ],
   "inline": [

@@ -4866,6 +4866,10 @@
     "named": false
   },
   {
+    "type": "interface",
+    "named": false
+  },
+  {
     "type": "line_comment",
     "named": true,
     "extra": true

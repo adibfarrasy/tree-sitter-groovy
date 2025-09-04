@@ -40,6 +40,7 @@ module.exports = grammar({
   externals: $ => [
     $._automatic_semicolon,
     $._range_operator,
+    $._record_keyword,
   ],
 
   extras: ($) => [
@@ -999,7 +1000,7 @@ module.exports = grammar({
         5,
         seq(
           optional($.modifiers),
-          token(seq("class", /\s+/)),
+          "class",
           field("name", $.identifier),
           optional(field("type_parameters", $.type_parameters)),
           optional(field("superclass", $.superclass)),
@@ -1130,7 +1131,7 @@ module.exports = grammar({
     record_declaration: ($) =>
       seq(
         optional($.modifiers),
-        token(seq("record", /\s+/)),
+        $._record_keyword,
         field("name", $.identifier),
         optional(field("type_parameters", $.type_parameters)),
         field("parameters", $.formal_parameters),
@@ -1179,7 +1180,7 @@ module.exports = grammar({
     interface_declaration: ($) =>
       seq(
         optional($.modifiers),
-        token(seq("interface", /\s+/)),
+        "interface",
         field("name", $.identifier),
         field("type_parameters", optional($.type_parameters)),
         optional($.extends_interfaces),
