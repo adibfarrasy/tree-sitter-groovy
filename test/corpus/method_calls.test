@@ -154,7 +154,46 @@ list.find({i -> i})
     (method_invocation
       (identifier)
       (identifier)
-      (closure
-        (identifier)
-        (expression_statement
-          (identifier))))))
+      (argument_list
+        (closure
+          (identifier)
+          (expression_statement
+            (identifier)))))))
+
+================================================================================
+nested method call with closure in arguments
+================================================================================
+outer(list.collect({ it.id }))
+--------------------------------------------------------------------------------
+(source_file
+  (expression_statement
+    (method_invocation
+      name: (identifier)
+      arguments: (argument_list
+        (method_invocation
+          object: (identifier)
+          name: (identifier)
+          arguments: (argument_list
+            (closure
+              (expression_statement
+                (field_access
+                  object: (identifier)
+                  field: (identifier))))))))))
+
+================================================================================
+method call with closure in parentheses
+================================================================================
+list.collect({ it.toString() })
+--------------------------------------------------------------------------------
+(source_file
+  (expression_statement
+    (method_invocation
+      object: (identifier)
+      name: (identifier)
+      arguments: (argument_list
+        (closure
+          (expression_statement
+            (method_invocation
+              object: (identifier)
+              name: (identifier)
+              arguments: (argument_list))))))))
