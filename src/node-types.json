@@ -176,10 +176,6 @@
         "named": true
       },
       {
-        "type": "lambda_expression",
-        "named": true
-      },
-      {
         "type": "primary_expression",
         "named": true
       },
@@ -253,6 +249,10 @@
       },
       {
         "type": "class_literal",
+        "named": true
+      },
+      {
+        "type": "closure",
         "named": true
       },
       {
@@ -792,7 +792,7 @@
         "required": false,
         "types": [
           {
-            "type": "array_initializer",
+            "type": "array_literal",
             "named": true
           }
         ]
@@ -808,25 +808,6 @@
         },
         {
           "type": "marker_annotation",
-          "named": true
-        }
-      ]
-    }
-  },
-  {
-    "type": "array_initializer",
-    "named": true,
-    "fields": {},
-    "children": {
-      "multiple": true,
-      "required": false,
-      "types": [
-        {
-          "type": "array_initializer",
-          "named": true
-        },
-        {
-          "type": "expression",
           "named": true
         }
       ]
@@ -1480,6 +1461,10 @@
       "multiple": true,
       "required": false,
       "types": [
+        {
+          "type": "formal_parameter",
+          "named": true
+        },
         {
           "type": "identifier",
           "named": true
@@ -2558,21 +2543,6 @@
     }
   },
   {
-    "type": "inferred_parameters",
-    "named": true,
-    "fields": {},
-    "children": {
-      "multiple": true,
-      "required": true,
-      "types": [
-        {
-          "type": "identifier",
-          "named": true
-        }
-      ]
-    }
-  },
-  {
     "type": "instanceof_expression",
     "named": true,
     "fields": {
@@ -2729,44 +2699,6 @@
           "named": true
         }
       ]
-    }
-  },
-  {
-    "type": "lambda_expression",
-    "named": true,
-    "fields": {
-      "body": {
-        "multiple": false,
-        "required": true,
-        "types": [
-          {
-            "type": "block",
-            "named": true
-          },
-          {
-            "type": "expression",
-            "named": true
-          }
-        ]
-      },
-      "parameters": {
-        "multiple": false,
-        "required": true,
-        "types": [
-          {
-            "type": "formal_parameters",
-            "named": true
-          },
-          {
-            "type": "identifier",
-            "named": true
-          },
-          {
-            "type": "inferred_parameters",
-            "named": true
-          }
-        ]
-      }
     }
   },
   {
@@ -4384,7 +4316,7 @@
         "required": false,
         "types": [
           {
-            "type": "array_initializer",
+            "type": "array_literal",
             "named": true
           },
           {

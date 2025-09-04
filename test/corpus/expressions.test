@@ -247,3 +247,103 @@ assert result
 (source_file
   (assert_statement
     (identifier)))
+
+================================================================================
+closure with implicit parameter
+================================================================================
+{ println(it) }
+--------------------------------------------------------------------------------
+(source_file
+  (expression_statement
+    (closure
+      (expression_statement
+        (method_invocation
+          name: (identifier)
+          arguments: (argument_list
+            (identifier)))))))
+
+================================================================================
+closure with single untyped parameter
+================================================================================
+{ x -> println(x) }
+--------------------------------------------------------------------------------
+(source_file
+  (expression_statement
+    (closure
+      (identifier)
+      (expression_statement
+        (method_invocation
+          name: (identifier)
+          arguments: (argument_list
+            (identifier)))))))
+
+================================================================================
+closure with single typed parameter
+================================================================================
+{ String x -> println(x) }
+--------------------------------------------------------------------------------
+(source_file
+  (expression_statement
+    (closure
+      (formal_parameter
+        type: (type_identifier)
+        name: (identifier))
+      (expression_statement
+        (method_invocation
+          name: (identifier)
+          arguments: (argument_list
+            (identifier)))))))
+
+================================================================================
+closure with multiple untyped parameters
+================================================================================
+{ x, y -> println(x + y) }
+--------------------------------------------------------------------------------
+(source_file
+  (expression_statement
+    (closure
+      (identifier)
+      (identifier)
+      (expression_statement
+        (method_invocation
+          name: (identifier)
+          arguments: (argument_list
+            (binary_expression
+              left: (identifier)
+              right: (identifier))))))))
+
+================================================================================
+closure with multiple typed parameters
+================================================================================
+{ String x, Integer y -> println(x + y) }
+--------------------------------------------------------------------------------
+(source_file
+  (expression_statement
+    (closure
+      (formal_parameter
+        type: (type_identifier)
+        name: (identifier))
+      (formal_parameter
+        type: (type_identifier)
+        name: (identifier))
+      (expression_statement
+        (method_invocation
+          name: (identifier)
+          arguments: (argument_list
+            (binary_expression
+              left: (identifier)
+              right: (identifier))))))))
+
+================================================================================
+closure with empty parameter list
+================================================================================
+{ () -> println("hello") }
+--------------------------------------------------------------------------------
+(source_file
+  (expression_statement
+    (closure
+      (expression_statement
+        (method_invocation
+          name: (identifier)
+          arguments: (argument_list
+            (string_literal)))))))

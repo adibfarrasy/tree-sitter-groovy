@@ -236,11 +236,10 @@
 (type_parameter
   (type_identifier) @type.parameter)
 
-; Lambda parameters
-(lambda_expression
-  parameters: (formal_parameters
-    (formal_parameter
-      name: (identifier) @variable.parameter)))
+; Closure parameters
+(closure
+  (formal_parameter
+    name: (identifier) @variable.parameter))
 
 ; Enum constants
 (enum_body

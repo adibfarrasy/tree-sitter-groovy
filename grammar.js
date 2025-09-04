@@ -80,7 +80,9 @@ module.exports = grammar({
     [$._object_method_invocation, $._closure_method_invocation],
     [$.primary_expression, $._unannotated_type],
     [$.primary_expression, $._unannotated_type, $.scoped_type_identifier],
+    [$.variable_declarator, $.formal_parameter],
     [$.method_declaration],
+    [$.modifiers, $.annotated_type],
   ],
 
   word: ($) => $.identifier,
@@ -275,7 +277,6 @@ module.exports = grammar({
         $.assignment_expression,
         $.binary_expression,
         $.instanceof_expression,
-        $.lambda_expression,
         $.ternary_expression,
         $.update_expression,
         $.primary_expression,
@@ -377,22 +378,6 @@ module.exports = grammar({
         ),
       ),
 
-    lambda_expression: ($) =>
-      prec.right(
-        PREC.LAMBDA,
-        seq(
-          field(
-            "parameters",
-            choice($.identifier, $.formal_parameters, $.inferred_parameters),
-          ),
-          "->",
-          field("body", choice($.expression, $.block)),
-        ),
-      ),
-
-    inferred_parameters: ($) =>
-      prec.left(seq("(", commaSep1($.identifier), ")")),
-
     ternary_expression: ($) =>
       prec.right(
         PREC.TERNARY,
@@ -450,6 +435,7 @@ module.exports = grammar({
           $.method_reference,
           $.array_creation_expression,
           $.array_type,
+          $.closure,
         ),
       ),
 
@@ -466,7 +452,7 @@ module.exports = grammar({
             ),
             seq(
               field("dimensions", $.dimensions),
-              field("value", $.array_initializer),
+              field("value", $.array_literal),
             ),
           ),
         ),
@@ -660,12 +646,18 @@ module.exports = grammar({
     block: ($) => seq("{", repeat($.statement), "}"),
 
     closure: ($) =>
-      seq(
+      prec(1, seq(
         "{",
-        optional(seq(commaSep1($.identifier), "->")),
+        optional(seq(
+          choice(
+            seq("(", ")"),
+            commaSep1(choice($.identifier, $.formal_parameter))
+          ),
+          "->"
+        )),
         repeat($.statement),
         "}",
-      ),
+      )),
 
     expression_statement: ($) => prec.right(seq($.expression, optional(";"))),
 
@@ -1194,10 +1186,8 @@ module.exports = grammar({
 
     _variable_declarator_id: ($) => seq(field("name", $.identifier)),
 
-    _variable_initializer: ($) => choice($.expression, $.array_initializer),
+    _variable_initializer: ($) => choice($.expression, $.array_literal),
 
-    array_initializer: ($) =>
-      seq("{", commaSep($._variable_initializer), optional(","), "}"),
 
     // Types
 

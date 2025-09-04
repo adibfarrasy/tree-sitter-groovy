@@ -155,7 +155,6 @@ list.find({i -> i})
       (identifier)
       (identifier)
       (closure
+        (identifier)
         (expression_statement
-          (lambda_expression
-            (identifier)
-            (identifier)))))))
+          (identifier))))))
