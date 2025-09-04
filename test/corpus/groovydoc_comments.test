@@ -1,0 +1,41 @@
+================================================================================
+groovydoc with double asterisk ending
+================================================================================
+/**
+ * @param value the input parameter
+ * @return processed result
+ **/
+@Entity
+class DataProcessor {
+}
+--------------------------------------------------------------------------------
+
+(source_file
+  (groovydoc_comment)
+  (class_declaration
+    (modifiers
+      (marker_annotation
+        name: (identifier)))
+    name: (identifier)
+    body: (class_body)))
+
+================================================================================
+groovydoc with single asterisk ending
+================================================================================
+/**
+ * Standard groovydoc comment
+ * @since version 1.0
+ */
+@Service
+class BusinessLogic {
+}
+--------------------------------------------------------------------------------
+
+(source_file
+  (groovydoc_comment)
+  (class_declaration
+    (modifiers
+      (marker_annotation
+        name: (identifier)))
+    name: (identifier)
+    body: (class_body)))

@@ -1,0 +1,73 @@
+================================================================================
+simple tuple destructuring
+================================================================================
+def (a, b, c) = [10, 20, 30]
+--------------------------------------------------------------------------------
+
+(source_file
+  (variable_declaration
+    (tuple_destructuring_pattern
+      (identifier)
+      (identifier)
+      (identifier))
+    value: (array_literal
+      (decimal_integer_literal)
+      (decimal_integer_literal)
+      (decimal_integer_literal))))
+
+================================================================================
+tuple destructuring with type
+================================================================================
+int (x, y) = coordinates
+--------------------------------------------------------------------------------
+
+(source_file
+  (variable_declaration
+    type: (integral_type)
+    (tuple_destructuring_pattern
+      (identifier)
+      (identifier))
+    value: (identifier)))
+
+================================================================================
+nested tuple destructuring
+================================================================================
+def ((first, second), third) = data
+--------------------------------------------------------------------------------
+
+(source_file
+  (variable_declaration
+    (tuple_destructuring_pattern
+      (tuple_destructuring_pattern
+        (identifier)
+        (identifier))
+      (identifier))
+    value: (identifier)))
+
+================================================================================
+tuple destructuring from method call
+================================================================================
+def (name, age) = getPersonData()
+--------------------------------------------------------------------------------
+
+(source_file
+  (variable_declaration
+    (tuple_destructuring_pattern
+      (identifier)
+      (identifier))
+    value: (method_invocation
+      name: (identifier)
+      arguments: (argument_list))))
+
+================================================================================
+tuple destructuring with underscore placeholder
+================================================================================
+def (value, _) = pair
+--------------------------------------------------------------------------------
+
+(source_file
+  (variable_declaration
+    (tuple_destructuring_pattern
+      (identifier)
+      (identifier))
+    value: (identifier)))

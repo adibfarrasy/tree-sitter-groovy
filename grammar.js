@@ -88,6 +88,7 @@ module.exports = grammar({
     ],
     [$.closure, $._variable_declarator_id],
     [$.for_loop_variable_declaration, $.modifiers],
+    [$._variable_declarator_id, $.compact_constructor_declaration],
   ],
 
   word: ($) => $.identifier,
@@ -110,6 +111,7 @@ module.exports = grammar({
         $.string_literal,
         $.text_block,
         $.null_literal,
+        $.regex_literal,
       ),
 
     map_key: ($) =>
@@ -285,6 +287,11 @@ module.exports = grammar({
       ),
 
     null_literal: ($) => "null",
+
+    regex_literal: () => token(choice(
+      seq("/", /([^/\\\n]|\\.)+/, "/"),
+      seq("~/", /([^/\\\n]|\\.)+/, "/")
+    )),
 
     // Expressions
 
@@ -721,10 +728,10 @@ module.exports = grammar({
       prec.right(seq("break", optional($.identifier), optional(";"))),
 
     continue_statement: ($) =>
-      prec.right(seq("continue", optional($.identifier), optional(";"))),
+      prec.right(seq("continue", optional($.identifier), optional(choice(";", $._automatic_semicolon)))),
 
     return_statement: ($) =>
-      prec.right(seq("return", optional($.expression), optional(";"))),
+      prec.right(seq("return", optional($.expression), optional(choice(";", $._automatic_semicolon)))),
 
     yield_statement: ($) =>
       prec.right(seq("yield", $.expression, optional(";"))),
@@ -1159,12 +1166,31 @@ module.exports = grammar({
       seq(field("scope", $._name), ".", field("name", $.identifier)),
 
     field_declaration: ($) =>
-      prec.right(
-        seq(
-          optional($.modifiers),
-          field("type", $._unannotated_type),
-          $._variable_declarator_list,
-          optional(";"),
+      choice(
+        // Field without explicit type (implicit dynamic type) - HIGHEST precedence
+        prec(
+          PREC.DECL + 2,
+          seq(
+            $.modifiers,
+            field("declarator", $.variable_declarator),
+            choice(";", $._automatic_semicolon),
+          ),
+        ),
+        // Field with explicit type or def
+        prec.right(
+          seq(
+            optional($.modifiers),
+            choice("def", field("type", $._unannotated_type)),
+            $._variable_declarator_list,
+            optional(choice(";", $._automatic_semicolon)),
+          ),
+        ),
+        // Field without modifiers and without explicit type
+        prec.right(
+          seq(
+            field("declarator", $.variable_declarator),
+            optional(choice(";", $._automatic_semicolon)),
+          ),
         ),
       ),
 
@@ -1293,6 +1319,7 @@ module.exports = grammar({
         $.floating_point_type,
         $.boolean_type,
         $.generic_type,
+        "def",
       ),
 
     annotated_type: ($) => seq(repeat1($._annotation), $._unannotated_type),
@@ -1405,13 +1432,32 @@ module.exports = grammar({
     variable_declaration: ($) =>
       prec.right(
         PREC.DECL,
-        seq(
-          optional("final"),
-          // repeat($._annotation),
-          choice("def", "var", field("type", $._unannotated_type)),
-          $._variable_declarator_list,
-          optional(";"),
+        choice(
+          // Regular variable declaration
+          seq(
+            optional("final"),
+            // repeat($._annotation),
+            choice("def", "var", field("type", $._unannotated_type)),
+            $._variable_declarator_list,
+            optional(";"),
+          ),
+          // Tuple destructuring declaration
+          seq(
+            optional("final"),
+            choice("def", "var", field("type", $._unannotated_type)),
+            $.tuple_destructuring_pattern,
+            "=",
+            field("value", $.expression),
+            optional(";"),
+          ),
         ),
+      ),
+
+    tuple_destructuring_pattern: ($) =>
+      seq(
+        "(",
+        commaSep1(choice($.identifier, $.tuple_destructuring_pattern)),
+        ")",
       ),
 
     method_declaration: ($) =>
@@ -1448,7 +1494,7 @@ module.exports = grammar({
       token(prec(PREC.COMMENT, seq("/*", /[^*]*\*+([^/*][^*]*\*+)*/, "/"))),
 
     groovydoc_comment: () =>
-      token(prec(PREC.COMMENT + 1, seq("/**", /([^*]|\*[^/])*/, "*/"))),
+      token(prec(PREC.COMMENT + 1, seq("/**", /([^*]|\*+[^*/])*/, /\*+\//))),
   },
 });
 

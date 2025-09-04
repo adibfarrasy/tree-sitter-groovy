@@ -1,0 +1,128 @@
+================================================================================
+field without explicit type
+================================================================================
+class TestClass {
+    @Field(value = "Current")
+    current
+}
+--------------------------------------------------------------------------------
+
+(source_file
+  (class_declaration
+    name: (identifier)
+    body: (class_body
+      (field_declaration
+        (modifiers
+          (annotation
+            name: (identifier)
+            arguments: (annotation_argument_list
+              (element_value_pair
+                key: (identifier)
+                value: (string_literal)))))
+        declarator: (variable_declarator
+          name: (identifier))))))
+
+================================================================================
+field with explicit type
+================================================================================
+class TestClass {
+    @Field(value = "Max")
+    int maxValue
+}
+--------------------------------------------------------------------------------
+
+(source_file
+  (class_declaration
+    name: (identifier)
+    body: (class_body
+      (field_declaration
+        (modifiers
+          (annotation
+            name: (identifier)
+            arguments: (annotation_argument_list
+              (element_value_pair
+                key: (identifier)
+                value: (string_literal)))))
+        type: (integral_type)
+        declarator: (variable_declarator
+          name: (identifier))))))
+
+================================================================================
+field with def type
+================================================================================
+class TestClass {
+    def dynamicField = "value"
+}
+--------------------------------------------------------------------------------
+
+(source_file
+  (class_declaration
+    name: (identifier)
+    body: (class_body
+      (field_declaration
+        declarator: (variable_declarator
+          name: (identifier)
+          value: (string_literal))))))
+
+================================================================================
+multiple fields with mixed types
+================================================================================
+class TestClass {
+    String name
+    age
+    def value = 42
+}
+--------------------------------------------------------------------------------
+
+(source_file
+  (class_declaration
+    name: (identifier)
+    body: (class_body
+      (field_declaration
+        type: (type_identifier)
+        declarator: (variable_declarator
+          name: (identifier)))
+      (field_declaration
+        declarator: (variable_declarator
+          name: (identifier)))
+      (field_declaration
+        declarator: (variable_declarator
+          name: (identifier)
+          value: (decimal_integer_literal))))))
+
+================================================================================
+annotated fields with mixed types
+================================================================================
+class TestClass {
+    @Field(value = "Current")
+    current
+    @Field(value = "Max")
+    int max
+}
+--------------------------------------------------------------------------------
+
+(source_file
+  (class_declaration
+    name: (identifier)
+    body: (class_body
+      (field_declaration
+        (modifiers
+          (annotation
+            name: (identifier)
+            arguments: (annotation_argument_list
+              (element_value_pair
+                key: (identifier)
+                value: (string_literal)))))
+        declarator: (variable_declarator
+          name: (identifier)))
+      (field_declaration
+        (modifiers
+          (annotation
+            name: (identifier)
+            arguments: (annotation_argument_list
+              (element_value_pair
+                key: (identifier)
+                value: (string_literal)))))
+        type: (integral_type)
+        declarator: (variable_declarator
+          name: (identifier))))))

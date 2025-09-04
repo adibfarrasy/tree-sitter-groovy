@@ -1,0 +1,90 @@
+================================================================================
+continue statement without semicolon
+================================================================================
+for (item in list) {
+    if (skip) continue
+    process(item)
+}
+--------------------------------------------------------------------------------
+
+(source_file
+  (enhanced_for_statement
+    name: (identifier)
+    value: (identifier)
+    body: (expression_statement
+      (closure
+        (if_statement
+          condition: (parenthesized_expression
+            (identifier))
+          consequence: (continue_statement))
+        (expression_statement
+          (method_invocation
+            name: (identifier)
+            arguments: (argument_list
+              (identifier))))))))
+
+================================================================================
+return statement without semicolon
+================================================================================
+{
+    if (hasData) return result
+    return defaultValue
+}
+--------------------------------------------------------------------------------
+
+(source_file
+  (expression_statement
+    (closure
+      (if_statement
+        condition: (parenthesized_expression
+          (identifier))
+        consequence: (return_statement
+          (identifier)))
+      (return_statement
+        (identifier)))))
+
+================================================================================
+continue with explicit semicolon  
+================================================================================
+for (item in items) {
+    if (shouldSkip) continue;
+    doWork()
+}
+--------------------------------------------------------------------------------
+
+(source_file
+  (enhanced_for_statement
+    name: (identifier)
+    value: (identifier)
+    body: (expression_statement
+      (closure
+        (if_statement
+          condition: (parenthesized_expression
+            (identifier))
+          consequence: (continue_statement))
+        (expression_statement
+          (method_invocation
+            name: (identifier)
+            arguments: (argument_list)))))))
+
+================================================================================
+return with explicit semicolon
+================================================================================
+{
+    if (error) return null;
+    return compute()
+}
+--------------------------------------------------------------------------------
+
+(source_file
+  (expression_statement
+    (closure
+      (if_statement
+        condition: (parenthesized_expression
+          (identifier))
+        consequence: (return_statement
+          (null_literal)))
+      (return_statement
+        (method_invocation
+          name: (identifier)
+          arguments: (argument_list))))))

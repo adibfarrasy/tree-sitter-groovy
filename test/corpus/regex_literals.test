@@ -1,0 +1,58 @@
+================================================================================
+regex literal with standard syntax
+================================================================================
+def result = data.replaceAll(/abc|def/, "xyz")
+--------------------------------------------------------------------------------
+
+(source_file
+  (variable_declaration
+    declarator: (variable_declarator
+      name: (identifier)
+      value: (method_invocation
+        object: (identifier)
+        name: (identifier)
+        arguments: (argument_list
+          (regex_literal)
+          (string_literal))))))
+
+================================================================================
+regex literal with slashy syntax
+================================================================================
+def pattern = ~/hello.*world/
+--------------------------------------------------------------------------------
+
+(source_file
+  (variable_declaration
+    declarator: (variable_declarator
+      name: (identifier)
+      value: (regex_literal))))
+
+================================================================================
+regex literal with escaped characters
+================================================================================
+def matcher = text.find(/foo\.bar/)
+--------------------------------------------------------------------------------
+
+(source_file
+  (variable_declaration
+    declarator: (variable_declarator
+      name: (identifier)
+      value: (method_invocation
+        object: (identifier)
+        name: (identifier)
+        arguments: (argument_list
+          (regex_literal))))))
+
+================================================================================
+regex literal in method call
+================================================================================
+str.matches(/test\d+/)
+--------------------------------------------------------------------------------
+
+(source_file
+  (expression_statement
+    (method_invocation
+      object: (identifier)
+      name: (identifier)
+      arguments: (argument_list
+        (regex_literal)))))
