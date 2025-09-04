@@ -36,12 +36,15 @@ const PREC = {
 module.exports = grammar({
   name: "groovy",
 
+  externals: $ => [
+    $._automatic_semicolon,
+  ],
+
   extras: ($) => [
     $.line_comment,
     $.block_comment,
     $.groovydoc_comment,
     /\s/,
-    /\n/,
   ],
 
   supertypes: ($) => [
@@ -80,7 +83,6 @@ module.exports = grammar({
     [$.primary_expression, $._unannotated_type],
     [$.primary_expression, $._unannotated_type, $.scoped_type_identifier],
     [$.variable_declarator, $.formal_parameter],
-    [$.method_declaration],
     [$.modifiers, $.annotated_type],
     [$.statement, $.constructor_body],
     [$.primary_expression, $._simple_method_invocation, $.explicit_constructor_invocation],
@@ -1330,11 +1332,15 @@ module.exports = grammar({
       ),
 
     method_declaration: ($) =>
-      seq(
+      prec.right(seq(
         optional($.modifiers),
         $._method_header,
-        optional(choice(field("body", $.block), ";")),
-      ),
+        optional(choice(
+          field("body", $.block),
+          ";",
+          $._automatic_semicolon
+        ))
+      )),
 
 
     compact_constructor_declaration: ($) =>
