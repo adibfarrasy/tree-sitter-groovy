@@ -13,10 +13,10 @@ class Test {
   (class_declaration
     name: (identifier)
     body: (class_body
-      (method_declaration
+      (function_declaration
         type: (void_type)
         name: (identifier)
-        parameters: (formal_parameters)
+        parameters: (parameters)
         body: (block
           (variable_declaration
             (annotation
@@ -46,10 +46,10 @@ class Test {
   (class_declaration
     name: (identifier)
     body: (class_body
-      (method_declaration
+      (function_declaration
         type: (void_type)
         name: (identifier)
-        parameters: (formal_parameters)
+        parameters: (parameters)
         body: (block
           (variable_declaration
             (annotation
@@ -78,10 +78,10 @@ class Test {
   (class_declaration
     name: (identifier)
     body: (class_body
-      (method_declaration
+      (function_declaration
         type: (void_type)
         name: (identifier)
-        parameters: (formal_parameters)
+        parameters: (parameters)
         body: (block
           (variable_declaration
             (marker_annotation
@@ -107,10 +107,10 @@ class Test {
   (class_declaration
     name: (identifier)
     body: (class_body
-      (method_declaration
+      (function_declaration
         type: (void_type)
         name: (identifier)
-        parameters: (formal_parameters)
+        parameters: (parameters)
         body: (block
           (variable_declaration
             (annotation

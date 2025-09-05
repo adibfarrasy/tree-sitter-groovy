@@ -166,7 +166,7 @@ class TestClass {
               (type_arguments
                 (type_identifier)
                 (type_identifier))))))
-      (method_declaration
+      (function_declaration
         (modifiers
           (marker_annotation
             name: (identifier)))
@@ -175,8 +175,8 @@ class TestClass {
           (type_arguments
             (type_identifier)))
         name: (identifier)
-        parameters: (formal_parameters
-          (formal_parameter
+        parameters: (parameters
+          (parameter
             type: (type_identifier)
             name: (identifier)))
         body: (block

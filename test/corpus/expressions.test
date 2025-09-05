@@ -285,7 +285,7 @@ closure with single typed parameter
 (source_file
   (expression_statement
     (closure
-      (formal_parameter
+      (parameter
         type: (type_identifier)
         name: (identifier))
       (expression_statement
@@ -320,10 +320,10 @@ closure with multiple typed parameters
 (source_file
   (expression_statement
     (closure
-      (formal_parameter
+      (parameter
         type: (type_identifier)
         name: (identifier))
-      (formal_parameter
+      (parameter
         type: (type_identifier)
         name: (identifier))
       (expression_statement

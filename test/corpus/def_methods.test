@@ -11,9 +11,9 @@ class TestClass {
   (class_declaration
     name: (identifier)
     body: (class_body
-      (method_declaration
+      (function_declaration
         name: (identifier)
-        parameters: (formal_parameters)
+        parameters: (parameters)
         body: (block)))))
 
 ================================================================================
@@ -30,13 +30,13 @@ class TestClass {
   (class_declaration
     name: (identifier)
     body: (class_body
-      (method_declaration
+      (function_declaration
         name: (identifier)
-        parameters: (formal_parameters
-          (formal_parameter
+        parameters: (parameters
+          (parameter
             type: (type_identifier)
             name: (identifier))
-          (formal_parameter
+          (parameter
             type: (integral_type)
             name: (identifier)))
         body: (block
@@ -63,17 +63,17 @@ class TestClass {
   (class_declaration
     name: (identifier)
     body: (class_body
-      (method_declaration
+      (function_declaration
         (modifiers)
         name: (identifier)
-        parameters: (formal_parameters)
+        parameters: (parameters)
         body: (block
           (return_statement
             (string_literal))))
-      (method_declaration
+      (function_declaration
         (modifiers)
         name: (identifier)
-        parameters: (formal_parameters)
+        parameters: (parameters)
         body: (block
           (return_statement
             (string_literal)))))))
@@ -98,26 +98,26 @@ class TestClass {
   (class_declaration
     name: (identifier)
     body: (class_body
-      (method_declaration
+      (function_declaration
         name: (identifier)
-        parameters: (formal_parameters)
+        parameters: (parameters)
         body: (block))
-      (method_declaration
+      (function_declaration
         (modifiers)
         type: (integral_type)
         name: (identifier)
-        parameters: (formal_parameters
-          (formal_parameter
+        parameters: (parameters
+          (parameter
             type: (type_identifier)
             name: (identifier)))
         body: (block
           (return_statement
             (decimal_integer_literal))))
-      (method_declaration
+      (function_declaration
         (modifiers)
         type: (void_type)
         name: (identifier)
-        parameters: (formal_parameters)
+        parameters: (parameters)
         body: (block)))))
 
 ================================================================================
@@ -142,19 +142,19 @@ class TestClass {
         (modifiers)
         name: (identifier)
         body: (class_body
-          (method_declaration
+          (function_declaration
             name: (identifier)
-            parameters: (formal_parameters)
+            parameters: (parameters)
             body: (block))
-          (method_declaration
+          (function_declaration
             (modifiers)
             type: (void_type)
             name: (identifier)
-            parameters: (formal_parameters
-              (formal_parameter
+            parameters: (parameters
+              (parameter
                 type: (integral_type)
                 name: (identifier))
-              (formal_parameter
+              (parameter
                 type: (type_identifier)
                 name: (identifier)))
             body: (block)))))))
@@ -179,9 +179,9 @@ class TestClass {
         declarator: (variable_declarator
           name: (identifier)
           value: (string_literal)))
-      (method_declaration
+      (function_declaration
         name: (identifier)
-        parameters: (formal_parameters)
+        parameters: (parameters)
         body: (block
           (return_statement
             (identifier)))))))

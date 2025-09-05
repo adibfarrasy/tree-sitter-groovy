@@ -7,10 +7,10 @@ void doSomething() {
 --------------------------------------------------------------------------------
 
 (source_file
-  (method_declaration
+  (function_declaration
     type: (void_type)
     name: (identifier)
-    parameters: (formal_parameters)
+    parameters: (parameters)
     body: (block
       (expression_statement
         (method_invocation
@@ -27,10 +27,10 @@ void "services should not inject with @Lazy"() {
 --------------------------------------------------------------------------------
 
 (source_file
-  (method_declaration
+  (function_declaration
     type: (void_type)
     name: (string_literal)
-    parameters: (formal_parameters)
+    parameters: (parameters)
     body: (block
       (line_comment))))
 
@@ -43,11 +43,11 @@ String "get user by id"(Long id) {
 --------------------------------------------------------------------------------
 
 (source_file
-  (method_declaration
+  (function_declaration
     type: (type_identifier)
     name: (string_literal)
-    parameters: (formal_parameters
-      (formal_parameter
+    parameters: (parameters
+      (parameter
         type: (type_identifier)
         name: (identifier)))
     body: (block
@@ -74,24 +74,24 @@ interface TestMapper {
   (interface_declaration
     name: (identifier)
     body: (interface_body
-      (method_declaration
+      (function_declaration
         (modifiers
           (marker_annotation
             name: (identifier)))
         type: (type_identifier)
         name: (identifier)
-        parameters: (formal_parameters
-          (formal_parameter
+        parameters: (parameters
+          (parameter
             type: (type_identifier)
             name: (identifier))))
-      (method_declaration
+      (function_declaration
         (modifiers
           (marker_annotation
             name: (identifier)))
         type: (integral_type)
         name: (identifier)
-        parameters: (formal_parameters
-          (formal_parameter
+        parameters: (parameters
+          (parameter
             type: (type_identifier)
             name: (identifier)))))))
 
@@ -112,8 +112,8 @@ class TestClass {
     body: (class_body
       (constructor_declaration
         name: (identifier)
-        parameters: (formal_parameters
-          (formal_parameter
+        parameters: (parameters
+          (parameter
             type: (type_identifier)
             name: (identifier)))
         body: (constructor_body
@@ -143,20 +143,20 @@ interface MultiParamMapper {
   (interface_declaration
     name: (identifier)
     body: (interface_body
-      (method_declaration
+      (function_declaration
         (modifiers
           (marker_annotation
             name: (identifier)))
         type: (type_identifier)
         name: (identifier)
-        parameters: (formal_parameters
-          (formal_parameter
+        parameters: (parameters
+          (parameter
             type: (type_identifier)
             name: (identifier))
-          (formal_parameter
+          (parameter
             type: (type_identifier)
             name: (identifier))
-          (formal_parameter
+          (parameter
             type: (type_identifier)
             name: (identifier)))))))
 
@@ -167,11 +167,11 @@ ReturnType methodName(@Annotation('param1') Type param1, @Annotation('param2') p
 --------------------------------------------------------------------------------
 
 (source_file
-  (method_declaration
+  (function_declaration
     type: (type_identifier)
     name: (identifier)
-    parameters: (formal_parameters
-      (formal_parameter
+    parameters: (parameters
+      (parameter
         (modifiers
           (annotation
             name: (identifier)
@@ -179,7 +179,7 @@ ReturnType methodName(@Annotation('param1') Type param1, @Annotation('param2') p
               (string_literal))))
         type: (type_identifier)
         name: (identifier))
-      (formal_parameter
+      (parameter
         (modifiers
           (annotation
             name: (identifier)

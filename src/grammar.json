@@ -4439,7 +4439,7 @@
                               },
                               {
                                 "type": "SYMBOL",
-                                "name": "formal_parameter"
+                                "name": "parameter"
                               }
                             ]
                           },
@@ -4461,7 +4461,7 @@
                                     },
                                     {
                                       "type": "SYMBOL",
-                                      "name": "formal_parameter"
+                                      "name": "parameter"
                                     }
                                   ]
                                 }
@@ -4963,7 +4963,7 @@
         },
         {
           "type": "SYMBOL",
-          "name": "catch_formal_parameter"
+          "name": "catch_parameter"
         },
         {
           "type": "STRING",
@@ -4979,7 +4979,7 @@
         }
       ]
     },
-    "catch_formal_parameter": {
+    "catch_parameter": {
       "type": "SEQ",
       "members": [
         {
@@ -5812,7 +5812,7 @@
           },
           {
             "type": "SYMBOL",
-            "name": "method_declaration"
+            "name": "function_declaration"
           }
         ]
       }
@@ -6513,7 +6513,7 @@
         },
         {
           "type": "SYMBOL",
-          "name": "method_declaration"
+          "name": "function_declaration"
         },
         {
           "type": "SYMBOL",
@@ -6980,7 +6980,7 @@
         },
         {
           "type": "SYMBOL",
-          "name": "method_declaration"
+          "name": "function_declaration"
         },
         {
           "type": "SYMBOL",
@@ -7106,7 +7106,7 @@
           "name": "parameters",
           "content": {
             "type": "SYMBOL",
-            "name": "formal_parameters"
+            "name": "parameters"
           }
         }
       ]
@@ -7504,7 +7504,7 @@
           "name": "parameters",
           "content": {
             "type": "SYMBOL",
-            "name": "formal_parameters"
+            "name": "parameters"
           }
         },
         {
@@ -7842,7 +7842,7 @@
               },
               {
                 "type": "SYMBOL",
-                "name": "method_declaration"
+                "name": "function_declaration"
               },
               {
                 "type": "SYMBOL",
@@ -8371,7 +8371,7 @@
             "name": "parameters",
             "content": {
               "type": "SYMBOL",
-              "name": "formal_parameters"
+              "name": "parameters"
             }
           },
           {
@@ -8393,7 +8393,7 @@
         ]
       }
     },
-    "formal_parameters": {
+    "parameters": {
       "type": "PREC",
       "value": 19,
       "content": {
@@ -8426,7 +8426,7 @@
                     "members": [
                       {
                         "type": "SYMBOL",
-                        "name": "formal_parameter"
+                        "name": "parameter"
                       },
                       {
                         "type": "SYMBOL",
@@ -8448,7 +8448,7 @@
                           "members": [
                             {
                               "type": "SYMBOL",
-                              "name": "formal_parameter"
+                              "name": "parameter"
                             },
                             {
                               "type": "SYMBOL",
@@ -8473,7 +8473,7 @@
         ]
       }
     },
-    "formal_parameter": {
+    "parameter": {
       "type": "SEQ",
       "members": [
         {
@@ -8885,7 +8885,7 @@
         }
       ]
     },
-    "method_declaration": {
+    "function_declaration": {
       "type": "PREC_RIGHT",
       "value": 5,
       "content": {
@@ -9130,7 +9130,7 @@
     ],
     [
       "variable_declarator",
-      "formal_parameter"
+      "parameter"
     ],
     [
       "modifiers",

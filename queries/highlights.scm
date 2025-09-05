@@ -55,10 +55,10 @@
 (annotation) @preproc
 
 ; Class properties, function arguments and variables - BLUE
-(formal_parameter
+(parameter
   name: (identifier) @variable.parameter)
 
-(catch_formal_parameter
+(catch_parameter
   name: (identifier) @variable.parameter)
 
 (variable_declarator
@@ -101,7 +101,7 @@
 ] @number
 
 ; Method names
-(method_declaration
+(function_declaration
   name: (identifier) @function)
 
 (method_invocation
@@ -238,7 +238,7 @@
 
 ; Closure parameters
 (closure
-  (formal_parameter
+  (parameter
     name: (identifier) @variable.parameter))
 
 ; Enum constants

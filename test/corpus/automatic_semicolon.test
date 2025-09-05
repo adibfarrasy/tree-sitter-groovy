@@ -298,8 +298,8 @@ class Foo {
               (type_arguments
                 (type_identifier)
                 (type_identifier))))))
-      (method_declaration
+      (function_declaration
         type: (void_type)
         name: (identifier)
-        parameters: (formal_parameters)
+        parameters: (parameters)
         body: (block)))))
