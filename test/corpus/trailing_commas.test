@@ -1,0 +1,111 @@
+================================================================================
+trailing comma in method arguments
+================================================================================
+return Helper.format(TEMPLATE,
+                value1,
+                obj.property1,
+                obj.property2,
+                obj.property3,
+        )
+--------------------------------------------------------------------------------
+
+(source_file
+  (return_statement
+    (method_invocation
+      object: (identifier)
+      name: (identifier)
+      arguments: (argument_list
+        (identifier)
+        (identifier)
+        (field_access
+          object: (identifier)
+          field: (identifier))
+        (field_access
+          object: (identifier)
+          field: (identifier))
+        (field_access
+          object: (identifier)
+          field: (identifier))))))
+
+================================================================================
+trailing comma in array literal
+================================================================================
+def list = [1, 2, 3, ]
+--------------------------------------------------------------------------------
+
+(source_file
+  (variable_declaration
+    declarator: (variable_declarator
+      name: (identifier)
+      value: (array_literal
+        (decimal_integer_literal)
+        (decimal_integer_literal)
+        (decimal_integer_literal)))))
+
+================================================================================
+trailing comma in map literal
+================================================================================
+def map = [a: 1, b: 2, ]
+--------------------------------------------------------------------------------
+
+(source_file
+  (variable_declaration
+    declarator: (variable_declarator
+      name: (identifier)
+      value: (map_literal
+        (map_entry
+          key: (map_key
+            (identifier))
+          value: (decimal_integer_literal))
+        (map_entry
+          key: (map_key
+            (identifier))
+          value: (decimal_integer_literal))))))
+
+================================================================================
+trailing comma in object creation arguments
+================================================================================
+def instance = new SomeClass(
+    param1,
+    param2,
+)
+--------------------------------------------------------------------------------
+
+(source_file
+  (variable_declaration
+    declarator: (variable_declarator
+      name: (identifier)
+      value: (object_creation_expression
+        type: (type_identifier)
+        (object_creation_argument_list
+          (argument
+            (identifier))
+          (argument
+            (identifier)))))))
+
+================================================================================
+multiple method calls with trailing commas
+================================================================================
+result = calculate(
+    x,
+    y,
+).transform(
+    mapper,
+    validator,
+)
+--------------------------------------------------------------------------------
+
+(source_file
+  (expression_statement
+    (assignment_expression
+      left: (identifier)
+      right: (method_invocation
+        object: (method_invocation
+          name: (identifier)
+          arguments: (argument_list
+            (identifier)
+            (identifier)))
+        name: (identifier)
+        arguments: (argument_list
+          (identifier)
+          (identifier))))))

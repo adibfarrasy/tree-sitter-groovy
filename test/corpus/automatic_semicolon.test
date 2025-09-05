@@ -1,0 +1,305 @@
+================================================================================
+expression statement with automatic semicolon
+================================================================================
+def x = 42
+println(x)
+--------------------------------------------------------------------------------
+
+(source_file
+  (variable_declaration
+    declarator: (variable_declarator
+      name: (identifier)
+      value: (decimal_integer_literal)))
+  (expression_statement
+    (method_invocation
+      name: (identifier)
+      arguments: (argument_list
+        (identifier)))))
+
+================================================================================
+assert statement with automatic semicolon
+================================================================================
+assert x > 0
+assert y == 10 : "y should be 10"
+--------------------------------------------------------------------------------
+
+(source_file
+  (assert_statement
+    (binary_expression
+      left: (identifier)
+      right: (decimal_integer_literal)))
+  (assert_statement
+    (binary_expression
+      left: (identifier)
+      right: (decimal_integer_literal))
+    (string_literal)))
+
+================================================================================
+break statement with automatic semicolon
+================================================================================
+while (true) {
+    if (done) break
+    process()
+}
+--------------------------------------------------------------------------------
+
+(source_file
+  (while_statement
+    condition: (parenthesized_expression
+      (true))
+    body: (expression_statement
+      (closure
+        (if_statement
+          condition: (parenthesized_expression
+            (identifier))
+          consequence: (break_statement))
+        (expression_statement
+          (method_invocation
+            name: (identifier)
+            arguments: (argument_list)))))))
+
+================================================================================
+yield statement with automatic semicolon
+================================================================================
+switch (x) {
+    case 1 -> {
+        yield "one"
+    }
+    case 2 -> {
+        yield "two"
+    }
+}
+--------------------------------------------------------------------------------
+
+(source_file
+  (switch_expression
+    condition: (parenthesized_expression
+      (identifier))
+    body: (switch_block
+      (switch_rule
+        (switch_label
+          (decimal_integer_literal))
+        (expression_statement
+          (closure
+            (yield_statement
+              (string_literal)))))
+      (switch_rule
+        (switch_label
+          (decimal_integer_literal))
+        (expression_statement
+          (closure
+            (yield_statement
+              (string_literal))))))))
+
+================================================================================
+throw statement with automatic semicolon
+================================================================================
+if (error) {
+    throw new Exception("Error occurred")
+}
+--------------------------------------------------------------------------------
+
+(source_file
+  (if_statement
+    condition: (parenthesized_expression
+      (identifier))
+    consequence: (expression_statement
+      (closure
+        (throw_statement
+          (object_creation_expression
+            type: (type_identifier)
+            (object_creation_argument_list
+              (argument
+                (string_literal)))))))))
+
+================================================================================
+package declaration with automatic semicolon
+================================================================================
+package com.example.test
+import java.util.List
+--------------------------------------------------------------------------------
+
+(source_file
+  (package_declaration
+    (scoped_identifier
+      scope: (scoped_identifier
+        scope: (identifier)
+        name: (identifier))
+      name: (identifier)))
+  (import_declaration
+    (scoped_identifier
+      scope: (scoped_identifier
+        scope: (identifier)
+        name: (identifier))
+      name: (identifier))))
+
+================================================================================
+import declaration with automatic semicolon
+================================================================================
+import java.util.*
+import java.lang.Math
+--------------------------------------------------------------------------------
+
+(source_file
+  (import_declaration
+    (scoped_identifier
+      scope: (identifier)
+      name: (identifier))
+    (asterisk))
+  (import_declaration
+    (scoped_identifier
+      scope: (scoped_identifier
+        scope: (identifier)
+        name: (identifier))
+      name: (identifier))))
+
+================================================================================
+variable declaration with automatic semicolon
+================================================================================
+def name = "John"
+String city = "New York"
+int age = 30
+--------------------------------------------------------------------------------
+
+(source_file
+  (variable_declaration
+    declarator: (variable_declarator
+      name: (identifier)
+      value: (string_literal)))
+  (variable_declaration
+    type: (type_identifier)
+    declarator: (variable_declarator
+      name: (identifier)
+      value: (string_literal)))
+  (variable_declaration
+    type: (integral_type)
+    declarator: (variable_declarator
+      name: (identifier)
+      value: (decimal_integer_literal))))
+
+================================================================================
+tuple destructuring with automatic semicolon
+================================================================================
+def (x, y) = [1, 2]
+def (a, (b, c)) = [1, [2, 3]]
+--------------------------------------------------------------------------------
+
+(source_file
+  (variable_declaration
+    (tuple_destructuring_pattern
+      (identifier)
+      (identifier))
+    value: (array_literal
+      (decimal_integer_literal)
+      (decimal_integer_literal)))
+  (variable_declaration
+    (tuple_destructuring_pattern
+      (identifier)
+      (tuple_destructuring_pattern
+        (identifier)
+        (identifier)))
+    value: (array_literal
+      (decimal_integer_literal)
+      (array_literal
+        (decimal_integer_literal)
+        (decimal_integer_literal)))))
+
+================================================================================
+constant declaration with automatic semicolon
+================================================================================
+interface Constants {
+    String NAME = "default"
+    int MAX_SIZE = 100
+}
+--------------------------------------------------------------------------------
+
+(source_file
+  (interface_declaration
+    name: (identifier)
+    body: (interface_body
+      (constant_declaration
+        type: (type_identifier)
+        declarator: (variable_declarator
+          name: (identifier)
+          value: (string_literal)))
+      (constant_declaration
+        type: (integral_type)
+        declarator: (variable_declarator
+          name: (identifier)
+          value: (decimal_integer_literal))))))
+
+================================================================================
+multiple statements with automatic semicolon
+================================================================================
+def x = 10
+println(x)
+assert x > 0
+def y = x * 2
+return y
+--------------------------------------------------------------------------------
+
+(source_file
+  (variable_declaration
+    declarator: (variable_declarator
+      name: (identifier)
+      value: (decimal_integer_literal)))
+  (expression_statement
+    (method_invocation
+      name: (identifier)
+      arguments: (argument_list
+        (identifier))))
+  (assert_statement
+    (binary_expression
+      left: (identifier)
+      right: (decimal_integer_literal)))
+  (variable_declaration
+    declarator: (variable_declarator
+      name: (identifier)
+      value: (binary_expression
+        left: (identifier)
+        right: (decimal_integer_literal))))
+  (return_statement
+    (identifier)))
+
+================================================================================
+field with cast expression requires explicit semicolon
+================================================================================
+class Foo {
+    private Function<String, Integer> converter = { s -> Integer.parseInt(s) } as Function<String, Integer>;
+    
+    void test() {}
+}
+--------------------------------------------------------------------------------
+
+(source_file
+  (class_declaration
+    name: (identifier)
+    body: (class_body
+      (field_declaration
+        (modifiers)
+        type: (generic_type
+          (type_identifier)
+          (type_arguments
+            (type_identifier)
+            (type_identifier)))
+        declarator: (variable_declarator
+          name: (identifier)
+          value: (cast_expression
+            value: (closure
+              (identifier)
+              (expression_statement
+                (method_invocation
+                  object: (identifier)
+                  name: (identifier)
+                  arguments: (argument_list
+                    (identifier)))))
+            type: (generic_type
+              (type_identifier)
+              (type_arguments
+                (type_identifier)
+                (type_identifier))))))
+      (method_declaration
+        type: (void_type)
+        name: (identifier)
+        parameters: (formal_parameters)
+        body: (block)))))

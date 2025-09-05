@@ -74,6 +74,7 @@ module.exports = grammar({
       $.package_declaration,
       $.modifiers,
       $.annotated_type,
+      $.variable_declaration,
     ],
     [$._object_method_invocation, $._closure_method_invocation],
     [$.primary_expression, $._unannotated_type],
@@ -310,7 +311,7 @@ module.exports = grammar({
       ),
 
     cast_expression: ($) =>
-      prec.right(
+      prec.left(
         PREC.CAST,
         choice(
           seq(
@@ -603,7 +604,7 @@ module.exports = grammar({
         ),
       ),
 
-    argument_list: ($) => seq("(", commaSep($.expression), ")"),
+    argument_list: ($) => seq("(", commaSep($.expression), optional(","), ")"),
 
     method_reference: ($) =>
       seq(
@@ -703,15 +704,15 @@ module.exports = grammar({
         ),
       ),
 
-    expression_statement: ($) => prec.right(seq($.expression, optional(";"))),
+    expression_statement: ($) => prec.right(seq($.expression, optional(choice(";", $._automatic_semicolon)))),
 
     labeled_statement: ($) => seq($.identifier, ":", $.statement),
 
     assert_statement: ($) =>
       choice(
-        prec.right(seq("assert", $.expression, optional(";"))),
+        prec.right(seq("assert", $.expression, optional(choice(";", $._automatic_semicolon)))),
         prec.right(
-          seq("assert", $.expression, ":", $.expression, optional(";")),
+          seq("assert", $.expression, ":", $.expression, optional(choice(";", $._automatic_semicolon))),
         ),
       ),
 
@@ -725,7 +726,7 @@ module.exports = grammar({
       ),
 
     break_statement: ($) =>
-      prec.right(seq("break", optional($.identifier), optional(";"))),
+      prec.right(seq("break", optional($.identifier), optional(choice(";", $._automatic_semicolon)))),
 
     continue_statement: ($) =>
       prec.right(seq("continue", optional($.identifier), optional(choice(";", $._automatic_semicolon)))),
@@ -734,13 +735,13 @@ module.exports = grammar({
       prec.right(seq("return", optional($.expression), optional(choice(";", $._automatic_semicolon)))),
 
     yield_statement: ($) =>
-      prec.right(seq("yield", $.expression, optional(";"))),
+      prec.right(seq("yield", $.expression, optional(choice(";", $._automatic_semicolon)))),
 
     synchronized_statement: ($) =>
       seq("synchronized", $.parenthesized_expression, field("body", $.block)),
 
     throw_statement: ($) =>
-      prec.right(seq("throw", $.expression, optional(";"))),
+      prec.right(seq("throw", $.expression, optional(choice(";", $._automatic_semicolon)))),
 
     try_statement: ($) =>
       seq(
@@ -964,7 +965,7 @@ module.exports = grammar({
       ),
 
     package_declaration: ($) =>
-      prec.right(seq(repeat($._annotation), "package", $._name, optional(";"))),
+      prec.right(seq(repeat($._annotation), "package", $._name, optional(choice(";", $._automatic_semicolon)))),
 
     import_declaration: ($) =>
       prec.right(
@@ -973,7 +974,7 @@ module.exports = grammar({
           optional("static"),
           $._name,
           optional(seq(".", $.asterisk)),
-          optional(";"),
+          optional(choice(";", $._automatic_semicolon)),
         ),
       ),
 
@@ -1156,7 +1157,7 @@ module.exports = grammar({
             ),
           ),
           field("arguments", $.argument_list),
-          optional(";"),
+          optional(choice(";", $._automatic_semicolon)),
         ),
       ),
 
@@ -1167,21 +1168,22 @@ module.exports = grammar({
 
     field_declaration: ($) =>
       choice(
-        // Field without explicit type (implicit dynamic type) - HIGHEST precedence
-        prec(
-          PREC.DECL + 2,
-          seq(
-            $.modifiers,
-            field("declarator", $.variable_declarator),
-            choice(";", $._automatic_semicolon),
-          ),
-        ),
         // Field with explicit type or def
         prec.right(
+          PREC.DECL + 1,
           seq(
             optional($.modifiers),
             choice("def", field("type", $._unannotated_type)),
             $._variable_declarator_list,
+            optional(choice(";", $._automatic_semicolon)),
+          ),
+        ),
+        // Field with modifiers but no explicit type (implicit dynamic type)
+        prec.right(
+          PREC.DECL + 2,
+          seq(
+            $.modifiers,
+            field("declarator", $.variable_declarator),
             optional(choice(";", $._automatic_semicolon)),
           ),
         ),
@@ -1239,7 +1241,7 @@ module.exports = grammar({
           ")",
           field("dimensions", optional($.dimensions)),
           optional($._default_value),
-          optional(";"),
+          optional(choice(";", $._automatic_semicolon)),
         ),
       ),
 
@@ -1283,7 +1285,7 @@ module.exports = grammar({
           optional($.modifiers),
           field("type", $._unannotated_type),
           $._variable_declarator_list,
-          optional(";"),
+          optional(choice(";", $._automatic_semicolon)),
         ),
       ),
 
@@ -1435,20 +1437,21 @@ module.exports = grammar({
         choice(
           // Regular variable declaration
           seq(
+            repeat($._annotation),
             optional("final"),
-            // repeat($._annotation),
             choice("def", "var", field("type", $._unannotated_type)),
             $._variable_declarator_list,
-            optional(";"),
+            optional(choice(";", $._automatic_semicolon)),
           ),
           // Tuple destructuring declaration
           seq(
+            repeat($._annotation),
             optional("final"),
             choice("def", "var", field("type", $._unannotated_type)),
             $.tuple_destructuring_pattern,
             "=",
             field("value", $.expression),
-            optional(";"),
+            optional(choice(";", $._automatic_semicolon)),
           ),
         ),
       ),

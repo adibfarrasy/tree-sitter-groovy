@@ -1,0 +1,125 @@
+================================================================================
+annotated local variable with final modifier
+================================================================================
+class Test {
+    void method() {
+        @SuppressWarnings("resource")
+        final ConnectionManager manager = new ConnectionManager()
+    }
+}
+--------------------------------------------------------------------------------
+
+(source_file
+  (class_declaration
+    name: (identifier)
+    body: (class_body
+      (method_declaration
+        type: (void_type)
+        name: (identifier)
+        parameters: (formal_parameters)
+        body: (block
+          (variable_declaration
+            (annotation
+              name: (identifier)
+              arguments: (annotation_argument_list
+                (string_literal)))
+            type: (type_identifier)
+            declarator: (variable_declarator
+              name: (identifier)
+              value: (object_creation_expression
+                type: (type_identifier)
+                (object_creation_argument_list)))))))))
+
+================================================================================
+multiple annotations on local variable
+================================================================================
+class Test {
+    void method() {
+        @SuppressWarnings("resource")
+        @Deprecated
+        final String name = "test"
+    }
+}
+--------------------------------------------------------------------------------
+
+(source_file
+  (class_declaration
+    name: (identifier)
+    body: (class_body
+      (method_declaration
+        type: (void_type)
+        name: (identifier)
+        parameters: (formal_parameters)
+        body: (block
+          (variable_declaration
+            (annotation
+              name: (identifier)
+              arguments: (annotation_argument_list
+                (string_literal)))
+            (marker_annotation
+              name: (identifier))
+            type: (type_identifier)
+            declarator: (variable_declarator
+              name: (identifier)
+              value: (string_literal))))))))
+
+================================================================================
+annotated def variable
+================================================================================
+class Test {
+    void method() {
+        @NotNull
+        def result = compute()
+    }
+}
+--------------------------------------------------------------------------------
+
+(source_file
+  (class_declaration
+    name: (identifier)
+    body: (class_body
+      (method_declaration
+        type: (void_type)
+        name: (identifier)
+        parameters: (formal_parameters)
+        body: (block
+          (variable_declaration
+            (marker_annotation
+              name: (identifier))
+            declarator: (variable_declarator
+              name: (identifier)
+              value: (method_invocation
+                name: (identifier)
+                arguments: (argument_list)))))))))
+
+================================================================================
+annotated tuple destructuring
+================================================================================
+class Test {
+    void method() {
+        @SuppressWarnings("unused")
+        def (x, y) = [1, 2]
+    }
+}
+--------------------------------------------------------------------------------
+
+(source_file
+  (class_declaration
+    name: (identifier)
+    body: (class_body
+      (method_declaration
+        type: (void_type)
+        name: (identifier)
+        parameters: (formal_parameters)
+        body: (block
+          (variable_declaration
+            (annotation
+              name: (identifier)
+              arguments: (annotation_argument_list
+                (string_literal)))
+            (tuple_destructuring_pattern
+              (identifier)
+              (identifier))
+            value: (array_literal
+              (decimal_integer_literal)
+              (decimal_integer_literal))))))))
