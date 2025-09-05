@@ -8294,8 +8294,17 @@
             "type": "FIELD",
             "name": "type",
             "content": {
-              "type": "SYMBOL",
-              "name": "_unannotated_type"
+              "type": "CHOICE",
+              "members": [
+                {
+                  "type": "STRING",
+                  "value": "def"
+                },
+                {
+                  "type": "SYMBOL",
+                  "name": "_unannotated_type"
+                }
+              ]
             }
           },
           {
@@ -8865,7 +8874,7 @@
     },
     "method_declaration": {
       "type": "PREC_RIGHT",
-      "value": 10,
+      "value": 5,
       "content": {
         "type": "SEQ",
         "members": [
@@ -9113,6 +9122,11 @@
     [
       "modifiers",
       "annotated_type"
+    ],
+    [
+      "field_declaration",
+      "_unannotated_type",
+      "_method_header"
     ],
     [
       "statement",

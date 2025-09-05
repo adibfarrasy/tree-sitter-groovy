@@ -1,0 +1,187 @@
+================================================================================
+def method without parameters
+================================================================================
+class TestClass {
+    def publicMethod() {
+    }
+}
+--------------------------------------------------------------------------------
+
+(source_file
+  (class_declaration
+    name: (identifier)
+    body: (class_body
+      (method_declaration
+        name: (identifier)
+        parameters: (formal_parameters)
+        body: (block)))))
+
+================================================================================
+def method with parameters
+================================================================================
+class TestClass {
+    def methodWithParams(String name, int age) {
+        return name + age
+    }
+}
+--------------------------------------------------------------------------------
+
+(source_file
+  (class_declaration
+    name: (identifier)
+    body: (class_body
+      (method_declaration
+        name: (identifier)
+        parameters: (formal_parameters
+          (formal_parameter
+            type: (type_identifier)
+            name: (identifier))
+          (formal_parameter
+            type: (integral_type)
+            name: (identifier)))
+        body: (block
+          (return_statement
+            (binary_expression
+              left: (identifier)
+              right: (identifier))))))))
+
+================================================================================
+def method with modifiers
+================================================================================
+class TestClass {
+    private def privateMethod() {
+        return "private"
+    }
+    
+    static def staticMethod() {
+        return "static"
+    }
+}
+--------------------------------------------------------------------------------
+
+(source_file
+  (class_declaration
+    name: (identifier)
+    body: (class_body
+      (method_declaration
+        (modifiers)
+        name: (identifier)
+        parameters: (formal_parameters)
+        body: (block
+          (return_statement
+            (string_literal))))
+      (method_declaration
+        (modifiers)
+        name: (identifier)
+        parameters: (formal_parameters)
+        body: (block
+          (return_statement
+            (string_literal)))))))
+
+================================================================================
+mixed method declarations with explicit types and def
+================================================================================
+class TestClass {
+    def publicMethod() {
+    }
+    
+    private int privateMethod(String param) {
+        return 42
+    }
+    
+    static void staticMethod() {
+    }
+}
+--------------------------------------------------------------------------------
+
+(source_file
+  (class_declaration
+    name: (identifier)
+    body: (class_body
+      (method_declaration
+        name: (identifier)
+        parameters: (formal_parameters)
+        body: (block))
+      (method_declaration
+        (modifiers)
+        type: (integral_type)
+        name: (identifier)
+        parameters: (formal_parameters
+          (formal_parameter
+            type: (type_identifier)
+            name: (identifier)))
+        body: (block
+          (return_statement
+            (decimal_integer_literal))))
+      (method_declaration
+        (modifiers)
+        type: (void_type)
+        name: (identifier)
+        parameters: (formal_parameters)
+        body: (block)))))
+
+================================================================================
+def method in nested class
+================================================================================
+class TestClass {
+    static class InnerClass {
+        def innerMethod() {
+        }
+        
+        private void anotherInnerMethod(int x, String y) {
+        }
+    }
+}
+--------------------------------------------------------------------------------
+
+(source_file
+  (class_declaration
+    name: (identifier)
+    body: (class_body
+      (class_declaration
+        (modifiers)
+        name: (identifier)
+        body: (class_body
+          (method_declaration
+            name: (identifier)
+            parameters: (formal_parameters)
+            body: (block))
+          (method_declaration
+            (modifiers)
+            type: (void_type)
+            name: (identifier)
+            parameters: (formal_parameters
+              (formal_parameter
+                type: (integral_type)
+                name: (identifier))
+              (formal_parameter
+                type: (type_identifier)
+                name: (identifier)))
+            body: (block)))))))
+
+================================================================================
+def method vs def field disambiguation
+================================================================================
+class TestClass {
+    def field = "value"
+    
+    def method() {
+        return field
+    }
+}
+--------------------------------------------------------------------------------
+
+(source_file
+  (class_declaration
+    name: (identifier)
+    body: (class_body
+      (field_declaration
+        declarator: (variable_declarator
+          name: (identifier)
+          value: (string_literal)))
+      (method_declaration
+        name: (identifier)
+        parameters: (formal_parameters)
+        body: (block
+          (return_statement
+            (identifier)))))))

@@ -81,6 +81,7 @@ module.exports = grammar({
     [$.primary_expression, $._unannotated_type, $.scoped_type_identifier],
     [$.variable_declarator, $.formal_parameter],
     [$.modifiers, $.annotated_type],
+    [$.field_declaration, $._unannotated_type, $._method_header],
     [$.statement, $.constructor_body],
     [
       $.primary_expression,
@@ -1375,7 +1376,7 @@ module.exports = grammar({
               repeat($._annotation),
             ),
           ),
-          field("type", $._unannotated_type),
+          field("type", choice("def", $._unannotated_type)),
           $._method_declarator,
           optional(prec.right($.throws)),
         ),
@@ -1465,7 +1466,7 @@ module.exports = grammar({
 
     method_declaration: ($) =>
       prec.right(
-        10,
+        PREC.DECL + 3,
         seq(
           optional($.modifiers),
           $._method_header,
