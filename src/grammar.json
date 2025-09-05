@@ -1568,6 +1568,19 @@
               "name": "identifier"
             }
           ]
+        },
+        {
+          "type": "SEQ",
+          "members": [
+            {
+              "type": "STRING",
+              "value": "$"
+            },
+            {
+              "type": "PATTERN",
+              "value": "\\d+"
+            }
+          ]
         }
       ]
     },
@@ -1603,7 +1616,7 @@
           },
           {
             "type": "PATTERN",
-            "value": "[bfnrt'\"\\\\]"
+            "value": "[bfnrt'\"\\\\\\$]"
           }
         ]
       }

@@ -258,7 +258,11 @@ module.exports = grammar({
     _multiline_string_fragment: () => choice(/[^"\\$]+/, /"([^"\\$]|\\")*/),
 
     string_interpolation: ($) =>
-      choice(seq("${", $.expression, "}"), seq("$", $.identifier)),
+      choice(
+        seq("${", $.expression, "}"), 
+        seq("$", $.identifier),
+        seq("$", /\d+/)  // Allow $1, $2, etc. for positional parameters
+      ),
 
     _escape_sequence: ($) =>
       choice(
@@ -268,7 +272,7 @@ module.exports = grammar({
         $._unicode_escape_sequence,
       ),
 
-    _basic_escape_sequence: () => token(seq("\\", /[bfnrt'"\\]/)),
+    _basic_escape_sequence: () => token(seq("\\", /[bfnrt'"\\\$]/)),
     _octal_escape_sequence: () => token(seq("\\", /[0-7]{1,3}/)),
     _hex_escape_sequence: () => token(seq("\\", /x[0-9a-fA-F]{2}/)),
     _unicode_escape_sequence: () =>

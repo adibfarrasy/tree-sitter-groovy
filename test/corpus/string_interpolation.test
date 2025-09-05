@@ -1,0 +1,87 @@
+================================================================================
+string with positional parameter interpolation
+================================================================================
+"Module '$1'"
+--------------------------------------------------------------------------------
+
+(source_file
+  (expression_statement
+    (string_literal
+      (string_interpolation))))
+
+================================================================================
+method chain with positional parameter interpolation
+================================================================================
+SlicesRuleDefinition.slices()
+    .matching("com.pintar.(*).(**)")
+    .namingSlices("Module '$1'")
+    .should().beFreeOfCycles()
+    .because("Cycles make code harder to maintain and test.")
+    .check(classes)
+--------------------------------------------------------------------------------
+
+(source_file
+  (expression_statement
+    (method_invocation
+      object: (method_invocation
+        object: (method_invocation
+          object: (method_invocation
+            object: (method_invocation
+              object: (method_invocation
+                object: (method_invocation
+                  object: (identifier)
+                  name: (identifier)
+                  arguments: (argument_list))
+                name: (identifier)
+                arguments: (argument_list
+                  (string_literal)))
+              name: (identifier)
+              arguments: (argument_list
+                (string_literal
+                  (string_interpolation))))
+            name: (identifier)
+            arguments: (argument_list))
+          name: (identifier)
+          arguments: (argument_list))
+        name: (identifier)
+        arguments: (argument_list
+          (string_literal)))
+      name: (identifier)
+      arguments: (argument_list
+        (identifier)))))
+
+================================================================================
+string with escaped dollar sign
+================================================================================
+"Price: \$50"
+--------------------------------------------------------------------------------
+
+(source_file
+  (expression_statement
+    (string_literal)))
+
+================================================================================
+various positional parameters
+================================================================================
+"First: $1, Second: $2, Tenth: $10"
+--------------------------------------------------------------------------------
+
+(source_file
+  (expression_statement
+    (string_literal
+      (string_interpolation)
+      (string_interpolation)
+      (string_interpolation))))
+
+================================================================================
+mixed interpolation types
+================================================================================
+"Hello ${name}, you are user $1"
+--------------------------------------------------------------------------------
+
+(source_file
+  (expression_statement
+    (string_literal
+      (string_interpolation
+        (identifier))
+      (string_interpolation))))
