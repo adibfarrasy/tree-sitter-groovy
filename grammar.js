@@ -691,7 +691,8 @@ module.exports = grammar({
         $.explicit_constructor_invocation,
       ),
 
-    block: ($) => seq("{", repeat($.statement), "}"),
+    block: ($) => prec(2, seq("{", repeat($.statement), "}")),
+
 
     closure: ($) =>
       prec(

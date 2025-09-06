@@ -11,17 +11,16 @@ for (item in list) {
   (enhanced_for_statement
     name: (identifier)
     value: (identifier)
-    body: (expression_statement
-      (closure
-        (if_statement
-          condition: (parenthesized_expression
-            (identifier))
-          consequence: (continue_statement))
-        (expression_statement
-          (method_invocation
-            name: (identifier)
-            arguments: (argument_list
-              (identifier))))))))
+    body: (block
+      (if_statement
+        condition: (parenthesized_expression
+          (identifier))
+        consequence: (continue_statement))
+      (expression_statement
+        (method_invocation
+          name: (identifier)
+          arguments: (argument_list
+            (identifier)))))))
 
 ================================================================================
 return statement without semicolon
@@ -33,15 +32,14 @@ return statement without semicolon
 --------------------------------------------------------------------------------
 
 (source_file
-  (expression_statement
-    (closure
-      (if_statement
-        condition: (parenthesized_expression
-          (identifier))
-        consequence: (return_statement
-          (identifier)))
-      (return_statement
-        (identifier)))))
+  (block
+    (if_statement
+      condition: (parenthesized_expression
+        (identifier))
+      consequence: (return_statement
+        (identifier)))
+    (return_statement
+      (identifier))))
 
 ================================================================================
 continue with explicit semicolon  
@@ -56,16 +54,15 @@ for (item in items) {
   (enhanced_for_statement
     name: (identifier)
     value: (identifier)
-    body: (expression_statement
-      (closure
-        (if_statement
-          condition: (parenthesized_expression
-            (identifier))
-          consequence: (continue_statement))
-        (expression_statement
-          (method_invocation
-            name: (identifier)
-            arguments: (argument_list)))))))
+    body: (block
+      (if_statement
+        condition: (parenthesized_expression
+          (identifier))
+        consequence: (continue_statement))
+      (expression_statement
+        (method_invocation
+          name: (identifier)
+          arguments: (argument_list))))))
 
 ================================================================================
 return with explicit semicolon
@@ -77,14 +74,13 @@ return with explicit semicolon
 --------------------------------------------------------------------------------
 
 (source_file
-  (expression_statement
-    (closure
-      (if_statement
-        condition: (parenthesized_expression
-          (identifier))
-        consequence: (return_statement
-          (null_literal)))
-      (return_statement
-        (method_invocation
-          name: (identifier)
-          arguments: (argument_list))))))
+  (block
+    (if_statement
+      condition: (parenthesized_expression
+        (identifier))
+      consequence: (return_statement
+        (null_literal)))
+    (return_statement
+      (method_invocation
+        name: (identifier)
+        arguments: (argument_list)))))

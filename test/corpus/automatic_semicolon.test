@@ -47,16 +47,15 @@ while (true) {
   (while_statement
     condition: (parenthesized_expression
       (true))
-    body: (expression_statement
-      (closure
-        (if_statement
-          condition: (parenthesized_expression
-            (identifier))
-          consequence: (break_statement))
-        (expression_statement
-          (method_invocation
-            name: (identifier)
-            arguments: (argument_list)))))))
+    body: (block
+      (if_statement
+        condition: (parenthesized_expression
+          (identifier))
+        consequence: (break_statement))
+      (expression_statement
+        (method_invocation
+          name: (identifier)
+          arguments: (argument_list))))))
 
 ================================================================================
 yield statement with automatic semicolon
@@ -79,17 +78,15 @@ switch (x) {
       (switch_rule
         (switch_label
           (decimal_integer_literal))
-        (expression_statement
-          (closure
-            (yield_statement
-              (string_literal)))))
+        (block
+          (yield_statement
+            (string_literal))))
       (switch_rule
         (switch_label
           (decimal_integer_literal))
-        (expression_statement
-          (closure
-            (yield_statement
-              (string_literal))))))))
+        (block
+          (yield_statement
+            (string_literal)))))))
 
 ================================================================================
 throw statement with automatic semicolon
@@ -103,14 +100,13 @@ if (error) {
   (if_statement
     condition: (parenthesized_expression
       (identifier))
-    consequence: (expression_statement
-      (closure
-        (throw_statement
-          (object_creation_expression
-            type: (type_identifier)
-            (object_creation_argument_list
-              (argument
-                (string_literal)))))))))
+    consequence: (block
+      (throw_statement
+        (object_creation_expression
+          type: (type_identifier)
+          (object_creation_argument_list
+            (argument
+              (string_literal))))))))
 
 ================================================================================
 package declaration with automatic semicolon

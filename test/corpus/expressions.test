@@ -254,13 +254,12 @@ closure with implicit parameter
 { println(it) }
 --------------------------------------------------------------------------------
 (source_file
-  (expression_statement
-    (closure
-      (expression_statement
-        (method_invocation
-          name: (identifier)
-          arguments: (argument_list
-            (identifier)))))))
+  (block
+    (expression_statement
+      (method_invocation
+        name: (identifier)
+        arguments: (argument_list
+          (identifier))))))
 
 ================================================================================
 closure with single untyped parameter

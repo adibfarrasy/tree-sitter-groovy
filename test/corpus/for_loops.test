@@ -12,9 +12,8 @@ for (final Annotation annotation : annotations) {
     type: (type_identifier)
     name: (identifier)
     value: (identifier)
-    body: (expression_statement
-      (closure
-        (line_comment)))))
+    body: (block
+      (line_comment))))
 
 ================================================================================
 enhanced for loop without modifiers
@@ -28,9 +27,8 @@ for (annotation : annotations) {
   (enhanced_for_statement
     name: (identifier)
     value: (identifier)
-    body: (expression_statement
-      (closure
-        (line_comment)))))
+    body: (block
+      (line_comment))))
 
 ================================================================================
 enhanced for loop with type but no modifiers
@@ -45,6 +43,5 @@ for (Annotation annotation : annotations) {
     type: (type_identifier)
     name: (identifier)
     value: (identifier)
-    body: (expression_statement
-      (closure
-        (line_comment)))))
+    body: (block
+      (line_comment))))

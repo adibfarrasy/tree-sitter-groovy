@@ -120,13 +120,12 @@ for (i : 0..10) {
     value: (range_expression
       left: (decimal_integer_literal)
       right: (decimal_integer_literal))
-    body: (expression_statement
-      (closure
-        (expression_statement
-          (method_invocation
-            name: (identifier)
-            arguments: (argument_list
-              (identifier))))))))
+    body: (block
+      (expression_statement
+        (method_invocation
+          name: (identifier)
+          arguments: (argument_list
+            (identifier)))))))
 
 ================================================================================
 range in enhanced for loop
@@ -143,13 +142,12 @@ for (i : (1 .. 10)) {
       (range_expression
         left: (decimal_integer_literal)
         right: (decimal_integer_literal)))
-    body: (expression_statement
-      (closure
-        (expression_statement
-          (method_invocation
-            name: (identifier)
-            arguments: (argument_list
-              (identifier))))))))
+    body: (block
+      (expression_statement
+        (method_invocation
+          name: (identifier)
+          arguments: (argument_list
+            (identifier)))))))
 
 ================================================================================
 range with negative numbers
