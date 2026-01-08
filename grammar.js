@@ -693,7 +693,6 @@ module.exports = grammar({
 
     block: ($) => prec(2, seq("{", repeat($.statement), "}")),
 
-
     closure: ($) =>
       prec(
         1,
@@ -1043,6 +1042,7 @@ module.exports = grammar({
 
     enum_declaration: ($) =>
       seq(
+        optional(field("documentation", $.groovydoc_comment)),
         optional($.modifiers),
         "enum",
         field("name", $.identifier),
@@ -1103,6 +1103,7 @@ module.exports = grammar({
       prec.right(
         5,
         seq(
+          optional(field("documentation", $.groovydoc_comment)),
           optional($.modifiers),
           "class",
           field("name", $.identifier),
@@ -1176,6 +1177,7 @@ module.exports = grammar({
 
     constructor_declaration: ($) =>
       seq(
+        optional(field("documentation", $.groovydoc_comment)),
         optional($.modifiers),
         $._constructor_declarator,
         optional($.throws),
@@ -1228,6 +1230,7 @@ module.exports = grammar({
         prec.right(
           PREC.DECL + 1,
           seq(
+            optional(field("documentation", $.groovydoc_comment)),
             optional($.modifiers),
             choice("def", field("type", $._unannotated_type)),
             $._variable_declarator_list,
@@ -1238,6 +1241,7 @@ module.exports = grammar({
         prec.right(
           PREC.DECL + 2,
           seq(
+            optional(field("documentation", $.groovydoc_comment)),
             $.modifiers,
             field("declarator", $.variable_declarator),
             optional(choice(";", $._automatic_semicolon)),
@@ -1246,6 +1250,7 @@ module.exports = grammar({
         // Field without modifiers and without explicit type
         prec.right(
           seq(
+            optional(field("documentation", $.groovydoc_comment)),
             field("declarator", $.variable_declarator),
             optional(choice(";", $._automatic_semicolon)),
           ),
@@ -1254,6 +1259,7 @@ module.exports = grammar({
 
     record_declaration: ($) =>
       seq(
+        optional(field("documentation", $.groovydoc_comment)),
         optional($.modifiers),
         $._record_keyword,
         field("name", $.identifier),
@@ -1265,6 +1271,7 @@ module.exports = grammar({
 
     annotation_type_declaration: ($) =>
       seq(
+        optional(field("documentation", $.groovydoc_comment)),
         optional($.modifiers),
         "@interface",
         field("name", $.identifier),
@@ -1305,6 +1312,7 @@ module.exports = grammar({
 
     interface_declaration: ($) =>
       seq(
+        optional(field("documentation", $.groovydoc_comment)),
         optional($.modifiers),
         "interface",
         field("name", $.identifier),
@@ -1523,6 +1531,7 @@ module.exports = grammar({
       prec.right(
         PREC.DECL + 3,
         seq(
+          optional(field("documentation", $.groovydoc_comment)),
           optional($.modifiers),
           $._method_header,
           optional(choice(field("body", $.block), ";", $._automatic_semicolon)),
@@ -1544,8 +1553,7 @@ module.exports = grammar({
     identifier: () => /[\p{L}_$][\p{L}\p{Nd}_$]*/,
 
     // http://stackoverflow.com/questions/13014947/regex-to-match-a-c-style-multiline-comment/36328890#36328890
-    comment: ($) =>
-      choice($.line_comment, $.block_comment, $.groovydoc_comment),
+    comment: ($) => choice($.line_comment, $.block_comment),
 
     line_comment: () => token(prec(PREC.COMMENT, seq("//", /[^\n]*/))),
 

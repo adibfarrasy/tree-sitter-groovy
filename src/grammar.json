@@ -6284,6 +6284,22 @@
           "type": "CHOICE",
           "members": [
             {
+              "type": "FIELD",
+              "name": "documentation",
+              "content": {
+                "type": "SYMBOL",
+                "name": "groovydoc_comment"
+              }
+            },
+            {
+              "type": "BLANK"
+            }
+          ]
+        },
+        {
+          "type": "CHOICE",
+          "members": [
+            {
               "type": "SYMBOL",
               "name": "modifiers"
             },
@@ -6620,6 +6636,22 @@
       "content": {
         "type": "SEQ",
         "members": [
+          {
+            "type": "CHOICE",
+            "members": [
+              {
+                "type": "FIELD",
+                "name": "documentation",
+                "content": {
+                  "type": "SYMBOL",
+                  "name": "groovydoc_comment"
+                }
+              },
+              {
+                "type": "BLANK"
+              }
+            ]
+          },
           {
             "type": "CHOICE",
             "members": [
@@ -7044,6 +7076,22 @@
           "type": "CHOICE",
           "members": [
             {
+              "type": "FIELD",
+              "name": "documentation",
+              "content": {
+                "type": "SYMBOL",
+                "name": "groovydoc_comment"
+              }
+            },
+            {
+              "type": "BLANK"
+            }
+          ]
+        },
+        {
+          "type": "CHOICE",
+          "members": [
+            {
               "type": "SYMBOL",
               "name": "modifiers"
             },
@@ -7325,6 +7373,22 @@
                 "type": "CHOICE",
                 "members": [
                   {
+                    "type": "FIELD",
+                    "name": "documentation",
+                    "content": {
+                      "type": "SYMBOL",
+                      "name": "groovydoc_comment"
+                    }
+                  },
+                  {
+                    "type": "BLANK"
+                  }
+                ]
+              },
+              {
+                "type": "CHOICE",
+                "members": [
+                  {
                     "type": "SYMBOL",
                     "name": "modifiers"
                   },
@@ -7385,6 +7449,22 @@
             "type": "SEQ",
             "members": [
               {
+                "type": "CHOICE",
+                "members": [
+                  {
+                    "type": "FIELD",
+                    "name": "documentation",
+                    "content": {
+                      "type": "SYMBOL",
+                      "name": "groovydoc_comment"
+                    }
+                  },
+                  {
+                    "type": "BLANK"
+                  }
+                ]
+              },
+              {
                 "type": "SYMBOL",
                 "name": "modifiers"
               },
@@ -7427,6 +7507,22 @@
             "type": "SEQ",
             "members": [
               {
+                "type": "CHOICE",
+                "members": [
+                  {
+                    "type": "FIELD",
+                    "name": "documentation",
+                    "content": {
+                      "type": "SYMBOL",
+                      "name": "groovydoc_comment"
+                    }
+                  },
+                  {
+                    "type": "BLANK"
+                  }
+                ]
+              },
+              {
                 "type": "FIELD",
                 "name": "declarator",
                 "content": {
@@ -7463,6 +7559,22 @@
     "record_declaration": {
       "type": "SEQ",
       "members": [
+        {
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "FIELD",
+              "name": "documentation",
+              "content": {
+                "type": "SYMBOL",
+                "name": "groovydoc_comment"
+              }
+            },
+            {
+              "type": "BLANK"
+            }
+          ]
+        },
         {
           "type": "CHOICE",
           "members": [
@@ -7540,6 +7652,22 @@
     "annotation_type_declaration": {
       "type": "SEQ",
       "members": [
+        {
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "FIELD",
+              "name": "documentation",
+              "content": {
+                "type": "SYMBOL",
+                "name": "groovydoc_comment"
+              }
+            },
+            {
+              "type": "BLANK"
+            }
+          ]
+        },
         {
           "type": "CHOICE",
           "members": [
@@ -7733,6 +7861,22 @@
     "interface_declaration": {
       "type": "SEQ",
       "members": [
+        {
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "FIELD",
+              "name": "documentation",
+              "content": {
+                "type": "SYMBOL",
+                "name": "groovydoc_comment"
+              }
+            },
+            {
+              "type": "BLANK"
+            }
+          ]
+        },
         {
           "type": "CHOICE",
           "members": [
@@ -8899,6 +9043,22 @@
             "type": "CHOICE",
             "members": [
               {
+                "type": "FIELD",
+                "name": "documentation",
+                "content": {
+                  "type": "SYMBOL",
+                  "name": "groovydoc_comment"
+                }
+              },
+              {
+                "type": "BLANK"
+              }
+            ]
+          },
+          {
+            "type": "CHOICE",
+            "members": [
+              {
                 "type": "SYMBOL",
                 "name": "modifiers"
               },
@@ -8998,10 +9158,6 @@
         {
           "type": "SYMBOL",
           "name": "block_comment"
-        },
-        {
-          "type": "SYMBOL",
-          "name": "groovydoc_comment"
         }
       ]
     },

@@ -11,8 +11,8 @@ class DataProcessor {
 --------------------------------------------------------------------------------
 
 (source_file
-  (groovydoc_comment)
   (class_declaration
+    documentation: (groovydoc_comment)
     (modifiers
       (marker_annotation
         name: (identifier)))
@@ -32,8 +32,8 @@ class BusinessLogic {
 --------------------------------------------------------------------------------
 
 (source_file
-  (groovydoc_comment)
   (class_declaration
+    documentation: (groovydoc_comment)
     (modifiers
       (marker_annotation
         name: (identifier)))
