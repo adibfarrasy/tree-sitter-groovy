@@ -713,8 +713,11 @@ module.exports = grammar({
       ),
 
     expression_statement: ($) =>
-      prec.right(
-        seq($.expression, optional(choice(";", $._automatic_semicolon))),
+      prec.dynamic(
+        -1,
+        prec.right(
+          seq($.expression, optional(choice(";", $._automatic_semicolon))),
+        ),
       ),
 
     labeled_statement: ($) => seq($.identifier, ":", $.statement),
@@ -1364,6 +1367,9 @@ module.exports = grammar({
         ),
       ),
 
+    _variable_declarator_id: ($) => seq(field("name", $.identifier)),
+
+    _variable_initializer: ($) => choice($.expression, $.array_literal),
     _variable_declarator_id: ($) => seq(field("name", $.identifier)),
 
     _variable_initializer: ($) => choice($.expression, $.array_literal),
