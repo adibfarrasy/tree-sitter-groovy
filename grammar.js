@@ -43,7 +43,7 @@ module.exports = grammar({
     $._record_keyword,
   ],
 
-  extras: ($) => [$.line_comment, $.block_comment, $.groovydoc_comment, /\s/],
+  extras: ($) => [$.line_comment, $.block_comment, /\s/],
 
   supertypes: ($) => [
     $.expression,
@@ -91,6 +91,7 @@ module.exports = grammar({
     [$.closure, $._variable_declarator_id],
     [$.for_loop_variable_declaration, $.modifiers],
     [$._variable_declarator_id, $.compact_constructor_declaration],
+    [$.modifiers, $.variable_declaration],
   ],
 
   word: ($) => $.identifier,
@@ -1507,6 +1508,7 @@ module.exports = grammar({
         choice(
           // Regular variable declaration
           seq(
+            optional(field("documentation", $.groovydoc_comment)),
             repeat($._annotation),
             optional("final"),
             choice("def", "var", field("type", $._unannotated_type)),
@@ -1515,6 +1517,7 @@ module.exports = grammar({
           ),
           // Tuple destructuring declaration
           seq(
+            optional(field("documentation", $.groovydoc_comment)),
             repeat($._annotation),
             optional("final"),
             choice("def", "var", field("type", $._unannotated_type)),

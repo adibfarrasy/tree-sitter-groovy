@@ -1,0 +1,66 @@
+diff --git a/grammar.js b/grammar.js
+index 0679850..b022288 100644
+--- a/grammar.js
++++ b/grammar.js
+@@ -43,7 +43,7 @@ module.exports = grammar({
+     $._record_keyword,
+   ],
+ 
+-  extras: ($) => [$.line_comment, $.block_comment, $.groovydoc_comment, /\s/],
++  extras: ($) => [$.line_comment, $.block_comment, /\s/],
+ 
+   supertypes: ($) => [
+     $.expression,
+@@ -91,6 +91,7 @@ module.exports = grammar({
+     [$.closure, $._variable_declarator_id],
+     [$.for_loop_variable_declaration, $.modifiers],
+     [$._variable_declarator_id, $.compact_constructor_declaration],
++    [$.modifiers, $.variable_declaration],
+   ],
+ 
+   word: ($) => $.identifier,
+@@ -1506,22 +1507,30 @@ module.exports = grammar({
+         PREC.DECL,
+         choice(
+           // Regular variable declaration
+-          seq(
+-            repeat($._annotation),
+-            optional("final"),
+-            choice("def", "var", field("type", $._unannotated_type)),
+-            $._variable_declarator_list,
+-            optional(choice(";", $._automatic_semicolon)),
++          prec.dynamic(
++            1,
++            seq(
++              optional(field("documentation", $.groovydoc_comment)),
++              repeat($._annotation),
++              optional("final"),
++              choice("def", "var", field("type", $._unannotated_type)),
++              $._variable_declarator_list,
++              optional(choice(";", $._automatic_semicolon)),
++            ),
+           ),
+           // Tuple destructuring declaration
+-          seq(
+-            repeat($._annotation),
+-            optional("final"),
+-            choice("def", "var", field("type", $._unannotated_type)),
+-            $.tuple_destructuring_pattern,
+-            "=",
+-            field("value", $.expression),
+-            optional(choice(";", $._automatic_semicolon)),
++          prec.dynamic(
++            1,
++            seq(
++              optional(field("documentation", $.groovydoc_comment)),
++              repeat($._annotation),
++              optional("final"),
++              choice("def", "var", field("type", $._unannotated_type)),
++              $.tuple_destructuring_pattern,
++              "=",
++              field("value", $.expression),
++              optional(choice(";", $._automatic_semicolon)),
++            ),
+           ),
+         ),
+       ),

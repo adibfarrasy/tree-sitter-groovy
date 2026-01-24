@@ -4489,6 +4489,16 @@
           }
         ]
       },
+      "documentation": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "groovydoc_comment",
+            "named": true
+          }
+        ]
+      },
       "type": {
         "multiple": false,
         "required": false,
@@ -4994,8 +5004,7 @@
   },
   {
     "type": "groovydoc_comment",
-    "named": true,
-    "extra": true
+    "named": true
   },
   {
     "type": "hex_floating_point_literal",

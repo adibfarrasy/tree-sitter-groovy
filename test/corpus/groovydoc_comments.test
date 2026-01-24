@@ -39,3 +39,45 @@ class BusinessLogic {
         name: (identifier)))
     name: (identifier)
     body: (class_body)))
+
+================================================================================
+Groovydoc Comments - Sibling vs Nested
+================================================================================
+/**
+ * Documentation for MyClass
+ */
+class MyClass {
+}
+
+/** Documentation for myFunction */
+def myFunction() {
+}
+
+/**
+ * Documentation for myVariable
+ */
+def myVariable = 5
+
+/** Documentation for MyObject */
+class MyObject {
+}
+--------------------------------------------------------------------------------
+(source_file
+  (class_declaration
+    (groovydoc_comment)
+    (identifier)
+    (class_body))
+  (function_declaration
+    (groovydoc_comment)
+    (identifier)
+    (parameters)
+    (block))
+  (variable_declaration
+    (groovydoc_comment)
+    (variable_declarator
+      (identifier)
+      (decimal_integer_literal)))
+  (class_declaration
+    (groovydoc_comment)
+    (identifier)
+    (class_body)))

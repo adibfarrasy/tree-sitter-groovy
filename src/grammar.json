@@ -8830,6 +8830,22 @@
             "type": "SEQ",
             "members": [
               {
+                "type": "CHOICE",
+                "members": [
+                  {
+                    "type": "FIELD",
+                    "name": "documentation",
+                    "content": {
+                      "type": "SYMBOL",
+                      "name": "groovydoc_comment"
+                    }
+                  },
+                  {
+                    "type": "BLANK"
+                  }
+                ]
+              },
+              {
                 "type": "REPEAT",
                 "content": {
                   "type": "SYMBOL",
@@ -8899,6 +8915,22 @@
           {
             "type": "SEQ",
             "members": [
+              {
+                "type": "CHOICE",
+                "members": [
+                  {
+                    "type": "FIELD",
+                    "name": "documentation",
+                    "content": {
+                      "type": "SYMBOL",
+                      "name": "groovydoc_comment"
+                    }
+                  },
+                  {
+                    "type": "BLANK"
+                  }
+                ]
+              },
               {
                 "type": "REPEAT",
                 "content": {
@@ -9244,10 +9276,6 @@
       "name": "block_comment"
     },
     {
-      "type": "SYMBOL",
-      "name": "groovydoc_comment"
-    },
-    {
       "type": "PATTERN",
       "value": "\\s"
     }
@@ -9325,6 +9353,10 @@
     [
       "_variable_declarator_id",
       "compact_constructor_declaration"
+    ],
+    [
+      "modifiers",
+      "variable_declaration"
     ]
   ],
   "precedences": [],
