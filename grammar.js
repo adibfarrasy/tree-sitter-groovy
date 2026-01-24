@@ -1371,9 +1371,6 @@ module.exports = grammar({
     _variable_declarator_id: ($) => seq(field("name", $.identifier)),
 
     _variable_initializer: ($) => choice($.expression, $.array_literal),
-    _variable_declarator_id: ($) => seq(field("name", $.identifier)),
-
-    _variable_initializer: ($) => choice($.expression, $.array_literal),
 
     // Types
 
