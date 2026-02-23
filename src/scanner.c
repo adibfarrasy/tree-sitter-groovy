@@ -21,36 +21,17 @@ static bool is_newline(int32_t c) {
   return c == '\n' || c == '\r';
 }
 
-static bool scan_whitespace_and_comments(TSLexer *lexer) {
+static bool scan_whitespace(TSLexer *lexer) {
   bool found_newline = false;
   
-  for (;;) {
-    while (iswspace(lexer->lookahead)) {
-      if (is_newline(lexer->lookahead)) {
-        found_newline = true;
-      }
-      skip(lexer);
+  while (iswspace(lexer->lookahead)) {
+    if (is_newline(lexer->lookahead)) {
+      found_newline = true;
     }
-    
-    // Skip line comments
-    if (lexer->lookahead == '/' && lexer->eof(lexer) == false) {
-      skip(lexer);
-      if (lexer->lookahead == '/') {
-        skip(lexer);
-        while (lexer->lookahead != '\n' && !lexer->eof(lexer)) {
-          skip(lexer);
-        }
-        if (lexer->lookahead == '\n') {
-          found_newline = true;
-          skip(lexer);
-        }
-      } else {
-        return found_newline;
-      }
-    } else {
-      return found_newline;
-    }
+    skip(lexer);
   }
+  
+  return found_newline;
 }
 
 static bool scan_record_keyword(TSLexer *lexer) {
@@ -129,7 +110,7 @@ static bool scan_automatic_semicolon(TSLexer *lexer) {
     return true;
   }
   
-  bool found_newline = scan_whitespace_and_comments(lexer);
+  bool found_newline = scan_whitespace(lexer);
   
   // Only insert automatic semicolon if we found a newline
   if (!found_newline) {
