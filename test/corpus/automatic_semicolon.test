@@ -282,7 +282,8 @@ class Foo {
           name: (identifier)
           value: (cast_expression
             value: (closure
-              (identifier)
+              (closure_parameter
+                (identifier))
               (expression_statement
                 (method_invocation
                   object: (identifier)

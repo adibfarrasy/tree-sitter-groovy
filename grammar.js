@@ -79,7 +79,6 @@ module.exports = grammar({
     [$._object_method_invocation, $._closure_method_invocation],
     [$.primary_expression, $._unannotated_type],
     [$.primary_expression, $._unannotated_type, $.scoped_type_identifier],
-    [$.variable_declarator, $.parameter],
     [$.modifiers, $.annotated_type],
     [$.field_declaration, $._unannotated_type, $._method_header],
     [$.statement, $.constructor_body],
@@ -88,7 +87,6 @@ module.exports = grammar({
       $._simple_method_invocation,
       $.explicit_constructor_invocation,
     ],
-    [$.closure, $._variable_declarator_id],
     [$.for_loop_variable_declaration, $.modifiers],
     [$._variable_declarator_id, $.compact_constructor_declaration],
     [$.modifiers, $.variable_declaration],
@@ -702,16 +700,18 @@ module.exports = grammar({
           optional(
             seq(
               choice(
-                seq("(", ")"),
-                commaSep1(choice($.identifier, $.parameter)),
+                seq(optional(commaSep1($.closure_parameter)), "->"),
+                seq("(", optional(commaSep1($.closure_parameter)), ")", "->"),
               ),
-              "->",
             ),
           ),
           repeat($.statement),
           "}",
         ),
       ),
+
+    closure_parameter: ($) =>
+      prec(2, choice($.identifier, seq($._unannotated_type, $.identifier))),
 
     expression_statement: ($) =>
       prec.dynamic(

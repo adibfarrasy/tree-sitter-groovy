@@ -240,8 +240,16 @@
 
 ; Closure parameters
 (closure
-  (parameter
-    name: (identifier) @variable.parameter))
+  (closure_parameter
+    (identifier) @variable.parameter))
+
+(closure
+  (closure_parameter
+    (type_identifier) @type.parameter))
+
+; Closure arrow operator
+(closure
+  "->" @operator)
 
 ; Enum constants
 (enum_body

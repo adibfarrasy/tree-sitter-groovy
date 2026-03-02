@@ -269,7 +269,8 @@ closure with single untyped parameter
 (source_file
   (expression_statement
     (closure
-      (identifier)
+      (closure_parameter
+        (identifier))
       (expression_statement
         (method_invocation
           name: (identifier)
@@ -284,9 +285,9 @@ closure with single typed parameter
 (source_file
   (expression_statement
     (closure
-      (parameter
-        type: (type_identifier)
-        name: (identifier))
+      (closure_parameter
+        (type_identifier)
+        (identifier))
       (expression_statement
         (method_invocation
           name: (identifier)
@@ -301,8 +302,10 @@ closure with multiple untyped parameters
 (source_file
   (expression_statement
     (closure
-      (identifier)
-      (identifier)
+      (closure_parameter
+        (identifier))
+      (closure_parameter
+        (identifier))
       (expression_statement
         (method_invocation
           name: (identifier)
@@ -319,12 +322,12 @@ closure with multiple typed parameters
 (source_file
   (expression_statement
     (closure
-      (parameter
-        type: (type_identifier)
-        name: (identifier))
-      (parameter
-        type: (type_identifier)
-        name: (identifier))
+      (closure_parameter
+        (type_identifier)
+        (identifier))
+      (closure_parameter
+        (type_identifier)
+        (identifier))
       (expression_statement
         (method_invocation
           name: (identifier)

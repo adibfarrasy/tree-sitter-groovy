@@ -156,7 +156,8 @@ list.find({i -> i})
       (identifier)
       (argument_list
         (closure
-          (identifier)
+          (closure_parameter
+            (identifier))
           (expression_statement
             (identifier)))))))
 

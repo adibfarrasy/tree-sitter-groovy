@@ -4422,12 +4422,41 @@
                         "type": "SEQ",
                         "members": [
                           {
-                            "type": "STRING",
-                            "value": "("
+                            "type": "CHOICE",
+                            "members": [
+                              {
+                                "type": "SEQ",
+                                "members": [
+                                  {
+                                    "type": "SYMBOL",
+                                    "name": "closure_parameter"
+                                  },
+                                  {
+                                    "type": "REPEAT",
+                                    "content": {
+                                      "type": "SEQ",
+                                      "members": [
+                                        {
+                                          "type": "STRING",
+                                          "value": ","
+                                        },
+                                        {
+                                          "type": "SYMBOL",
+                                          "name": "closure_parameter"
+                                        }
+                                      ]
+                                    }
+                                  }
+                                ]
+                              },
+                              {
+                                "type": "BLANK"
+                              }
+                            ]
                           },
                           {
                             "type": "STRING",
-                            "value": ")"
+                            "value": "->"
                           }
                         ]
                       },
@@ -4435,50 +4464,53 @@
                         "type": "SEQ",
                         "members": [
                           {
+                            "type": "STRING",
+                            "value": "("
+                          },
+                          {
                             "type": "CHOICE",
                             "members": [
                               {
-                                "type": "SYMBOL",
-                                "name": "identifier"
+                                "type": "SEQ",
+                                "members": [
+                                  {
+                                    "type": "SYMBOL",
+                                    "name": "closure_parameter"
+                                  },
+                                  {
+                                    "type": "REPEAT",
+                                    "content": {
+                                      "type": "SEQ",
+                                      "members": [
+                                        {
+                                          "type": "STRING",
+                                          "value": ","
+                                        },
+                                        {
+                                          "type": "SYMBOL",
+                                          "name": "closure_parameter"
+                                        }
+                                      ]
+                                    }
+                                  }
+                                ]
                               },
                               {
-                                "type": "SYMBOL",
-                                "name": "parameter"
+                                "type": "BLANK"
                               }
                             ]
                           },
                           {
-                            "type": "REPEAT",
-                            "content": {
-                              "type": "SEQ",
-                              "members": [
-                                {
-                                  "type": "STRING",
-                                  "value": ","
-                                },
-                                {
-                                  "type": "CHOICE",
-                                  "members": [
-                                    {
-                                      "type": "SYMBOL",
-                                      "name": "identifier"
-                                    },
-                                    {
-                                      "type": "SYMBOL",
-                                      "name": "parameter"
-                                    }
-                                  ]
-                                }
-                              ]
-                            }
+                            "type": "STRING",
+                            "value": ")"
+                          },
+                          {
+                            "type": "STRING",
+                            "value": "->"
                           }
                         ]
                       }
                     ]
-                  },
-                  {
-                    "type": "STRING",
-                    "value": "->"
                   }
                 ]
               },
@@ -4497,6 +4529,32 @@
           {
             "type": "STRING",
             "value": "}"
+          }
+        ]
+      }
+    },
+    "closure_parameter": {
+      "type": "PREC",
+      "value": 2,
+      "content": {
+        "type": "CHOICE",
+        "members": [
+          {
+            "type": "SYMBOL",
+            "name": "identifier"
+          },
+          {
+            "type": "SEQ",
+            "members": [
+              {
+                "type": "SYMBOL",
+                "name": "_unannotated_type"
+              },
+              {
+                "type": "SYMBOL",
+                "name": "identifier"
+              }
+            ]
           }
         ]
       }
@@ -9321,10 +9379,6 @@
       "scoped_type_identifier"
     ],
     [
-      "variable_declarator",
-      "parameter"
-    ],
-    [
       "modifiers",
       "annotated_type"
     ],
@@ -9341,10 +9395,6 @@
       "primary_expression",
       "_simple_method_invocation",
       "explicit_constructor_invocation"
-    ],
-    [
-      "closure",
-      "_variable_declarator_id"
     ],
     [
       "for_loop_variable_declaration",
