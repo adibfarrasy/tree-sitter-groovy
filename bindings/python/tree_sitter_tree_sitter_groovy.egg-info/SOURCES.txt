@@ -1,0 +1,16 @@
+LICENSE.md
+README.md
+pyproject.toml
+setup.py
+bindings/python/tree_sitter_tree_sitter_groovy/__init__.py
+bindings/python/tree_sitter_tree_sitter_groovy/__init__.pyi
+bindings/python/tree_sitter_tree_sitter_groovy/binding.c
+bindings/python/tree_sitter_tree_sitter_groovy/py.typed
+bindings/python/tree_sitter_tree_sitter_groovy.egg-info/PKG-INFO
+bindings/python/tree_sitter_tree_sitter_groovy.egg-info/SOURCES.txt
+bindings/python/tree_sitter_tree_sitter_groovy.egg-info/dependency_links.txt
+bindings/python/tree_sitter_tree_sitter_groovy.egg-info/not-zip-safe
+bindings/python/tree_sitter_tree_sitter_groovy.egg-info/requires.txt
+bindings/python/tree_sitter_tree_sitter_groovy.egg-info/top_level.txt
+src/parser.c
+src/scanner.c
