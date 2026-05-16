@@ -154,6 +154,10 @@
         "named": true
       },
       {
+        "type": "trait_declaration",
+        "named": true
+      },
+      {
         "type": "variable_declaration",
         "named": true
       }
@@ -1368,6 +1372,10 @@
         {
           "type": "static_initializer",
           "named": true
+        },
+        {
+          "type": "trait_declaration",
+          "named": true
         }
       ]
     }
@@ -2046,6 +2054,10 @@
         },
         {
           "type": "static_initializer",
+          "named": true
+        },
+        {
+          "type": "trait_declaration",
           "named": true
         }
       ]
@@ -2826,6 +2838,10 @@
         },
         {
           "type": "record_declaration",
+          "named": true
+        },
+        {
+          "type": "trait_declaration",
           "named": true
         }
       ]
@@ -4266,6 +4282,82 @@
     }
   },
   {
+    "type": "trait_declaration",
+    "named": true,
+    "fields": {
+      "body": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "class_body",
+            "named": true
+          }
+        ]
+      },
+      "documentation": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "groovydoc_comment",
+            "named": true
+          }
+        ]
+      },
+      "interfaces": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "super_interfaces",
+            "named": true
+          }
+        ]
+      },
+      "name": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "identifier",
+            "named": true
+          }
+        ]
+      },
+      "superclass": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "superclass",
+            "named": true
+          }
+        ]
+      },
+      "type_parameters": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "type_parameters",
+            "named": true
+          }
+        ]
+      }
+    },
+    "children": {
+      "multiple": false,
+      "required": false,
+      "types": [
+        {
+          "type": "modifiers",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
     "type": "try_statement",
     "named": true,
     "fields": {
@@ -5212,6 +5304,10 @@
   },
   {
     "type": "to",
+    "named": false
+  },
+  {
+    "type": "trait",
     "named": false
   },
   {

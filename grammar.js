@@ -944,6 +944,7 @@ module.exports = grammar({
           $.class_declaration,
           $.record_declaration,
           $.interface_declaration,
+          $.trait_declaration,
           $.annotation_type_declaration,
           $.enum_declaration,
           $.variable_declaration,
@@ -1086,6 +1087,7 @@ module.exports = grammar({
         $.compact_constructor_declaration, // For records.
         $.class_declaration,
         $.interface_declaration,
+        $.trait_declaration,
         $.annotation_type_declaration,
         $.enum_declaration,
         $.block,
@@ -1169,6 +1171,7 @@ module.exports = grammar({
         $.compact_constructor_declaration, // For records.
         $.class_declaration,
         $.interface_declaration,
+        $.trait_declaration,
         $.annotation_type_declaration,
         $.enum_declaration,
         $.block,
@@ -1326,6 +1329,24 @@ module.exports = grammar({
         field("body", $.interface_body),
       ),
 
+    // Groovy `trait`: structurally like a class (can hold method bodies, fields,
+    // properties) but semantically closer to an interface with default impls.
+    // Reuses `class_body` so members are extracted the same way.
+    trait_declaration: ($) =>
+      prec.right(
+        5,
+        seq(
+          optional(field("documentation", $.groovydoc_comment)),
+          optional($.modifiers),
+          "trait",
+          field("name", $.identifier),
+          optional(field("type_parameters", $.type_parameters)),
+          optional(field("superclass", $.superclass)),
+          optional(field("interfaces", $.super_interfaces)),
+          field("body", $.class_body),
+        ),
+      ),
+
     extends_interfaces: ($) => seq("extends", $.type_list),
 
     interface_body: ($) =>
@@ -1338,6 +1359,7 @@ module.exports = grammar({
             $.function_declaration,
             $.class_declaration,
             $.interface_declaration,
+            $.trait_declaration,
             $.record_declaration,
             $.annotation_type_declaration,
             ";",
